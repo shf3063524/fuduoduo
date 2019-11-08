@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cl_fff"
+    android:paddingStart="21dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="16dp">
+
+    <TextView
+        android:id="@+id/m_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="张三"
+        android:textColor="@color/cl_333"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/m_tv_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/m_tv_name"
+        android:text="18338392812"
+        android:textColor="@color/cl_333"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/m_tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/m_tv_name"
+        android:layout_marginTop="4dp"
+        android:text="河北保定市莲池区七一东路与东三环交叉口未来石…"
+        android:textColor="@color/cl_333"
+        android:textSize="13sp" />
+
+    <CheckBox
+        android:id="@+id/m_cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="22dp"
+        android:button="@drawable/check_box_bg"
+        android:checked="false"
+        android:clickable="false"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+</RelativeLayout>

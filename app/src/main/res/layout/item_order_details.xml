@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="17dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/m_iv_shopping"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@color/cl_f8" />
+
+        <TextView
+            android:id="@+id/m_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:lines="2"
+            android:maxEms="22"
+            android:layout_toEndOf="@+id/m_iv_shopping"
+            android:text="张裕第九代大师级解百纳干红葡萄酒蛇龙珠红酒玫瑰金版单支高端···"
+            android:textColor="@color/cl_333"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/m_tv_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/m_iv_shopping">
+
+            <TextView
+                android:id="@+id/m_tv_specification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_frame_cl_f8"
+                android:paddingStart="6dp"
+                android:paddingTop="1dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="1dp"
+                android:text="750ml"
+                android:textColor="@color/cl_999"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/m_tv_price_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="398.00 积分 x 1"
+                android:textColor="@color/cl_666"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

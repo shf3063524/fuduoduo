@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <attr name="radius" format="dimension" />
+    <attr name="clickable" format="boolean"/>
+    <!-- 全局点击条目的自定义属性 -->
+    <declare-styleable name="GlobalClickItem">
+        <!-- 设置左边的图片 -->
+        <attr name="icon" format="reference" />
+        <!-- 设置箭头的图片 -->
+        <attr name="arrow" format="reference" />
+        <!-- 设置左边的文本内容 -->
+        <attr name="left_text" format="string" />
+        <!-- 设置右边的文本内容 -->
+        <attr name="right_text" format="string" />
+        <!-- 设置左边的文本颜色 -->
+        <attr name="left_text_color" format="reference" />
+        <!-- 设置左边的文本大小 默认16sp-->
+        <attr name="left_text_size" format="dimension" />
+        <!-- 设置右边的文本颜色 -->
+        <attr name="right_text_color" format="reference" />
+        <!-- 设置右边的文本大小 默认16sp-->
+        <attr name="right_text_size" format="dimension" />
+        <!-- 是否显示arrow，默认为0 0：VISIBLE; 1: GONE 2：INVISIBLE-->
+        <attr name="show_arrow" format="integer" />
+        <!-- 是否显示左侧的图标，默认为0  0：VISIBLE; 1: GONE 2：INVISIBLE -->
+        <attr name="show_left_icon" format="integer" />
+        <!-- 是否显示必填的图标，默认为1  0：VISIBLE; 1: GONE 2：INVISIBLE -->
+        <attr name="show_must_icon" format="integer" />
+        <!-- 条目是否可以点击 默认可以点击-->
+        <attr name="clickable"/>
+    </declare-styleable>
+    <!--自定义支付密码-->
+    <declare-styleable name="PayPsdInputView">
+
+        <attr name="maxCount" format="integer" />
+        <attr name="circleColor" format="color" />
+        <!--底线颜色-->
+        <attr name="bottomLineColor" format="color" />
+        <attr name="radius" />
+        <!--分割线宽-->
+        <attr name="divideLineWidth" format="dimension" />
+        <!--分割线颜色-->
+        <attr name="divideLineColor" format="color" />
+        <attr name="rectAngle" format="dimension" />
+        <attr name="focusedColor" format="color" />
+        <attr name="psdType" format="enum">
+            <enum name="weChat" value="0" />
+            <enum name="bottomLine" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <!-- 全局编辑条目的自定义属性 -->
+    <declare-styleable name="GlobalEditItem">
+        <!-- 设置左边textview的文本内容 -->
+        <attr name="leftText" format="string" />
+        <!-- 设置右边edittext的文本内容 -->
+        <attr name="rightText" format="string" />
+        <!-- 设置右边edittext的文本内容 -->
+        <attr name="rightHint" format="string" />
+        <!-- 设置左边的文本颜色 默认：#333333 -->
+        <attr name="leftTextColor" format="reference" />
+        <!-- 设置左边的文本大小 默认16sp-->
+        <attr name="leftTextSize" format="dimension" />
+        <!-- 设置右边的文本颜色 默认：#333333 -->
+        <attr name="rightTextColor" format="reference" />
+        <!-- 设置右边的文本大小 默认16sp-->
+        <attr name="rightTextSize" format="dimension" />
+        <!-- 是否显示必填的图标，默认为1  0：VISIBLE; 1: GONE 2：INVISIBLE -->
+        <attr name="showMustIcon" format="integer" />
+        <!-- 设置右边的文本颜色 默认：#999999 -->
+        <attr name="rightTextColorHint" format="reference" />
+        <!--设置右边的输入框的inputType属性 默认为：textMultiLine-->
+        <attr name="rightInputType" format="integer">
+            <enum name="textMultiLine" value="0" />
+            <enum name="phone" value="1" />
+            <enum name="number" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="LogisticsInformationView">
+        <attr name="width" format="dimension" />
+        <attr name="radius" />
+    </declare-styleable>
+
+    <declare-styleable name="RatingBar" tools:ignore="ResourceName">
+        <attr name="starImageWidth" format="dimension"/>
+        <attr name="starImageHeight" format="dimension"/>
+        <attr name="starImagePadding" format="dimension"/>
+        <attr name="starCount" format="integer"/>
+        <attr name="starNum" format="integer"/>
+        <attr name="starEmpty" format="reference"/>
+        <attr name="starFill" format="reference"/>
+        <attr name="starHalf" format="reference"/>
+        <attr name="clickable"/>
+        <attr name="touchable" format="boolean"/>
+        <attr name="halfstart" format="boolean"/>
+    </declare-styleable>
+</resources>

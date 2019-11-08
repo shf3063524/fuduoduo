@@ -1,0 +1,93 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
+        multiDexEnabled true
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "2g"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation rootProject.ext.dependencies["appcompat-v7"]
+    // 每次创建Activity会自动生成此依赖，所以未使用抽取的格式
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    //    implementation rootProject.ext.dependencies["constraint-layout"]
+    implementation rootProject.ext.dependencies["junit"]
+    implementation rootProject.ext.dependencies["runner"]
+    implementation rootProject.ext.dependencies["espresso-core"]
+    implementation rootProject.ext.dependencies["design"]
+    implementation rootProject.ext.dependencies["cardview-v7"]
+    // https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    // https://github.com/square/leakcanary
+    debugImplementation rootProject.ext.dependencies["leakcanary-android"]
+    releaseImplementation rootProject.ext.dependencies["leakcanary-android-no-op"]
+    // Optional, if you use support library fragments:
+    debugImplementation rootProject.ext.dependencies["leakcanary-support-fragment"]
+
+    // https://github.com/JakeWharton/butterknife
+    implementation rootProject.ext.dependencies["butterknife"]
+    annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
+
+    // https://github.com/H07000223/FlycoTabLayout
+    implementation rootProject.ext.dependencies["FlycoTabLayout"]
+    // https://github.com/Kaopiz/KProgressHUD
+    implementation rootProject.ext.dependencies["kprogresshud"]
+    // https://github.com/scwang90/SmartRefreshLayout
+    implementation rootProject.ext.dependencies["SmartRefreshLayout"]
+
+    // https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    implementation rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
+
+    // https://github.com/mylhyl/Android-CircleDialog
+    implementation rootProject.ext.dependencies["circleDialog"]
+
+    // https://github.com/GrenderG/Toasty
+    implementation rootProject.ext.dependencies["Toasty"]
+
+    // https://github.com/kyleduo/SwitchButton
+    implementation rootProject.ext.dependencies["switchbutton"]
+
+    // https://github.com/Bigkoo/Android-PickerView
+    implementation rootProject.ext.dependencies["PickerView"]
+    // https://github.com/google/gson
+    implementation rootProject.ext.dependencies["gson"]
+
+    // https://github.com/bingoogolapple/BGASwipeItemLayout-Android
+    implementation rootProject.ext.dependencies["swipeitemlayout"]
+
+    // 使用module方式导入，修改部分源码
+    implementation project(':PictureSelectorLib')
+
+    // https://github.com/liys666666/DoubleClick 针对点击按钮页面跳转2次
+    implementation rootProject.ext.dependencies["DoubleClick"]
+
+    // https://github.com/jeasonlzy/okhttp-OkGo
+    implementation rootProject.ext.dependencies["okgo"]
+    // 通过module的方式引入，修改源码
+    implementation project(':loadinglayout')
+    // https://github.com/DeMonLiu623/DeMon-JS-PDF
+    implementation rootProject.ext.dependencies["DeMon-JS-PDF"]
+}

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_frame3_cl_fff"
+    android:orientation="vertical"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="9dp"
+        android:gravity="center_horizontal"
+        android:text="取消订单"
+        android:textColor="@color/cl_333"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_frame_cl_f8"
+        android:paddingStart="8dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="4dp"
+        android:text="取消订单后将无法恢复，请谨慎操作"
+        android:textColor="@color/cl_666"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:text="请选择取消订单原因"
+        android:textColor="@color/cl_666"
+        android:textSize="13sp" />
+
+    <RelativeLayout
+        android:id="@+id/m_layout_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="多拍/拍错/不想要"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/m_cb_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:button="@drawable/check_box_bg"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="true"
+            android:clickable="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/cl_eee" />
+
+    <RelativeLayout
+        android:id="@+id/m_layout_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="我不想买了"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/m_cb_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:button="@drawable/check_box_bg"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="false"
+            android:clickable="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/cl_eee" />
+
+    <RelativeLayout
+        android:id="@+id/m_layout_three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="信息填写错误，重新拍"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/m_cb_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:button="@drawable/check_box_bg"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="false"
+            android:clickable="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/cl_eee" />
+
+    <RelativeLayout
+        android:id="@+id/m_layout_four"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="卖家缺货"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/m_cb_four"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:button="@drawable/check_box_bg"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="false"
+            android:clickable="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/cl_eee" />
+
+    <RelativeLayout
+        android:id="@+id/m_layout_five"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="同城见面交易"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/m_cb_five"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:button="@drawable/check_box_bg"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="false"
+            android:clickable="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/cl_eee" />
+
+    <RelativeLayout
+        android:id="@+id/m_layout_six"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="其他原因"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/m_cb_six"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:button="@drawable/check_box_bg"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="false"
+            android:clickable="false"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/m_tv_no_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_frame_cl_e51c23"
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="暂不取消"
+            android:textColor="@color/cl_fff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/m_tv_yes_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_frame_cl_eda81c"
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="确定取消"
+            android:textColor="@color/cl_fff"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

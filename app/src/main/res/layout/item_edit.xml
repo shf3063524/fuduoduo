@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/et"
+        android:layout_width="match_parent"
+        android:textSize="17sp"
+        android:padding="10dp"
+        android:gravity="center"
+        android:hint="输入豆豆"
+        android:layout_margin="1dp"
+        android:background="@drawable/shape_recharge_background"
+        android:inputType="numberDecimal"
+        android:textColorHint="@color/cl_333"
+        android:textColor="@color/cl_333"
+        android:textCursorDrawable="@color/cl_e51C23"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

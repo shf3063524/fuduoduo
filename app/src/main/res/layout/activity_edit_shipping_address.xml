@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cl_f6"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/m_layout_set_return"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+
+        android:background="@color/cl_fff">
+
+        <ImageView
+            android:id="@+id/m_iv_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
+            android:src="@mipmap/ic_arrows_left" />
+
+        <TextView
+            android:id="@+id/m_add_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="编辑收货地址"
+            android:textColor="@color/cl_333"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/m_tv_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
+            android:text="保存"
+            android:textColor="@color/cl_e51C23"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:background="@color/cl_fff"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="17dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="收货人"
+            android:textColor="@color/cl_666"
+            android:textSize="14sp" />
+
+        <com.hjkj.fuduoduo.view.ClearEditText
+            android:id="@+id/m_cet_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="100dp"
+            android:background="@color/transparent"
+            android:hint="填写收货人姓名"
+            android:textColor="@color/cl_333"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:background="@color/cl_fff"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="17dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机号码"
+            android:textColor="@color/cl_666"
+            android:textSize="14sp" />
+
+        <com.hjkj.fuduoduo.view.ClearEditText
+            android:id="@+id/m_cet_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="100dp"
+            android:background="@color/transparent"
+            android:digits="0123456789"
+            android:hint="填写收货人手机号"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="11"
+            android:maxLines="1"
+            android:textColor="@color/cl_333"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/m_layout_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:background="@color/cl_fff"
+        android:paddingStart="12dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="17dp">
+
+        <TextView
+            android:id="@+id/m_tv_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="所在地区"
+            android:textColor="@color/cl_666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/m_tv_write_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_toEndOf="@+id/m_tv_area"
+            android:text="填写所在地区"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_right_arrow" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cl_fff"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="69dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="详细地址"
+            android:gravity="top"
+            android:textColor="@color/cl_666"
+            android:textSize="14sp" />
+
+        <com.hjkj.fuduoduo.view.ClearEditText
+            android:id="@+id/m_cet_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:background="@color/transparent"
+            android:hint="街道，楼牌号等"
+            android:paddingEnd="12dp"
+            android:textColor="@color/cl_333"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/cl_fff"
+        android:paddingStart="12dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="设为默认地址"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <com.kyleduo.switchbutton.SwitchButton
+            android:id="@+id/m_sb_show_on_coupon_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            app:kswAnimationDuration="300"
+            app:kswBackDrawable="@drawable/ios_back_drawable"
+            app:kswThumbDrawable="@drawable/ios_thumb_selector"
+            app:kswThumbMarginBottom="-8dp"
+            app:kswThumbMarginLeft="-5dp"
+            app:kswThumbMarginRight="-5dp"
+            app:kswThumbMarginTop="-2.5dp"
+            app:kswThumbRangeRatio="1.6" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/m_tv_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/cl_fff"
+        android:paddingStart="12dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="删除收货地址"
+        android:textColor="@color/cl_e51C23"
+        android:textSize="14sp" />
+</LinearLayout>

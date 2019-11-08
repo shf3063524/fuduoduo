@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cl_f6"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/m_layout_set_return"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/cl_fff">
+
+        <ImageView
+            android:id="@+id/m_iv_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
+            android:src="@mipmap/ic_arrows_left" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="常见问题"
+            android:textColor="@color/cl_333"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/m_cv_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/cl_fff"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="如何登录“福多多”"
+                    android:textColor="@color/cl_333"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/m_iv_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/ic_arrow_down" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/m_tv_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp"
+                android:text="在登录前需进行账户激活，在登录页面-【用户激活】填写“手机号、手机号验证码、登录密码、支付密码”【激活】(如您对账号不清楚，请联系客服)；账户激活后，在登录页面-【使用密码登录】-填写“手机号码、密码”进行登录或【使用验证码登录】-填写“手机号验证码”进行登录。"
+                android:textColor="@color/cl_666"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/m_cv_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/cl_fff"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="忘记密码怎么办"
+                    android:textColor="@color/cl_333"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/m_iv_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/ic_arrow_down" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/m_tv_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp"
+                android:text="在登录页面中，点击【忘记密码】-填写“手机号、手机号验证码、新密码、确认密码”-【确定】即可。"
+                android:textColor="@color/cl_666"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/m_cv_three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/cl_fff"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="福豆如何使用"
+                    android:textColor="@color/cl_333"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/m_iv_three"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/ic_arrow_down" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/m_tv_three"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp"
+                android:text="福豆可在本商城中使用，亦可购买“福多多”平台中的产品和服务。"
+                android:textColor="@color/cl_666"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/m_cv_four"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/cl_fff"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="福豆是如何获得的"
+                    android:textColor="@color/cl_333"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/m_iv_four"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/ic_arrow_down" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/m_tv_four"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp"
+                android:text="福豆是由您所在的企业统一发放。"
+                android:textColor="@color/cl_666"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/m_cv_five"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/cl_fff"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="福豆能提现吗"
+                    android:textColor="@color/cl_333"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/m_iv_five"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/ic_arrow_down" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/m_tv_five"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp"
+                android:text="福豆只能在“福多多”平台内部使用，不能提现，敬请谅解。"
+                android:textColor="@color/cl_666"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/m_cv_six"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@color/cl_fff"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="福豆有效期是多久"
+                    android:textColor="@color/cl_333"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/m_iv_six"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/ic_arrow_down" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/m_tv_six"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp"
+                android:text="除特殊规定外，福豆是永久有效的。"
+                android:textColor="@color/cl_666"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/m_cv_seven"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:cardBackgroundColor="@color/cl_fff"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="联系客服时，没人接通是怎么回事"
+                    android:textColor="@color/cl_333"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/m_iv_seven"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@mipmap/ic_arrow_down" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/m_tv_seven"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="14dp"
+                android:text="我们的客服工作时间为：周一至周五 9:00-18:00(节假日除外)"
+                android:textColor="@color/cl_666"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

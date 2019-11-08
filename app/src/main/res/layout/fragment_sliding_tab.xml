@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cl_f6"
+    android:fitsSystemWindows="false">
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/m_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--<ezy.ui.layout.LoadingLayout-->
+            <!--android:id="@+id/m_loading_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/m_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingEnd="6dp"
+                android:scrollbarSize="4dp"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
+                android:scrollbars="vertical" />
+        <!--</ezy.ui.layout.LoadingLayout>-->
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</RelativeLayout>

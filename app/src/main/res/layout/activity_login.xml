@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/m_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/ic_login_background"
+    android:overScrollMode="never"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:id="@+id/m_layout_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="220dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/m_tv_user_activation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="end"
+            android:text="用户激活"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="41dp"
+            android:src="@mipmap/ic_login_logo" />
+
+        <com.hjkj.fuduoduo.view.ClearEditText
+            android:id="@+id/m_et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="100dp"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:layout_marginTop="72dp"
+            android:background="@color/transparent"
+            android:digits="0123456789"
+            android:inputType="number"
+            android:hint="请输入手机号"
+            android:lines="1"
+            android:text="18306845011"
+            android:maxLength="11"
+            android:maxLines="1"
+            android:textColor="@color/cl_333"
+            android:textColorHint="@color/cl_999"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="40dp"
+            android:background="@color/cl_d8" />
+
+        <RelativeLayout
+            android:id="@+id/m_layout_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="47dp"
+            android:visibility="visible">
+
+            <com.hjkj.fuduoduo.view.ClearEditText
+                android:id="@+id/m_et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@color/transparent"
+                android:hint="请输入密码"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:inputType="textPassword"
+                android:lines="1"
+                android:text="0"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:layout_toStartOf="@+id/togglePwd"
+                android:textColor="@color/cl_333"
+                android:textColorHint="@color/cl_999"
+                android:textSize="16sp" />
+
+            <ToggleButton
+                android:id="@+id/togglePwd"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_alignParentEnd="true"
+                android:background="@mipmap/ic_hide_password"
+                android:textOff=""
+                android:textOn="" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/m_layout_vcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="47dp"
+            android:visibility="gone">
+
+            <com.hjkj.fuduoduo.view.ClearEditText
+                android:id="@+id/m_et_vcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:background="@color/transparent"
+                android:digits="0123456789"
+                android:hint="请输入验证码"
+                android:inputType="number"
+                android:lines="1"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:layout_toStartOf="@+id/m_tv_get_vcode"
+                android:textColor="@color/cl_333"
+                android:textColorHint="@color/cl_999"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/m_tv_get_vcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="获取验证码"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/cl_e51C23"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="40dp"
+            android:background="@color/cl_d8" />
+
+        <TextView
+            android:id="@+id/m_tv_forget_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="40dp"
+            android:gravity="end"
+            android:text="忘记密码？"
+            android:textColor="@color/cl_333"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/m_tv_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/shape_frame_cl_f5a5a7"
+            android:gravity="center"
+            android:paddingTop="9dp"
+            android:paddingBottom="9dp"
+            android:text="登录"
+            android:textColor="@color/cl_fff"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/m_tv_login_vcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:text="验证码登录"
+            android:textColor="@color/cl_e51C23"
+            android:textSize="16sp" />
+    </LinearLayout>
+</ScrollView>

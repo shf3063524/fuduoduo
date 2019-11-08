@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cl_f6"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cl_fff"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp">
+
+        <ImageView
+            android:id="@+id/m_iv_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@mipmap/ic_arrows_left" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/m_tv_return"
+            android:layout_toEndOf="@+id/m_iv_arrow"
+            android:background="@drawable/shape_frame_cl_f8"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@mipmap/ic_sort_search" />
+
+            <com.hjkj.fuduoduo.view.ClearEditText
+                android:id="@+id/m_et_shop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="80dp"
+                android:background="@color/transparent"
+                android:hint="查询商品"
+                android:textColor="@color/cl_333"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/m_tv_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:padding="12dp"
+            android:text="取消"
+            android:textColor="@color/cl_666"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="13dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/m_tv_complex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="综合"
+            android:textColor="#ffe51c23"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/m_tv_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:text="销量"
+            android:textColor="@color/cl_999"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/m_tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="42dp"
+            android:text="价格"
+            android:textColor="@color/cl_999"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/m_iv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="7dp"
+            android:src="@drawable/ic_price_sort" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/m_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:scrollbarSize="4dp"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
+        android:scrollbars="none" />
+</LinearLayout>

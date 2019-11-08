@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cl_f6"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/m_layout_set_return"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/cl_fff">
+
+        <ImageView
+            android:id="@+id/m_iv_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
+            android:src="@mipmap/ic_arrows_left" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="意见反馈"
+            android:textColor="@color/cl_333"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardBackgroundColor="@color/cl_fff"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
+        <com.hjkj.fuduoduo.view.ClearEditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:ellipsize="end"
+            android:hint="请输入标题"
+            android:lines="1"
+            android:maxEms="20"
+            android:paddingStart="16dp"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+    </android.support.v7.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/shape_frame3_cl_fff"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+
+        <com.hjkj.fuduoduo.view.ClearEditText
+            android:id="@+id/m_et_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:background="@color/transparent"
+            android:hint="请简要描述您所遇到的问题"
+            android:lineSpacingExtra="3dp"
+            android:lineSpacingMultiplier="1.1"
+            android:paddingTop="16dp"
+            android:textColor="@color/cl_333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/m_tv_Input_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:text="0/200"
+            android:textColor="@color/cl_666"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/m_layout_determine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/shape_frame_cl_ccc_all"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/m_tv_determine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="确定"
+            android:textColor="@color/cl_fff"
+            android:textSize="15sp" />
+    </RelativeLayout>
+</LinearLayout>

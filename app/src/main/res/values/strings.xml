@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">fuduoduo</string>
+
+    <string name="Worst">非常差</string>
+    <string name="Bad">差</string>
+    <string name="Good">一般</string>
+    <string name="Better">满意</string>
+    <string name="Best">非常满意</string>
+</resources>

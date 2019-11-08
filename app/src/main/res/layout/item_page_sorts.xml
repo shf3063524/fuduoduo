@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="45dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/m_iv_name"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:src="@mipmap/ic_all_background" />
+
+    <TextView
+        android:id="@+id/m_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="京东优选"
+        android:textColor="@color/cl_666"
+        android:textSize="11sp" />
+</LinearLayout>

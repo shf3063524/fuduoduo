@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cl_f6"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/m_layout_set_return"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/cl_fff">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@mipmap/ic_arrows_left" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="设置"
+            android:textColor="@color/cl_333"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/m_layout_personal_center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:background="@color/cl_fff"
+        android:paddingStart="11dp"
+        android:paddingTop="19dp"
+        android:paddingBottom="19dp">
+
+        <ImageView
+            android:id="@+id/m_iv_set_logo"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:src="@mipmap/ic_set_logo" />
+
+        <TextView
+            android:id="@+id/m_tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/m_iv_set_logo"
+            android:text="张三"
+            android:textColor="@color/cl_333"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/m_tv_job_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/m_tv_username"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@+id/m_iv_set_logo"
+            android:text="工号：000001"
+            android:textColor="@color/cl_666"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <com.hjkj.fuduoduo.view.GlobalClickItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        app:left_text="账号"
+        app:right_text="18306845011"
+        app:show_arrow="1"
+        app:show_left_icon="1" />
+
+    <com.hjkj.fuduoduo.view.GlobalClickItem
+        android:id="@+id/m_login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        app:left_text="登录密码"
+        app:show_left_icon="1" />
+
+    <com.hjkj.fuduoduo.view.GlobalClickItem
+        android:id="@+id/m_payment_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        app:left_text="支付密码"
+        app:show_left_icon="1" />
+
+    <com.hjkj.fuduoduo.view.GlobalClickItem
+        android:id="@+id/m_my_shipping_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        app:left_text="我的收货地址"
+        app:show_left_icon="1" />
+
+    <com.hjkj.fuduoduo.view.GlobalClickItem
+        android:id="@+id/m_about_us"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        app:left_text="关于我们"
+        app:show_left_icon="1" />
+
+    <TextView
+        android:id="@+id/m_tv_sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/shape_frame_cl_e51c23_all"
+        android:paddingStart="149dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="149dp"
+        android:paddingBottom="10dp"
+        android:text="退出登录"
+        android:textColor="@color/cl_fff"
+        android:textSize="14sp" />
+</LinearLayout>

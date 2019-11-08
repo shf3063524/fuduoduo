@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/cl_fff">
+
+        <TextView
+            android:id="@+id/m_tv_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text=""
+            android:layout_marginStart="16dp"
+            android:textColor="@color/cl_666"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/m_iv_must"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_toEndOf="@id/m_tv_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_yes_check" />
+
+        <com.hjkj.fuduoduo.view.ClearEditText
+            android:id="@+id/m_et_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@id/m_iv_must"
+            android:layout_marginStart="12dp"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:background="@color/transparent"
+            android:gravity="center_vertical|end"
+            android:hint="点击填写"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:visibility="visible" />
+    </RelativeLayout>
+</LinearLayout>

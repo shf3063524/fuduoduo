@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@color/cl_fff"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/m_iv_head"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:background="@color/cl_e51C23" />
+
+    <RelativeLayout
+        android:id="@+id/m_layout_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/m_iv_head">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="圣罗兰官方旗舰店"
+            android:textColor="@color/cl_333"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="11:12"
+            android:textColor="@color/cl_999"
+            android:textSize="10sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/m_layout_one"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/m_iv_head">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="建议您先去专柜试色呢～"
+            android:textColor="@color/cl_999"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shape_circle_cl_e51c23_background"
+            android:gravity="center"
+            android:text="2"
+            android:textColor="@color/cl_fff"
+            android:textSize="10sp" />
+    </RelativeLayout>
+</RelativeLayout>

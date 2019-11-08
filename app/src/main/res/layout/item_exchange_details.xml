@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="17dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/m_iv_shopping"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@color/cl_e51C23" />
+
+        <TextView
+            android:id="@+id/m_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/m_iv_shopping"
+            android:text="张裕第九代大师级解百纳干红葡萄酒蛇龙珠红酒玫瑰金版单支高端···"
+            android:textColor="@color/cl_333"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/m_tv_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/m_iv_shopping">
+
+            <TextView
+                android:id="@+id/m_tv_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="换成：N°7"
+                android:textColor="@color/cl_e51C23"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/m_tv_change"
+                android:text="原有：N°1正宫色"
+                android:textColor="@color/cl_999"
+                android:textSize="11sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
