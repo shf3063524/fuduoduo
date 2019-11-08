@@ -78,8 +78,8 @@ public class SlidingTabFragment extends BaseFragment {
         }
     }
     private void initRefreshLayout() {
-        mRefreshLayout.setEnableRefresh(false);
-        mRefreshLayout.setEnableLoadMore(true);
+//        mRefreshLayout.setEnableRefresh(false);
+//        mRefreshLayout.setEnableLoadMore(true);
     }
 
     private void initRecyclerView() {
@@ -140,7 +140,7 @@ public class SlidingTabFragment extends BaseFragment {
                         mAdapter.notifyDataSetChanged();
                         if (unbinder != null) {
 //                            mRefreshLayout.finishRefresh();
-                            mRefreshLayout.finishLoadMore();
+//                            mRefreshLayout.finishLoadMore();
                         }
                     }
                 });
@@ -168,7 +168,7 @@ public class SlidingTabFragment extends BaseFragment {
                         mAdapter.notifyDataSetChanged();
                         if (unbinder != null) {
 //                            mRefreshLayout.finishRefresh();
-                            mRefreshLayout.finishLoadMore();
+//                            mRefreshLayout.finishLoadMore();
                         }
                     }
                 });

@@ -128,6 +128,8 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
     RelativeLayout mLayoutReview;
     @BindView(R.id.m_layout_collect)
     RelativeLayout mLayoutCollect;
+    @BindView(R.id.m_layout_review_one)
+    LinearLayout mLayoutReviewOne;
     private int imageHeight; //图片高度
 
     /**
@@ -389,47 +391,51 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
         // 包邮的地址涵盖在这里
         FreightTemplateBean freightTemplate = data.getFreightTemplate();
         // 包邮
-        if ("1".equals(freightTemplate.getFreeShipping())) {
-            mTvShipping.setText("包邮");
-        } else {
-            mTvShipping.setText("不包邮");
-        }
+//        if ("1".equals(freightTemplate.getFreeShipping())) {
+        mTvShipping.setText("包邮");
+//        } else {
+//            mTvShipping.setText("不包邮");
+//        }
         // 店铺地址
         SupplierBean supplier = data.getSupplier();
         mTvAddress.setText(supplier.getProvince() + supplier.getCity());
         // 商品评价条数
         EvaluationsBean evaluations = data.getEvaluations();
         mTvProductReview.setText("商品评价（" + evaluations.getNumber() + ")");
-        // 所有评价
-        ArrayList<EvaluationBeans> evaluation = evaluations.getEvaluation();
-        // 第一个用户
-        ConsumerBean consumer = evaluation.get(0).getConsumer();
-        //用户头像
-        GlideUtils.loadCircleHeadImage(ProductDetailsActivity.this, consumer.getLogo(), R.drawable.ic_all_background, mIvHead);
-        //用户电话
-        String phoneNumber = consumer.getPhoneNumber();
-        String phonenum = phoneNumber.substring(0, 3) + "****" + phoneNumber.substring(7, 11);
-        mTvPhone.setText(phonenum);
-        // 评级时间
-        Evaluation evaluation1 = evaluation.get(0).getEvaluation();
-        mTvTime.setText(evaluation1.getCreateTime());
-        // 评价规格
-        SpecificationBeans specification = evaluation.get(0).getSpecification();
-        mTvSpecification.setText(specification.getCommoditySpecification());
-        // 评价内容
-        mTvContent.setText(evaluation1.getEvaluationContent());
+        if (!"0".equals(evaluations.getNumber())) {
+            // 所有评价
+            ArrayList<EvaluationBeans> evaluation = evaluations.getEvaluation();
+            // 第一个用户
+            ConsumerBean consumer = evaluation.get(0).getConsumer();
+            //用户头像
+            GlideUtils.loadCircleHeadImage(ProductDetailsActivity.this, consumer.getLogo(), R.drawable.ic_all_background, mIvHead);
+            //用户电话
+            String phoneNumber = consumer.getPhoneNumber();
+            String phonenum = phoneNumber.substring(0, 3) + "****" + phoneNumber.substring(7, 11);
+            mTvPhone.setText(phonenum);
+            // 评级时间
+            Evaluation evaluation1 = evaluation.get(0).getEvaluation();
+            mTvTime.setText(evaluation1.getCreateTime());
+            // 评价规格
+            SpecificationBeans specification = evaluation.get(0).getSpecification();
+            mTvSpecification.setText(specification.getCommoditySpecification());
+            // 评价内容
+            mTvContent.setText(evaluation1.getEvaluationContent());
+            //规格
+            ArrayList<SpecificationsBean> specifications = data.getSpecifications();
+            // 参数
+            ArrayList<AttributesBean> attributes = data.getAttributes();
 
-        //规格
-        ArrayList<SpecificationsBean> specifications = data.getSpecifications();
-        // 参数
-        ArrayList<AttributesBean> attributes = data.getAttributes();
+            // 服务
+            mTvShip.setText(commodity.getServiceType());
+            //已选默认第一个
+            mTvSelectContent.setText(specifications.get(0).getCommoditySpecification() + " 1件");
+            // 参数内容
+            mTvParameterContent.setText(attributes.get(0).getAttribute() + "：" + attributes.get(0).getValue());
+        }else {
+            mLayoutReviewOne.setVisibility(View.GONE);
+        }
 
-        // 服务
-        mTvShip.setText(commodity.getServiceType());
-        //已选默认第一个
-        mTvSelectContent.setText(specifications.get(0).getCommoditySpecification() + " 1件");
-        // 参数内容
-        mTvParameterContent.setText(attributes.get(0).getAttribute() + "：" + attributes.get(0).getValue());
 
         collection = data.getCollection();
         if ("0".equals(collection)) {
