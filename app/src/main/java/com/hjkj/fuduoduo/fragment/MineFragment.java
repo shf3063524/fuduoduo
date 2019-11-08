@@ -94,7 +94,6 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.m_layout_customer_service_secret)
     LinearLayout mLayoutCustomerServiceSecret;
     private String fudouBalance;
-    private UserDoQueryData tempidList;
 
     public static MineFragment newInstance() {
         MineFragment fragment = new MineFragment();
@@ -134,7 +133,7 @@ public class MineFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_set:   // 设置
-                SetActivity.openActivity(mContext,tempidList.getConsumer());
+                SetActivity.openActivity(mContext);
                 break;
             case R.id.m_layout_fudou_banlance:   // 福豆余额
                 FudouBanlanceActivity.openActivity(mContext,fudouBalance);
@@ -193,7 +192,7 @@ public class MineFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse<UserDoQueryData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            tempidList = simpleResponseAppResponse.getData();
+                            UserDoQueryData tempidList = simpleResponseAppResponse.getData();
                             initDealUser(tempidList);
                         }
                     }

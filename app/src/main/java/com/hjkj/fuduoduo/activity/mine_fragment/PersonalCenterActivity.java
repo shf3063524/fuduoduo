@@ -16,6 +16,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.hjkj.fuduoduo.LoginActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.base.BaseActivity;
+import com.hjkj.fuduoduo.entity.bean.ConsumerBean;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
@@ -33,6 +34,7 @@ import com.lzy.okgo.OkGo;
 import com.mylhyl.circledialog.CircleDialog;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -79,14 +81,21 @@ public class PersonalCenterActivity extends BaseActivity {
     private String gender;
     private String logoHead = null;
 
-    public static void openActivity(Context context) {
+    public static void openActivity(Context context, ConsumerBean consumerBean) {
         Intent intent = new Intent(context, PersonalCenterActivity.class);
+        intent.putExtra("ConsumerBean",consumerBean);
         context.startActivity(intent);
     }
 
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_personal_center;
+    }
+
+    @Override
+    protected void initPageData() {
+        ConsumerBean consumerBean =(ConsumerBean) getIntent().getSerializableExtra("ConsumerBean");
+        uploadedProfileDisplay(consumerBean);
     }
 
     @Override
@@ -384,4 +393,34 @@ public class PersonalCenterActivity extends BaseActivity {
                     }
                 });
     }
+
+    /**
+     * 已经上传的个人资料展示
+     * @param consumerBean
+     */
+    private void uploadedProfileDisplay(ConsumerBean consumerBean){
+        // 头像
+        GlideUtils.loadCircleHeadImage(PersonalCenterActivity.this,consumerBean.getLogo(),R.drawable.ic_all_background,mIvHead);
+        // 用户名
+        mEtUsername.setText(consumerBean.getUsername());
+        // 昵称
+        mEtNickname.setText(consumerBean.getName());
+        // 手机号
+        mEtPhone.setText(consumerBean.getPhoneNumber());
+        // 性别
+        switch (consumerBean.getGender()){
+            case "1":
+                mTvWriteGender.setText("男");
+                break;
+            case "2":
+                mTvWriteGender.setText("女");
+                break;
+            case "3":
+                mTvWriteGender.setText("保密");
+                break;
+        }
+        // 生日
+        mTvWriteBirth.setText(consumerBean.getBirthday());
+    }
+
 }
