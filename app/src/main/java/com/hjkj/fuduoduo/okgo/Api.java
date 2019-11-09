@@ -2,7 +2,7 @@ package com.hjkj.fuduoduo.okgo;
 
 public class Api {
     // 服务器地址--和个人有关
-    private static final String BASE_URL = "http://192.168.0.125:1001/user-service";
+    private static final String BASE_URL = "http://192.168.1.11:1001/user-service";
     /**
      * 登录发送密码
      */
@@ -76,7 +76,7 @@ public class Api {
 //************************************************    订单有关    **************************************************************
 
     // 服务器地址--和订单有关
-    private static final String BASE_ORDERS = "http://192.168.0.125:1001/orders-service";
+    private static final String BASE_ORDERS = "http://192.168.1.11:1001/orders-service";
     /**
      * 查询收货地址
      */
@@ -113,11 +113,19 @@ public class Api {
      * 待付款买家提醒发货
      */
     public static final String ORDERS_DOREMINDSEND = BASE_ORDERS + "/orders/doRemindSend";
+    /**
+     * 查询订单的物流信息
+     */
+    public static final String ORDERS_DOQUERYORDEREXPRESSES = BASE_ORDERS + "/orders/doQueryOrderExpresses";
+    /**
+     * 根据物流id查询物流
+     */
+    public static final String ORDERS_DOQUERYEXPRESS = BASE_ORDERS + "/orders/doQueryExpress";
 
     //************************************************    商品有关    **************************************************************
 
     // 图片地址---和商品有关
-    private static final String BASE_IMAGE_URL = "http://192.168.0.125:1001/commodity-service";
+    private static final String BASE_IMAGE_URL = "http://192.168.1.11:1001/commodity-service";
 
     /**
      * 图片接口

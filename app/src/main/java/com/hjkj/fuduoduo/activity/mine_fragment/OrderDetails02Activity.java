@@ -163,23 +163,15 @@ public class OrderDetails02Activity extends BaseActivity {
     }
 
     private void orderDetails(String orderId) {
-        String userId = UserManager.getUserId(OrderDetails02Activity.this);
         OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
-                .params("id", userId)
-                .params("saleState", "2")
                 .params("orderId", orderId)
-                .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
+                .execute( new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                             refreshUi(tempList);
                         }
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
                     }
                 });
     }
@@ -217,7 +209,6 @@ public class OrderDetails02Activity extends BaseActivity {
         mTvPayTime.setText(order.getPayTime());
 
         ArrayList<OrderDetailsBean> orderDetails = detailsData.get(0).getOrderDetails();
-        mOrderDetailsData.clear();
         mOrderDetailsData.addAll(orderDetails);
         mOrderDetails02Adapter.notifyDataSetChanged();
     }

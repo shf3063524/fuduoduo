@@ -18,6 +18,7 @@
             android:src="@mipmap/ic_view_logistics" />
 
         <TextView
+            android:id="@+id/m_tv_freightState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -27,6 +28,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/m_tv_freightCompany"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -36,6 +38,7 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/m_tv_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="12dp"
@@ -44,10 +47,11 @@
         android:textSize="13sp" />
 
     <ImageView
+        android:id="@+id/m_iv_shopping"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="30dp"
-        android:src="@color/cl_333" />
+        android:background="@color/cl_f8" />
 </LinearLayout>

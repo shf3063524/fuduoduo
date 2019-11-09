@@ -72,7 +72,6 @@ public class MyOrderActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initSlidingTabLayout();
-
         initFragment(positionStatus);
     }
 

@@ -13,9 +13,18 @@ public class DoQueryOrdersDetailsData implements Serializable {
     private String refunding;
     private FreightBean freight;// 物流信息
     private OrderBean order;
+    private ArrayList<ExpressBean> express;
     private DefaultAddressBean freightAddress;
     private boolean clickable; // 显示与不显示
     private boolean check; // 选定与不选定
+
+    public ArrayList<ExpressBean> getExpress() {
+        return express;
+    }
+
+    public void setExpress(ArrayList<ExpressBean> express) {
+        this.express = express;
+    }
 
     public FreightBean getFreight() {
         return freight;

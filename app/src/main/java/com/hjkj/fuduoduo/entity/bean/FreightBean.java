@@ -12,10 +12,13 @@ public class FreightBean implements Serializable {
     private String id;
     private String consumerId;
     private String supplierId;
+    private String freightNumber; // 物流编号
+    private String orderNumber; // 物流编号
     private String freightCompany; //物流名称
     private String freightCompanyCode;
     private String freightCode;
     private String state;
+    private String isReturn;
     private String reMarks;
 
     public String getCreateTime() {
@@ -96,5 +99,29 @@ public class FreightBean implements Serializable {
 
     public void setReMarks(String reMarks) {
         this.reMarks = reMarks;
+    }
+
+    public String getFreightNumber() {
+        return freightNumber;
+    }
+
+    public void setFreightNumber(String freightNumber) {
+        this.freightNumber = freightNumber;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getIsReturn() {
+        return isReturn;
+    }
+
+    public void setIsReturn(String isReturn) {
+        this.isReturn = isReturn;
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.adapter.OrderDetails03Adapter;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
@@ -19,6 +21,7 @@ import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
+import com.hjkj.fuduoduo.entity.bean.ExpressBean;
 import com.hjkj.fuduoduo.entity.bean.OrderBean;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.bean.ShopBean;
@@ -26,12 +29,17 @@ import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
+import com.hjkj.fuduoduo.tool.GsonHelper;
+import com.hjkj.fuduoduo.tool.JsonHelper;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.SpaceItemDecoration;
 import com.lzy.okgo.OkGo;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -74,6 +82,12 @@ public class OrderDetails03Activity extends BaseActivity {
     TextView mTvDeliveryTime;
     @BindView(R.id.m_tv_express_name)
     TextView mTvExpressName;
+    @BindView(R.id.m_tv_track_number)
+    TextView mTvTrackNumber;
+    @BindView(R.id.m_tv_logistics_content)
+    TextView mTvLogisticeContent;
+    @BindView(R.id.m_tv_logistics_time)
+    TextView mTvLogisticeTime;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.m_scrollview)
@@ -89,6 +103,8 @@ public class OrderDetails03Activity extends BaseActivity {
 
     private ArrayList<TestBean> mData;
     private ShoppingFragmentAdapter mAdapter;
+    private ArrayList<ExpressBean> express;
+    private ArrayList<DoQueryOrdersDetailsData> detailsData;
 
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetails03Activity.class);
@@ -104,7 +120,7 @@ public class OrderDetails03Activity extends BaseActivity {
     @Override
     protected void initPageData() {
         String orderId = getIntent().getStringExtra("orderId");
-        orderDetails(orderId);
+        orderDetail(orderId);
     }
 
     @Override
@@ -165,35 +181,27 @@ public class OrderDetails03Activity extends BaseActivity {
                 Toasty.info(this, "联系卖家").show();
                 break;
             case R.id.m_tv_two:// 查看物流
-                ViewLogisticsActivity.openActivity(OrderDetails03Activity.this);
+                ViewLogisticsActivity.openActivity(OrderDetails03Activity.this,detailsData.get(0).getOrder().getOrderNumber());
                 break;
             case R.id.m_tv_three: // 确认收货
                 Toasty.info(this, "确认收货").show();
                 break;
             case R.id.m_layout_logistics: // 物流信息
-                LogisticsInfoActivity.openActivity(OrderDetails03Activity.this);
+                LogisticsInfoActivity.openActivity(OrderDetails03Activity.this,express);
                 break;
         }
     }
 
-    private void orderDetails(String orderId) {
-        String userId = UserManager.getUserId(OrderDetails03Activity.this);
+    private void orderDetail(String orderId) {
         OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
-                .params("id", userId)
-                .params("saleState", "3")
                 .params("orderId", orderId)
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
-                            refreshUi(tempList);
+                            detailsData = simpleResponseAppResponse.getData();
+                            refreshUi(detailsData);
                         }
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
                     }
                 });
     }
@@ -225,6 +233,8 @@ public class OrderDetails03Activity extends BaseActivity {
         mTvOrderTime.setText(order.getCreateTime());
         // 订单号
         mTvPayNumber.setText(order.getPayNumber());
+        // 物流编号
+        mTvTrackNumber.setText(detailsData.get(0).getFreight().getFreightNumber());
         // 支付时间
         mTvPayTime.setText(order.getPayTime());
         // 快递名称
@@ -236,6 +246,14 @@ public class OrderDetails03Activity extends BaseActivity {
         mOrderDetailsData.clear();
         mOrderDetailsData.addAll(orderDetails);
         mOrderDetailsAdapter.notifyDataSetChanged();
+        // 物流信息
+        express = detailsData.get(0).getExpress();
+        // 物流内容
+        mTvLogisticeContent.setText(express.get(0).getContext());
+        // 物流时间
+        mTvLogisticeTime.setText(express.get(0).getTime());
     }
 
 }
+
+

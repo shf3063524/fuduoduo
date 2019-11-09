@@ -13,7 +13,6 @@ import com.hjkj.fuduoduo.activity.mine_fragment.OrderDetailsActivity;
 import com.hjkj.fuduoduo.activity.product.StoreDetailsActivity;
 import com.hjkj.fuduoduo.adapter.PendingPaymentAdapter;
 import com.hjkj.fuduoduo.base.BaseFragment;
-import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.dialog.CancelOrderDialog;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
@@ -86,9 +85,6 @@ public class PendingPaymentFragment extends BaseFragment {
     private void initRecyclerView() {
         mData = new ArrayList<>();
         mAdapter = new PendingPaymentAdapter(R.layout.item_pending_payment, mData);
-        mAdapter.setSingleSelect(false);
-        // mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        // mAdapter.isFirstOnly(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
