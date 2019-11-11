@@ -311,8 +311,8 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
 
             case R.id.m_layout_store: // 店铺详情
                 // 到时这里需要对店铺详情做有无背景判断进行页面跳转
-//                StoreDetailsNoBackgroundActivity.openActivity(ProductDetailsActivity.this);
-                StoreDetailsActivity.openActivity(ProductDetailsActivity.this, supplierId);
+                StoreDetailsNoBackgroundActivity.openActivity(ProductDetailsActivity.this,supplierId);
+//                StoreDetailsActivity.openActivity(ProductDetailsActivity.this, supplierId);
                 break;
 
             case R.id.m_layout_collect: // 收藏

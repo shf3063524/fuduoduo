@@ -13,6 +13,7 @@
         android:layout_marginTop="10dp">
 
         <TextView
+            android:id="@+id/m_tv_store_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="圣罗兰官方旗舰店透明"
