@@ -32,6 +32,8 @@ ext{
             "okgo"                         : "com.lzy.net:okgo:3.0.4",
             "DoubleClick"                  : "com.github.liys666666:DoubleClick:V2.0.6",
             "DeMon-JS-PDF"                 : "com.github.DeMonLiu623:DeMon-JS-PDF:v1.0",
+            "jsoup"                         : "org.jsoup:jsoup:1.12.1",
+
             //endregion
 
             //region view

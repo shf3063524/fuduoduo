@@ -15,6 +15,9 @@ import com.hjkj.fuduoduo.base.BaseActivity;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 福多多平台协议-页面
+ */
 public class ServiceAgreementActivity extends BaseActivity {
     @BindView(R.id.m_web_view)
     WebView mWebView;

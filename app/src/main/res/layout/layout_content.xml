@@ -247,81 +247,86 @@
         <View style="@style/view_line_global" />
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
 
-                <ImageView
-                    android:id="@+id/m_iv_head"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/ic_all_background" />
-
-                <TextView
-                    android:id="@+id/m_tv_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="9dp"
-                    android:layout_toEndOf="@+id/m_iv_head"
-                    android:text="18306845011"
-                    android:textColor="@color/cl_333"
-                    android:textSize="14sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:id="@+id/m_tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2019-08-23"
-                    android:textColor="@color/cl_666"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/m_tv_specification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/m_tv_time"
-                    android:text="N1正宫色规格"
-                    android:textColor="@color/cl_666"
-                    android:textSize="12sp" />
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/m_iv_head"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_all_background" />
 
             <TextView
-                android:id="@+id/m_tv_content"
+                android:id="@+id/m_tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="2"
-                android:text="五项圣诞快乐似懂非懂时空裂缝多斯拉克放点水杰弗里斯点击上方克雷登斯就发了是的范德萨发生的方式"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="9dp"
+                android:layout_toEndOf="@+id/m_iv_head"
+                android:text="18306845011"
                 android:textColor="@color/cl_333"
                 android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/m_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2019-08-23"
+                android:textColor="@color/cl_666"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/m_tv_specification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/m_tv_time"
+                android:text="N1正宫色规格"
+                android:textColor="@color/cl_666"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/m_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="2"
+            android:text="五项圣诞快乐似懂非懂时空裂缝多斯拉克放点水杰弗里斯点击上方克雷登斯就发了是的范德萨发生的方式"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="match_parent"
         android:background="@color/cl_fff"
         android:orientation="vertical"
-        android:paddingStart="12dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="16dp">
+        android:paddingTop="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:text="商品详情"
             android:textColor="@color/cl_333"
             android:textSize="15sp" />
+
+        <WebView
+            android:id="@+id/m_web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
+
 </LinearLayout>

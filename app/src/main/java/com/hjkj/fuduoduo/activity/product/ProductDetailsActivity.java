@@ -5,8 +5,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,6 +46,7 @@ import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.DialogCallBack;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
+import com.hjkj.fuduoduo.tool.GetJsonDataUtil;
 import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.SharedPrefUtil;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
@@ -130,6 +136,8 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
     RelativeLayout mLayoutCollect;
     @BindView(R.id.m_layout_review_one)
     LinearLayout mLayoutReviewOne;
+    @BindView(R.id.m_web_view)
+    WebView mWebView;
     private int imageHeight; //图片高度
 
     /**
@@ -167,6 +175,18 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
     protected void initViews() {
         initViewPager();
         initListener();
+        initWebView();
+    }
+
+    /**
+     * 加载Html5需要设置的参数
+     */
+    private void initWebView() {
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+//        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+//        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
     }
 
     @Override
@@ -311,7 +331,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
 
             case R.id.m_layout_store: // 店铺详情
                 // 到时这里需要对店铺详情做有无背景判断进行页面跳转
-                StoreDetailsNoBackgroundActivity.openActivity(ProductDetailsActivity.this,supplierId);
+                StoreDetailsNoBackgroundActivity.openActivity(ProductDetailsActivity.this, supplierId);
 //                StoreDetailsActivity.openActivity(ProductDetailsActivity.this, supplierId);
                 break;
 
@@ -366,8 +386,10 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
         // 产品图片
         ArrayList<String> picture = new ArrayList<>();
         String images = commodity.getImages();
-        String[] imageUrl = images.split(",");
-        picture.addAll(Arrays.asList(imageUrl));
+        if (images != null && !images.equals("") && !images.isEmpty()) {
+            String[] imageUrl = images.split(",");
+            picture.addAll(Arrays.asList(imageUrl));
+        }
 
         if (picture != null && !picture.isEmpty()) {
             for (int i = 0; i < picture.size(); i++)
@@ -387,15 +409,19 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
         mTvName.setText(commodity.getName());
         // 销量
         mTvMonthlySales.setText("销量：" + commodity.getFictitiousVolume());
+        // 商品详情
+        String description = commodity.getDescription();
+
+        mWebView.loadDataWithBaseURL(null,GetJsonDataUtil.jsoup(ProductDetailsActivity.this,description),"text/html","utf-8",null);
 
         // 包邮的地址涵盖在这里
         FreightTemplateBean freightTemplate = data.getFreightTemplate();
         // 包邮
-//        if ("1".equals(freightTemplate.getFreeShipping())) {
-        mTvShipping.setText("包邮");
-//        } else {
-//            mTvShipping.setText("不包邮");
-//        }
+        if ("1".equals(freightTemplate.getFreeShipping())) {
+            mTvShipping.setText("包邮");
+        } else {
+            mTvShipping.setText("不包邮");
+        }
         // 店铺地址
         SupplierBean supplier = data.getSupplier();
         mTvAddress.setText(supplier.getProvince() + supplier.getCity());
@@ -421,19 +447,23 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
             mTvSpecification.setText(specification.getCommoditySpecification());
             // 评价内容
             mTvContent.setText(evaluation1.getEvaluationContent());
-            //规格
-            ArrayList<SpecificationsBean> specifications = data.getSpecifications();
-            // 参数
-            ArrayList<AttributesBean> attributes = data.getAttributes();
-
-            // 服务
-            mTvShip.setText(commodity.getServiceType());
-            //已选默认第一个
-            mTvSelectContent.setText(specifications.get(0).getCommoditySpecification() + " 1件");
-            // 参数内容
-            mTvParameterContent.setText(attributes.get(0).getAttribute() + "：" + attributes.get(0).getValue());
-        }else {
+        } else {
             mLayoutReviewOne.setVisibility(View.GONE);
+        }
+        //规格
+        ArrayList<SpecificationsBean> specifications = data.getSpecifications();
+        // 参数
+        ArrayList<AttributesBean> attributes = data.getAttributes();
+
+        // 服务
+        mTvShip.setText(commodity.getServiceType());
+        //已选默认第一个
+        mTvSelectContent.setText(specifications.get(0).getCommoditySpecification() + " 1件");
+        // 参数内容
+        if (attributes.size() > 0 && attributes != null) {
+            mTvParameterContent.setText(attributes.get(0).getAttribute() + "：" + attributes.get(0).getValue());
+        } else {
+            mTvParameterContent.setText("暂无规格参数");
         }
 
 
@@ -506,4 +536,5 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
                     }
                 });
     }
+
 }

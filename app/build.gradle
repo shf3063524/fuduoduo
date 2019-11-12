@@ -90,4 +90,6 @@ dependencies {
     implementation project(':loadinglayout')
     // https://github.com/DeMonLiu623/DeMon-JS-PDF
     implementation rootProject.ext.dependencies["DeMon-JS-PDF"]
+    //jsoup解析器
+    implementation rootProject.ext.dependencies["jsoup"]
 }
