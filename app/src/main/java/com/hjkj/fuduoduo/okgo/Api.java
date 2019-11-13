@@ -142,6 +142,11 @@ public class Api {
      */
     public static final String ORDERS_DOCANCELRETURNORDER = BASE_ORDERS + "/orders/doCancelReturnOrder";
 
+    /**
+     *  协商历史查询
+     */
+    public static final String ORDERS_DOQUERYCONSULT = BASE_ORDERS + "/orders/doQueryConsult";
+
     //************************************************    商品有关    **************************************************************
 
     // 图片地址---和商品有关

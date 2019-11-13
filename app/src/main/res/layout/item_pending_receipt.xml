@@ -57,6 +57,7 @@
             android:layout_marginTop="5dp"
             android:gravity="end"
             android:text="退款中"
+            android:visibility="gone"
             android:textColor="@color/cl_e51C23"
             android:textSize="12sp" />
 

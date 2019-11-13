@@ -35,10 +35,12 @@ public class OrderDetails02Adapter extends BaseQuickAdapter<OrderDetailsBean, Ba
         // 商品状态
         if ("仅退款处理中".equals(item.getRefunding())) {
             helper.setText(R.id.m_tv_refund, "退款中");
+        } else if ("退款成功".equals(item.getRefunding())) {
+            helper.setText(R.id.m_tv_refund, "退款成功");
         } else {
             helper.setText(R.id.m_tv_refund, "退款");
         }
-            helper.addOnClickListener(R.id.m_tv_refund);
+        helper.addOnClickListener(R.id.m_tv_refund);
     }
 }
 

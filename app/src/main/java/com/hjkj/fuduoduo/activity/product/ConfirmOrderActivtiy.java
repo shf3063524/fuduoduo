@@ -234,6 +234,10 @@ public class ConfirmOrderActivtiy extends BaseActivity {
                             // 发货时间
                             FreightTemplateBean freightTemplate = doconfirmordersData.getFreightTemplate();
                             mTvDeliveryTime.setText("发货时间：买家承诺" + freightTemplate.getSendTime() + "小时");
+                            tvNum.setText(doconfirmordersData.getNumber());
+                            int number = Integer.parseInt(doconfirmordersData.getNumber());
+                            currentCount = number;
+
                             // 运费0不包邮  1包邮
                             if ("1".equals(freightTemplate.getFreeShipping())) {
                                 mTvFreight.setText("0");
@@ -242,9 +246,6 @@ public class ConfirmOrderActivtiy extends BaseActivity {
                                 calculateTotalFreight(freightTemplate.getAddPrice(), freightTemplate.getNumber(), freightTemplate.getPrice());
                             }
                             //选择商品数量
-                            tvNum.setText(doconfirmordersData.getNumber());
-                            int number = Integer.parseInt(doconfirmordersData.getNumber());
-                            currentCount = number;
                             // 计算总的积分（两个小计）
                             calculateTotalPoints(commoditySpecification.getSalePrice(), doconfirmordersData.getNumber());
                             calculateTotalPrice(getTextString(mTvFreight), getTextString(mTvIntegral));
@@ -300,6 +301,7 @@ public class ConfirmOrderActivtiy extends BaseActivity {
         String supplierId = doconfirmordersData.getShop().getSupplierId();
         Double mul = DoubleUtil.mul(Double.parseDouble(getTextString(mTvTotalPrice)), 100.00);
         freightAddressId = doconfirmordersData.getDefaultAddress().getId();
+        Double freightPriceDouble = DoubleUtil.mul(Double.parseDouble(getTextString(mTvFreight)), 100.00);
         String note = getTextString(mEtOrderNotes);
         String commodityId = doconfirmordersData.getCommodity().getId();
         String commoditySpecificationId = doconfirmordersData.getCommoditySpecification().getId();
@@ -310,6 +312,7 @@ public class ConfirmOrderActivtiy extends BaseActivity {
                 .params("consumerId", userId) //	用户id
                 .params("actualPrice", DoubleUtil.doubleTransf(mul)) // 实收款
                 .params("freightAddressId", freightAddressId) //	货运地址id
+                .params("freightPrice", DoubleUtil.doubleTransf(freightPriceDouble)) //	货运运费
                 .params("note", note) // 备注
                 .params("commodityId", commodityId) // 商品id
                 .params("commoditySpecificationId", commoditySpecificationId) //	商品规格id

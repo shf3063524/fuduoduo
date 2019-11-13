@@ -180,7 +180,7 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_cv_negotiation_history: // 协商历史
-                NegotiationHistoryActivity.openActivity(OrderDetails02RefundDetailsActivity.this);
+                NegotiationHistoryActivity.openActivity(OrderDetails02RefundDetailsActivity.this,orderDetailsBean);
                 break;
         }
     }

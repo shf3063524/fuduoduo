@@ -60,7 +60,8 @@
             android:gravity="end"
             android:text="退款中"
             android:textColor="@color/cl_e51C23"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="match_parent"

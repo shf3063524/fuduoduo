@@ -119,8 +119,6 @@ public class OrderDetails02Activity extends BaseActivity {
     private void initRecyclerView() {
         mOrderDetailsData = new ArrayList<>();
         mOrderDetails02Adapter = new OrderDetails02Adapter(R.layout.item_order_details02, mOrderDetailsData);
-        // mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        // mAdapter.isFirstOnly(true);
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(OrderDetails02Activity.this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -249,6 +247,8 @@ public class OrderDetails02Activity extends BaseActivity {
                             String freightPrice = simpleResponseAppResponse.getData().getVcode();
                             if ("仅退款处理中".equals(mOrderDetailsData.get(position).getRefunding())) {
                                 OrderDetails02RefundDetailsActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice);
+                            } else if ("退款成功".equals(mOrderDetailsData.get(position).getRefunding())) {
+                                RefundDetailsActivity.openActivity(OrderDetails02Activity.this);
                             } else {
                                 ApplyForAfterSaleActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice);
                             }
