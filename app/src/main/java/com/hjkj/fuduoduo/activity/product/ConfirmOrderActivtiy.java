@@ -132,12 +132,16 @@ public class ConfirmOrderActivtiy extends BaseActivity {
                     currentCount--;
                     tvNum.setText(String.valueOf(currentCount));
                     calculateTotalPoints(doconfirmordersData.getCommoditySpecification().getSalePrice(), String.valueOf(currentCount));
+                    calculateTotalFreight(doconfirmordersData.getFreightTemplate().getAddPrice(), doconfirmordersData.getFreightTemplate().getNumber(), doconfirmordersData.getFreightTemplate().getPrice());
+                    calculateTotalPrice(getTextString(mTvFreight), getTextString(mTvIntegral));
                 }
                 break;
             case R.id.tv_add: //加法
                 currentCount++;
                 tvNum.setText(String.valueOf(currentCount));
                 calculateTotalPoints(doconfirmordersData.getCommoditySpecification().getSalePrice(), String.valueOf(currentCount));
+                calculateTotalFreight(doconfirmordersData.getFreightTemplate().getAddPrice(), doconfirmordersData.getFreightTemplate().getNumber(), doconfirmordersData.getFreightTemplate().getPrice());
+                calculateTotalPrice(getTextString(mTvFreight), getTextString(mTvIntegral));
                 break;
             case R.id.m_tv_pay: //提交订单
                 new ConfirmPaymentDialog(ConfirmOrderActivtiy.this, getTextString(mTvTotalPrice))
@@ -232,9 +236,10 @@ public class ConfirmOrderActivtiy extends BaseActivity {
                             mTvDeliveryTime.setText("发货时间：买家承诺" + freightTemplate.getSendTime() + "小时");
                             // 运费0不包邮  1包邮
                             if ("1".equals(freightTemplate.getFreeShipping())) {
-                                mTvFreight.setText("包邮");
+                                mTvFreight.setText("0");
                             } else {
-                                mTvFreight.setText("不包邮");
+                                // 计算总的运费积分
+                                calculateTotalFreight(freightTemplate.getAddPrice(), freightTemplate.getNumber(), freightTemplate.getPrice());
                             }
                             //选择商品数量
                             tvNum.setText(doconfirmordersData.getNumber());
@@ -242,9 +247,27 @@ public class ConfirmOrderActivtiy extends BaseActivity {
                             currentCount = number;
                             // 计算总的积分（两个小计）
                             calculateTotalPoints(commoditySpecification.getSalePrice(), doconfirmordersData.getNumber());
+                            calculateTotalPrice(getTextString(mTvFreight), getTextString(mTvIntegral));
                         }
                     }
                 });
+    }
+
+    /**
+     * @param addPrice 从 number+1 开始，每次增加1就要加的价格
+     * @param number   商品限制的数量
+     * @param price    商品限制的价格
+     */
+    private void calculateTotalFreight(String addPrice, String number, String price) {
+        if (currentCount <= Integer.parseInt(number)) {
+            mTvFreight.setText(DoubleUtil.double2Str(price));
+        } else {
+            int i = Integer.parseInt(number);
+            int j = currentCount - i;
+            Double mul = DoubleUtil.mul(Double.parseDouble(addPrice), Double.parseDouble(String.valueOf(j)));
+            Double add = DoubleUtil.add(mul, Double.parseDouble(price));
+            mTvFreight.setText(DoubleUtil.double2Str(String.valueOf(add)));
+        }
     }
 
     /**
@@ -256,7 +279,17 @@ public class ConfirmOrderActivtiy extends BaseActivity {
     private void calculateTotalPoints(String price, String number) {
         Double mul = DoubleUtil.mul(Double.parseDouble(price), Double.parseDouble(number));
         mTvIntegral.setText(DoubleUtil.double2Str(String.valueOf(DoubleUtil.round(mul, 2))));
-        mTvTotalPrice.setText(DoubleUtil.double2Str(String.valueOf(DoubleUtil.round(mul, 2))));
+    }
+
+    /**
+     * 小计
+     *
+     * @param freight
+     * @param subtotalPrice
+     */
+    private void calculateTotalPrice(String freight, String subtotalPrice) {
+        Double add = DoubleUtil.add(Double.parseDouble(freight), Double.parseDouble(subtotalPrice));
+        mTvTotalPrice.setText(String.valueOf(add));
     }
 
     /**
@@ -324,9 +357,9 @@ public class ConfirmOrderActivtiy extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.getState() == 0) {
-                            Toasty.info(ConfirmOrderActivtiy.this,simpleResponseAppResponse.getMessage()).show();
+                            Toasty.info(ConfirmOrderActivtiy.this, simpleResponseAppResponse.getMessage()).show();
                             PayFailureActivity.openActivity(ConfirmOrderActivtiy.this);
-                        }else {
+                        } else {
                             PaySuccessActivity.openActivity(ConfirmOrderActivtiy.this);
                             finish();
                         }

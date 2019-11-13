@@ -376,8 +376,17 @@
                         android:id="@+id/m_tv_freight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_toStartOf="@+id/m_tv_unit03"
+                        android:textColor="@color/cl_999"
+                        android:layout_marginEnd="5dp"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/m_tv_unit03"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="0积分"
+                        android:text="积分"
                         android:textColor="@color/cl_999"
                         android:textSize="12sp" />
                 </RelativeLayout>
