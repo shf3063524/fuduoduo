@@ -12,16 +12,20 @@ public class ReturnOrderBean implements Serializable {
     private String id;
     private String returnOrderNumber;
     private String orderNumber;
+    private String returnOrderDetailsId;
+    private String orderDetailsId;
     private String supplierId;
     private String consumerId;
     private String price;
     private String returnNumber;
+    private String originFreightId;
     private String returnReason;
     private String freightId;
     private String exchange;
     private String agree;
     private String endTime;
     private String saleState;
+    private String totalPrice;
 
     public String getCreateTime() {
         return createTime;
@@ -141,5 +145,37 @@ public class ReturnOrderBean implements Serializable {
 
     public void setSaleState(String saleState) {
         this.saleState = saleState;
+    }
+
+    public String getReturnOrderDetailsId() {
+        return returnOrderDetailsId;
+    }
+
+    public void setReturnOrderDetailsId(String returnOrderDetailsId) {
+        this.returnOrderDetailsId = returnOrderDetailsId;
+    }
+
+    public String getOrderDetailsId() {
+        return orderDetailsId;
+    }
+
+    public void setOrderDetailsId(String orderDetailsId) {
+        this.orderDetailsId = orderDetailsId;
+    }
+
+    public String getOriginFreightId() {
+        return originFreightId;
+    }
+
+    public void setOriginFreightId(String originFreightId) {
+        this.originFreightId = originFreightId;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

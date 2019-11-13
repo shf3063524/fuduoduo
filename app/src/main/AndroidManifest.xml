@@ -126,16 +126,23 @@
             android:name=".activity.home_fragment.HomeSearchActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
 
-        <activity android:name=".activity.mine_fragment.MemberCenterActivity"/>
+        <activity android:name=".activity.mine_fragment.MemberCenterActivity" />
 
-        <activity android:name=".activity.mine_fragment.EditShippingAddressActivity"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden"/>
+        <activity
+            android:name=".activity.mine_fragment.EditShippingAddressActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
 
-        <activity android:name=".activity.login.ServiceAgreementActivity"/>
-        <activity android:name=".activity.shop_fragment.ConfirmOrder02Activtiy"/>
+        <activity android:name=".activity.login.ServiceAgreementActivity" />
+        <activity android:name=".activity.shop_fragment.ConfirmOrder02Activtiy" />
 
-        <activity android:name=".activity.product.PaySuccessActivity"/>
-        <activity android:name=".activity.product.PayFailureActivity"/>
+        <activity android:name=".activity.product.PaySuccessActivity" />
+        <activity android:name=".activity.product.PayFailureActivity" />
+        <activity android:name=".activity.mine_fragment.OrderDetails02RefundDetailsActivity" />
+        <activity
+            android:name=".activity.mine_fragment.ModifyApplicationActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
+        <activity android:name=".activity.mine_fragment.OrderDetails02RefundDetails02Activity" />
+        <activity android:name=".activity.mine_fragment.NegotiationHistoryActivity" />
     </application>
 
 </manifest>

@@ -71,7 +71,7 @@ public class AfterSaleActivity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_cv_item:
-                        // ExchangeDetailsActivity.openActivity(AfterSaleActivity.this); //换货详情页面
+//                         ExchangeDetailsActivity.openActivity(AfterSaleActivity.this); //换货详情页面
 
                         RefundDetailsActivity.openActivity(AfterSaleActivity.this);//退款详情页面
                         break;

@@ -26,7 +26,7 @@ public class AppResponse<T> implements Serializable {
         if (state == 1) {
             return true;
         } else {
-            Toasty.info(MyApp.getmContext(), message).show();
+            Toasty.normal(MyApp.getmContext(), message).show();
             return false;
         }
     }

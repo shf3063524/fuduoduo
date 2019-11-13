@@ -23,7 +23,6 @@ public class OrderDetails02Adapter extends BaseQuickAdapter<OrderDetailsBean, Ba
 
     @Override
     protected void convert(BaseViewHolder helper, OrderDetailsBean item) {
-        helper.addOnClickListener(R.id.m_tv_refund);
 
         // 选择商品图片
         GlideUtils.loadImage(mContext, item.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, helper.getView(R.id.m_iv_shopping));
@@ -33,7 +32,13 @@ public class OrderDetails02Adapter extends BaseQuickAdapter<OrderDetailsBean, Ba
         helper.setText(R.id.m_tv_specification, item.getSpecification().getCommoditySpecification());
         // 选择商品数量+价格
         helper.setText(R.id.m_tv_price_num, DoubleUtil.double2Str(item.getOrderDetail().getPrice()) + "积分 x" + item.getOrderDetail().getNumber());
-
+        // 商品状态
+        if ("仅退款处理中".equals(item.getRefunding())) {
+            helper.setText(R.id.m_tv_refund, "退款中");
+        } else {
+            helper.setText(R.id.m_tv_refund, "退款");
+        }
+            helper.addOnClickListener(R.id.m_tv_refund);
     }
 }
 

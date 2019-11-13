@@ -26,8 +26,10 @@ public class SlidingTabAdapter extends BaseQuickAdapter<DoFindMaybeYouLikeData, 
     @Override
     protected void convert(BaseViewHolder helper, DoFindMaybeYouLikeData item) {
         CommodityBean commodity = item.getCommodity();
-        // 商品图片
-        GlideUtils.loadImage(mContext, PictureFileUtils.getImage(commodity.getImages()), R.drawable.ic_all_background, helper.getView(R.id.m_iv_shopping));
+        if (commodity.getImages() != null && !commodity.getImages().equals("") && !commodity.getImages().isEmpty()) {
+            // 商品图片
+            GlideUtils.loadImage(mContext, PictureFileUtils.getImage(commodity.getImages()), R.drawable.ic_all_background, helper.getView(R.id.m_iv_shopping));
+        }
         // 商品名称
         helper.setText(R.id.m_tv_name, commodity.getName());
         //商品价格

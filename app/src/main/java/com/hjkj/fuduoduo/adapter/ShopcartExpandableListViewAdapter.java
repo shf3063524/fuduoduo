@@ -177,7 +177,9 @@ public class ShopcartExpandableListViewAdapter extends BaseExpandableListAdapter
         CartBean cartBean = (CartBean) getChild(groupPosition, childPosition);
         if (cartBean != null) {
             GlideUtils.loadImage(context, cartBean.getCommoditySpecification().getSpecificationImage(), R.drawable.ic_all_background, cholder.iv_shopping);
-            cholder.tv_product_name.setText(cartBean.getCommodity().getName());
+            if (cartBean.getCommodity() != null && !cartBean.getCommodity().equals("")) {
+                cholder.tv_product_name.setText(cartBean.getCommodity().getName());
+            }
             cholder.tv_specification.setText(cartBean.getCommoditySpecification().getCommoditySpecification());
             cholder.tv_price.setText(DoubleUtil.double2Str(cartBean.getCommoditySpecification().getSalePrice()));
             cholder.tv_count.setText(cartBean.getCart().getNumber());

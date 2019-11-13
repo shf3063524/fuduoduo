@@ -10,7 +10,6 @@ public class DoQueryOrdersDetailsData implements Serializable {
     private static final long serialVersionUID = 5745492771462470808L;
     private ArrayList<OrderDetailsBean> orderDetails;
     private ShopBean shop;
-    private String refunding;
     private FreightBean freight;// 物流信息
     private OrderBean order;
     private ArrayList<ExpressBean> express;
@@ -56,14 +55,6 @@ public class DoQueryOrdersDetailsData implements Serializable {
 
     public void setShop(ShopBean shop) {
         this.shop = shop;
-    }
-
-    public String getRefunding() {
-        return refunding;
-    }
-
-    public void setRefunding(String refunding) {
-        this.refunding = refunding;
     }
 
     public OrderBean getOrder() {

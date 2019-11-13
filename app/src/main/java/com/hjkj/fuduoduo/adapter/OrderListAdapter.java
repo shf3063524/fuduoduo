@@ -25,12 +25,13 @@ public class OrderListAdapter extends BaseQuickAdapter<OrderDetailsBean, BaseVie
     protected void convert(BaseViewHolder helper, OrderDetailsBean item) {
         // 商品图片
         GlideUtils.loadImage(mContext, item.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, helper.getView(R.id.m_iv_shopping));
-        // 商品内容
+        // 商品名称
         helper.setText(R.id.m_tv_content, item.getCommodity().getName());
         // 商品规格
         helper.setText(R.id.m_tv_specification, item.getSpecification().getCommoditySpecification());
         // 积分+数量
         helper.setText(R.id.m_tv_prce_num, DoubleUtil.double2Str(item.getOrderDetail().getPrice()) + " 积分" + "x" + item.getOrderDetail().getNumber());
-
+        // 商品状态
+        helper.setText(R.id.m_tv_refunding, item.getRefunding());
     }
 }

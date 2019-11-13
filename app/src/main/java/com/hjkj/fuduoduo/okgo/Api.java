@@ -121,6 +121,26 @@ public class Api {
      * 根据物流id查询物流
      */
     public static final String ORDERS_DOQUERYEXPRESS = BASE_ORDERS + "/orders/doQueryExpress";
+    /**
+     * 退/换货
+     */
+    public static final String ORDERS_DORETURNORDERS = BASE_ORDERS + "/orders/doReturnOrders";
+    /**
+     * 单 订单详情运费计算
+     */
+    public static final String ORDERS_DOCOUNTFREIGHTPRICE = BASE_ORDERS + "/orders/doCountFreightPrice";
+    /**
+     *  查询退货订单详情
+     */
+    public static final String ORDERS_DOQUERYRETURNORDERDETAILS = BASE_ORDERS + "/orders/doQueryReturnOrderDetails";
+    /**
+     *  修改退货申请
+     */
+    public static final String ORDERS_DOMODIFYRETURNORDER = BASE_ORDERS + "/orders/doModifyReturnOrder";
+    /**
+     *  撤销退货申请
+     */
+    public static final String ORDERS_DOCANCELRETURNORDER = BASE_ORDERS + "/orders/doCancelReturnOrder";
 
     //************************************************    商品有关    **************************************************************
 

@@ -2,6 +2,7 @@ package com.hjkj.fuduoduo.activity.mine_fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,10 +18,12 @@ import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
+import com.hjkj.fuduoduo.entity.bean.DoQueryData;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
 import com.hjkj.fuduoduo.entity.bean.OrderBean;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.bean.ShopBean;
+import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
@@ -81,6 +84,8 @@ public class OrderDetails02Activity extends BaseActivity {
 
     private ArrayList<TestBean> mData;
     private ShoppingFragmentAdapter mAdapter;
+    private ArrayList<DoQueryOrdersDetailsData> doQueryOrdersDetailsData;
+    private String orderId;
 
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetails02Activity.class);
@@ -95,7 +100,7 @@ public class OrderDetails02Activity extends BaseActivity {
 
     @Override
     protected void initPageData() {
-        String orderId = getIntent().getStringExtra("orderId");
+        orderId = getIntent().getStringExtra("orderId");
         orderDetails(orderId);
     }
 
@@ -103,6 +108,12 @@ public class OrderDetails02Activity extends BaseActivity {
     protected void initViews() {
         StatusBarUtil.setColor(OrderDetails02Activity.this, cl_e51C23, 1);
         initRecyclerView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        orderDetails(orderId);
     }
 
     private void initRecyclerView() {
@@ -138,7 +149,7 @@ public class OrderDetails02Activity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_tv_refund: // 退款 申请售后
-                        ApplyForAfterSaleActivity.openActivity(OrderDetails02Activity.this);
+                        onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
                         break;
                 }
             }
@@ -165,12 +176,12 @@ public class OrderDetails02Activity extends BaseActivity {
     private void orderDetails(String orderId) {
         OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
                 .params("orderId", orderId)
-                .execute( new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
-                            refreshUi(tempList);
+                            doQueryOrdersDetailsData = simpleResponseAppResponse.getData();
+                            refreshUi(doQueryOrdersDetailsData);
                         }
                     }
                 });
@@ -196,8 +207,12 @@ public class OrderDetails02Activity extends BaseActivity {
         // 订单相关
         OrderBean order = detailsData.get(0).getOrder();
         // 运费
-//        String freightPrice = order.getFreightPrice();
-//        mTvFreight.setText(DoubleUtil.double2Str(freightPrice) + "积分");
+        String freightPrice = order.getFreightPrice();
+        if (null == freightPrice || freightPrice.isEmpty()) {
+            mTvFreight.setText("0 积分");
+        } else {
+            mTvFreight.setText(DoubleUtil.double2Str(freightPrice) + "积分");
+        }
         // 合计价格
         String actualPrice = order.getActualPrice();
         mTvTotalPrice.setText(DoubleUtil.double2Str(actualPrice) + "积分");
@@ -209,7 +224,36 @@ public class OrderDetails02Activity extends BaseActivity {
         mTvPayTime.setText(order.getPayTime());
 
         ArrayList<OrderDetailsBean> orderDetails = detailsData.get(0).getOrderDetails();
+        mOrderDetailsData.clear();
         mOrderDetailsData.addAll(orderDetails);
         mOrderDetails02Adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 单个商品订单详情运费计算
+     *
+     * @param supplierId 商户id
+     * @param name       运费模板名称
+     * @param number     商品数量
+     * @param position
+     */
+    private void onFreightCalculation(String supplierId, String name, String number, int position) {
+        OkGo.<AppResponse<VcodeLoginData>>get(Api.ORDERS_DOCOUNTFREIGHTPRICE)//
+                .params("supplierId", supplierId)
+                .params("name", name)
+                .params("number", number)
+                .execute(new JsonCallBack<AppResponse<VcodeLoginData>>() {
+                    @Override
+                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            String freightPrice = simpleResponseAppResponse.getData().getVcode();
+                            if ("仅退款处理中".equals(mOrderDetailsData.get(position).getRefunding())) {
+                                OrderDetails02RefundDetailsActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice);
+                            } else {
+                                ApplyForAfterSaleActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice);
+                            }
+                        }
+                    }
+                });
     }
 }

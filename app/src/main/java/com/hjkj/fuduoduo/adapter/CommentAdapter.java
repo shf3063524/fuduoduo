@@ -39,8 +39,8 @@ public class CommentAdapter extends BaseQuickAdapter<DoQueryOrdersDetailsData, B
         // 店铺名称
         ShopBean shop = item.getShop();
         helper.setText(R.id.m_tv_store, "  " + shop.getName() + " ");
-        // 退款中，待处理等等
-        helper.setText(R.id.m_tv_refunding, item.getRefunding());
+//        // 退款中，待处理等等
+//        helper.setText(R.id.m_tv_refunding, item.getRefunding());
         //共几件商品
         helper.setText(R.id.m_tv_number, "共" + item.getOrderDetails().size() + "件商品");
         // 合计

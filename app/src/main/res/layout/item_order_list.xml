@@ -22,11 +22,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/m_iv_shopping"
-            android:text="张裕第九代大师级解百纳干红葡萄酒蛇龙珠红酒玫瑰金版单支高端···"
+            android:text="大股东发鬼地方"
             android:textColor="@color/cl_333"
             android:textSize="12sp" />
 
         <RelativeLayout
+            android:id="@+id/m_layout_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/m_tv_content"
@@ -43,7 +44,7 @@
                 android:paddingTop="1dp"
                 android:paddingEnd="6dp"
                 android:paddingBottom="1dp"
-                android:text="750ml"
+                android:text="是的发送到发送到"
                 android:textColor="@color/cl_999"
                 android:textSize="11sp" />
 
@@ -52,9 +53,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="398.00 积分 x 1"
+                android:text="是发送到发送到"
                 android:textColor="@color/cl_666"
                 android:textSize="12sp" />
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/m_tv_refunding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/m_layout_one"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:text="退款中"
+            android:textColor="@color/cl_e51C23"
+            android:textSize="12sp" />
     </RelativeLayout>
 </LinearLayout>

@@ -9,7 +9,13 @@ public class OrderDetailsBean implements Serializable {
     private static final long serialVersionUID = 4007502738990134241L;
     private CommodityBean commodity;
     private OrderDetailBean orderDetail;
+    private String refunding;
     private SpecificationsBean specification;
+    private boolean clickable;
+
+    public OrderDetailsBean(boolean clickable) {
+        this.clickable = clickable;
+    }
 
     public CommodityBean getCommodity() {
         return commodity;
@@ -33,5 +39,21 @@ public class OrderDetailsBean implements Serializable {
 
     public void setOrderDetail(OrderDetailBean orderDetail) {
         this.orderDetail = orderDetail;
+    }
+
+    public boolean isClickable() {
+        return clickable;
+    }
+
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
+    }
+
+    public String getRefunding() {
+        return refunding;
+    }
+
+    public void setRefunding(String refunding) {
+        this.refunding = refunding;
     }
 }

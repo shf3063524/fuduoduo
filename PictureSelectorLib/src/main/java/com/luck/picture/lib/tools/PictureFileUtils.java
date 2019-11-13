@@ -664,9 +664,9 @@ public class PictureFileUtils {
     }
 
     /**
-     *
+     * 多张图片展示
      */
-    public static String getImage(String images){
+    public static String getImage(String images) {
         ArrayList<String> imageShopUrl = new ArrayList<>();
         String[] imageUrl = images.split(",");
         imageShopUrl.addAll(Arrays.asList(imageUrl));
