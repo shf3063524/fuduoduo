@@ -10,6 +10,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DoqueryreturnordersData;
+import com.hjkj.fuduoduo.entity.bean.ReturnDetailsListBean;
+import com.hjkj.fuduoduo.tool.GlideUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,30 +29,18 @@ public class AfterSaleAdapter extends BaseQuickAdapter<DoqueryreturnordersData, 
     protected void convert(BaseViewHolder helper, DoqueryreturnordersData item) {
         helper.addOnClickListener(R.id.m_cv_item);
         // 店铺名称
-        helper.setText(R.id.m_tv_store,"  " + item.getShop().getName() + " ");
+        helper.setText(R.id.m_tv_store, "  " + item.getShop().getName() + " ");
         // 换货中、仅退款，退款成功
-        helper.setText(R.id.m_tv_refunding,item.getRefunding());
-
-
-        ArrayList<TestBean> mTypeData = new ArrayList<>();
-        initRecyclerView(helper, mTypeData);
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void initRecyclerView(BaseViewHolder helper, ArrayList<TestBean> dataList) {
-        AfterSaleListAdapter mAdapter = new AfterSaleListAdapter(R.layout.item_after_sale_list, dataList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        ((RecyclerView) helper.getView(R.id.m_recycler_view)).setLayoutManager(layoutManager);
-        ((RecyclerView) helper.getView(R.id.m_recycler_view)).setAdapter(mAdapter);
-        dataList.clear();
-        for (int i = 0; i < 2; i++) {
-            dataList.add(new TestBean("item" + i));
+        helper.setText(R.id.m_tv_refunding, item.getRefunding());
+        // 商品图片
+        GlideUtils.loadImage(mContext, item.getReturnDetailsList().getSpecification().getSpecificationImage(), R.drawable.ic_all_background, helper.getView(R.id.m_iv_shopping));
+        // 商品内容
+        helper.setText(R.id.m_tv_content, item.getReturnDetailsList().getCommodity().getName());
+        // 商品数量
+        helper.setText(R.id.m_tv_number, "x " + item.getReturnDetailsList().getReturnOrderDetails().getNumber());
+        // 换成
+        if (item.getReturnDetailsList().getExchange() != null) {
+            helper.setText(R.id.m_tv_sale_name,"换成：" + item.getReturnDetailsList().getExchange().getCommoditySpecification());
         }
-        mAdapter.notifyDataSetChanged();
     }
 }

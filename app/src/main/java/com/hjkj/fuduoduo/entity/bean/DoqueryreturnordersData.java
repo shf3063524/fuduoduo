@@ -10,8 +10,35 @@ public class DoqueryreturnordersData implements Serializable {
     private static final long serialVersionUID = -8149866986837421633L;
     private ShopBean shop;
     private String refunding;
-    private ArrayList<ReturnDetailsListBean> returnDetailsList;
-    private ReturnOrderBean  returnOrder;
+    private ReturnDetailsListBean returnDetailsList;
+    private ReturnOrderBean returnOrder;
+    private String freightPrice;
+    private DefaultAddressBean freightAddress;
+    private OrderBean order;
+
+    public String getFreightPrice() {
+        return freightPrice;
+    }
+
+    public void setFreightPrice(String freightPrice) {
+        this.freightPrice = freightPrice;
+    }
+
+    public OrderBean getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderBean order) {
+        this.order = order;
+    }
+
+    public DefaultAddressBean getFreightAddress() {
+        return freightAddress;
+    }
+
+    public void setFreightAddress(DefaultAddressBean freightAddress) {
+        this.freightAddress = freightAddress;
+    }
 
     public ShopBean getShop() {
         return shop;
@@ -29,11 +56,11 @@ public class DoqueryreturnordersData implements Serializable {
         this.refunding = refunding;
     }
 
-    public ArrayList<ReturnDetailsListBean> getReturnDetailsList() {
+    public ReturnDetailsListBean getReturnDetailsList() {
         return returnDetailsList;
     }
 
-    public void setReturnDetailsList(ArrayList<ReturnDetailsListBean> returnDetailsList) {
+    public void setReturnDetailsList(ReturnDetailsListBean returnDetailsList) {
         this.returnDetailsList = returnDetailsList;
     }
 

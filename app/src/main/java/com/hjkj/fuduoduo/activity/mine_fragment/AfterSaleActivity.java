@@ -17,6 +17,7 @@ import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.DialogCallBack;
+import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
 
@@ -50,8 +51,14 @@ public class AfterSaleActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-        requestData();
         initRecyclerView();
+        requestData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 
     private void initRecyclerView() {
@@ -72,8 +79,18 @@ public class AfterSaleActivity extends BaseActivity {
                 switch (view.getId()) {
                     case R.id.m_cv_item:
 //                         ExchangeDetailsActivity.openActivity(AfterSaleActivity.this); //换货详情页面
+//                        RefundDetailsActivity.openActivity(AfterSaleActivity.this);//退款详情页面
 
-                        RefundDetailsActivity.openActivity(AfterSaleActivity.this);//退款详情页面
+                        switch (mData.get(position).getRefunding()) {
+                            case "买家取消":
+                            case "卖家取消":
+                                OrderDetails05Activity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnOrder().getId());
+                                break;
+                            case "仅退款处理中":
+                                orderDetails(mData.get(position).getReturnOrder().getId());
+                                break;
+                        }
+
                         break;
                 }
             }
@@ -100,8 +117,8 @@ public class AfterSaleActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoqueryreturnordersData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoqueryreturnordersData> tempList = simpleResponseAppResponse.getData();
                             mData.clear();
+                            ArrayList<DoqueryreturnordersData> tempList = simpleResponseAppResponse.getData();
                             mData.addAll(tempList);
                         }
                     }
@@ -110,6 +127,23 @@ public class AfterSaleActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    /**
+     * @param returnOrderId 售后订单id
+     */
+    private void orderDetails(String returnOrderId) {
+        OkGo.<AppResponse<ArrayList<DoqueryreturnordersData>>>get(Api.ORDERS_DOQUERYRETURNORDERS)//
+                .params("returnOrderId", returnOrderId)
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoqueryreturnordersData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoqueryreturnordersData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            ArrayList<DoqueryreturnordersData> responseData = simpleResponseAppResponse.getData();
+                            OrderDetails05RefundDetailsActivity.openActivity(AfterSaleActivity.this, responseData.get(0));
+                        }
                     }
                 });
     }

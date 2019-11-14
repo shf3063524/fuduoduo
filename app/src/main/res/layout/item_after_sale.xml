@@ -39,15 +39,63 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="换货中"
+                android:text=""
                 android:textColor="@color/cl_e51C23"
                 android:textSize="12sp" />
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/m_recycler_view"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <ImageView
+                android:id="@+id/m_iv_shopping"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@color/cl_f8" />
+
+            <TextView
+                android:id="@+id/m_tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@+id/m_iv_shopping"
+                android:text="···"
+                android:textColor="@color/cl_333"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/m_tv_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/m_iv_shopping"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/m_tv_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="6dp"
+                    android:paddingBottom="1dp"
+                    android:text=""
+                    android:textColor="@color/cl_999"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/m_tv_sale_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text=""
+                    android:textColor="@color/cl_999"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"

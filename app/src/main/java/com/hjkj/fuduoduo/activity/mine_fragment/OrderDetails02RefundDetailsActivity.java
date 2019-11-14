@@ -180,7 +180,7 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_cv_negotiation_history: // 协商历史
-                NegotiationHistoryActivity.openActivity(OrderDetails02RefundDetailsActivity.this,orderDetailsBean);
+                NegotiationHistoryActivity.openActivity(OrderDetails02RefundDetailsActivity.this,orderDetailsBean.getOrderDetail().getId(),orderDetailsBean.getCommodity().getSupplierId());
                 break;
         }
     }
@@ -215,7 +215,7 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
         // 申请时间
         mTvApplicationTime.setText("申请时间：" + responseData.getReturnOrderDetails().getCreateTime());
         // 退款编号
-        mTvRefundAmount.setText("退款编号：" + responseData.getReturnOrder().getReturnOrderNumber());
+        mTvRefundNumber.setText("退款编号：" + responseData.getReturnOrder().getReturnOrderNumber());
         // 还剩余多长时间
         mTvRemainingTime.setText(TimeLeftUtil2.doCalculate(responseData.getReturnOrder().getCreateTime()));
     }

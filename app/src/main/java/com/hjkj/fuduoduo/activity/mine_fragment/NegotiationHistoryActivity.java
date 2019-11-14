@@ -34,11 +34,11 @@ public class NegotiationHistoryActivity extends BaseActivity {
     ImageView mIvArrow;
     private ArrayList<DoqueryconsultData> mData;
     private NegotiationHistoryAdapter mAdapter;
-    private OrderDetailsBean orderDetailsBean;
 
-    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean) {
+    public static void openActivity(Context context, String orderDetailsId, String supplierId) {
         Intent intent = new Intent(context, NegotiationHistoryActivity.class);
-        intent.putExtra("OrderDetailsBean", orderDetailsBean);
+        intent.putExtra("orderDetailsId", orderDetailsId);
+        intent.putExtra("supplierId", supplierId);
         context.startActivity(intent);
     }
 
@@ -49,8 +49,9 @@ public class NegotiationHistoryActivity extends BaseActivity {
 
     @Override
     protected void initPageData() {
-        orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
-        onNegotiationHistory(orderDetailsBean.getOrderDetail().getId(), orderDetailsBean.getCommodity().getSupplierId());
+        String orderDetailsId = getIntent().getStringExtra("orderDetailsId");
+        String supplierId = getIntent().getStringExtra("supplierId");
+        onNegotiationHistory(orderDetailsId, supplierId);
     }
 
     @Override
@@ -81,6 +82,7 @@ public class NegotiationHistoryActivity extends BaseActivity {
                 break;
         }
     }
+
     /**
      * 协商历史查询接口
      */
