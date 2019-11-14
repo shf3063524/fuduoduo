@@ -141,11 +141,14 @@ public class Api {
      *  撤销退货申请
      */
     public static final String ORDERS_DOCANCELRETURNORDER = BASE_ORDERS + "/orders/doCancelReturnOrder";
-
     /**
      *  协商历史查询
      */
     public static final String ORDERS_DOQUERYCONSULT = BASE_ORDERS + "/orders/doQueryConsult";
+    /**
+     *  待付款取消订单
+     */
+    public static final String ORDERS_DOCANCELORDER = BASE_ORDERS + "/orders/doCancelOrder";
 
     //************************************************    商品有关    **************************************************************
 

@@ -41,7 +41,7 @@ public class CancelOrderDialog extends Dialog implements View.OnClickListener {
     private TextView mTvNoCancel;
     private TextView mTvYesCancel;
 
-    private int cancleOrderType = 1;//取消订单原因，默认第一种
+    private String cancleOrderType = "多拍/拍错/不想要";//取消订单原因，默认第一种
     private OnCancleOrderClickListener listener;
 
     public CancelOrderDialog(@NonNull Context context) {
@@ -112,7 +112,7 @@ public class CancelOrderDialog extends Dialog implements View.OnClickListener {
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                cancleOrderType = M_LAYOUT_ONE;
+                cancleOrderType = "多拍/拍错/不想要";
                 break;
             case R.id.m_layout_two:
                 mCbOne.setChecked(false);
@@ -121,7 +121,7 @@ public class CancelOrderDialog extends Dialog implements View.OnClickListener {
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                cancleOrderType = M_LAYOUT_TWO;
+                cancleOrderType = "我不想买了";
                 break;
             case R.id.m_layout_three:
                 mCbOne.setChecked(false);
@@ -130,7 +130,7 @@ public class CancelOrderDialog extends Dialog implements View.OnClickListener {
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                cancleOrderType = M_LAYOUT_THREE;
+                cancleOrderType = "信息填写错误，重新拍";
                 break;
             case R.id.m_layout_four:
                 mCbOne.setChecked(false);
@@ -139,7 +139,7 @@ public class CancelOrderDialog extends Dialog implements View.OnClickListener {
                 mCbFour.setChecked(true);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                cancleOrderType = M_LAYOUT_FOUR;
+                cancleOrderType = "卖价缺货";
                 break;
             case R.id.m_layout_five:
                 mCbOne.setChecked(false);
@@ -148,7 +148,7 @@ public class CancelOrderDialog extends Dialog implements View.OnClickListener {
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(true);
                 mCbSix.setChecked(false);
-                cancleOrderType = M_LAYOUT_FIVE;
+                cancleOrderType = "同城见面交易";
                 break;
             case R.id.m_layout_six:
                 mCbOne.setChecked(false);
@@ -157,7 +157,7 @@ public class CancelOrderDialog extends Dialog implements View.OnClickListener {
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(true);
-                cancleOrderType = M_LAYOUT_SIX;
+                cancleOrderType = "其他原因";
                 break;
             case R.id.m_tv_no_cancel:
                 dismiss();
@@ -170,6 +170,6 @@ public class CancelOrderDialog extends Dialog implements View.OnClickListener {
     }
 
     public interface OnCancleOrderClickListener {
-        void onancleOrderClick(int cancleOrderType);
+        void onancleOrderClick(String cancleOrderType);
     }
 }

@@ -97,7 +97,7 @@ public class PendingPaymentFragment extends BaseFragment {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_cv_item: // 订单详情
-                        OrderDetailsActivity.openActivity(mContext,mData.get(position).getOrder().getId());
+                        OrderDetailsActivity.openActivity(mContext, mData.get(position).getOrder().getId());
                         break;
                     case R.id.m_tv_one:// 联系卖家
                         Toasty.info(mContext, "联系卖家").show();
@@ -106,29 +106,11 @@ public class PendingPaymentFragment extends BaseFragment {
                         new CancelOrderDialog(mContext)
                                 .setListener(new CancelOrderDialog.OnCancleOrderClickListener() {
                                     @Override
-                                    public void onancleOrderClick(int cancleOrderType) {
-                                        switch (cancleOrderType) {
-                                            case CancelOrderDialog.M_LAYOUT_ONE:
-                                                Toasty.info(mContext, "ONE").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_TWO:
-                                                Toasty.info(mContext, "TWO").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_THREE:
-                                                Toasty.info(mContext, "THREE").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_FOUR:
-                                                Toasty.info(mContext, "FOUR").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_FIVE:
-                                                Toasty.info(mContext, "FIVE").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_SIX:
-                                                Toasty.info(mContext, "SIX").show();
-                                                break;
-                                        }
+                                    public void onancleOrderClick(String cancleOrderType) {
+                                        onCancelOrder(mData.get(position).getOrder().getId(), mData.get(position).getOrder().getSupplierId(),cancleOrderType);
                                     }
                                 }).show();
+
                         break;
                     case R.id.m_tv_three: // 立即付款
                         Toasty.info(mContext, "立即付款").show();
@@ -188,4 +170,29 @@ public class PendingPaymentFragment extends BaseFragment {
                     }
                 });
     }
+
+    /**
+     * 取消订单
+     * @param ordersId 订单id
+     * @param supplierId 商户id
+     * @param cancelReason 取消原因
+     */
+    private void onCancelOrder(String ordersId, String supplierId,String cancelReason) {
+        String consumerId = UserManager.getUserId(mContext);
+        OkGo.<AppResponse>get(Api.ORDERS_DOCANCELORDER)//
+                .params("ordersId", ordersId)
+                .params("supplierId", supplierId)
+                .params("consumerId", consumerId)
+                .params("cancelReason", cancelReason)
+                .params("type", "0")
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.info(mContext,"取消订单成功").show();
+                        }
+                    }
+                });
+    }
 }
+

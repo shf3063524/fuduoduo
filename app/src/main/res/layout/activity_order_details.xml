@@ -44,7 +44,7 @@
         android:gravity="center_vertical"
         android:paddingStart="20dp"
         android:paddingEnd="12dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <TextView
@@ -96,7 +96,7 @@
         android:id="@+id/m_view_line"
         style="@style/view_line_e8"
         android:layout_above="@id/m_rl_bottom"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <ScrollView
         android:id="@+id/m_scrollview"
@@ -133,11 +133,13 @@
                         android:paddingTop="20dp">
 
                         <ImageView
+                            android:id="@+id/m_iv_head"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@mipmap/ic_waite_pay" />
 
                         <TextView
+                            android:id="@+id/m_tv_head_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="等待买家付款"
@@ -404,13 +406,20 @@
                     android:background="@color/cl_cdcdcd" />
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/m_love_recycler_view"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="16dp"
-                android:scrollbars="none" />
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/m_love_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="16dp"
+                    android:scrollbars="none" />
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

@@ -97,16 +97,16 @@ public class MyOrderFragment extends BaseFragment {
                     case R.id.m_cv_item: // 条目点击
                         switch (mData.get(position).getOrder().getSaleState()) {
                             case "1":
-                                OrderDetailsActivity.openActivity(mContext,mData.get(position).getOrder().getId());
+                                OrderDetailsActivity.openActivity(mContext, mData.get(position).getOrder().getId());
                                 break;
                             case "2":
-                                OrderDetails02Activity.openActivity(mContext,mData.get(position).getOrder().getId());
+                                OrderDetails02Activity.openActivity(mContext, mData.get(position).getOrder().getId());
                                 break;
                             case "3":
-                                OrderDetails03Activity.openActivity(mContext,mData.get(position).getOrder().getId());
+                                OrderDetails03Activity.openActivity(mContext, mData.get(position).getOrder().getId());
                                 break;
                             case "4":
-                                OrderDetails04Activity.openActivity(mContext,mData.get(position).getOrder().getId());
+                                OrderDetails04Activity.openActivity(mContext, mData.get(position).getOrder().getId());
                                 break;
                         }
                         break;
@@ -120,27 +120,8 @@ public class MyOrderFragment extends BaseFragment {
                         new CancelOrderDialog(mContext)
                                 .setListener(new CancelOrderDialog.OnCancleOrderClickListener() {
                                     @Override
-                                    public void onancleOrderClick(int cancleOrderType) {
-                                        switch (cancleOrderType) {
-                                            case CancelOrderDialog.M_LAYOUT_ONE:
-                                                Toasty.info(mContext, "ONE").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_TWO:
-                                                Toasty.info(mContext, "TWO").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_THREE:
-                                                Toasty.info(mContext, "THREE").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_FOUR:
-                                                Toasty.info(mContext, "FOUR").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_FIVE:
-                                                Toasty.info(mContext, "FIVE").show();
-                                                break;
-                                            case CancelOrderDialog.M_LAYOUT_SIX:
-                                                Toasty.info(mContext, "SIX").show();
-                                                break;
-                                        }
+                                    public void onancleOrderClick(String cancleOrderType) {
+                                        onCancelOrder(mData.get(position).getOrder().getId(), mData.get(position).getOrder().getSupplierId(), cancleOrderType);
                                     }
                                 }).show();
                         break;
@@ -195,6 +176,31 @@ public class MyOrderFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param ordersId     订单id
+     * @param supplierId   商户id
+     * @param cancelReason 取消原因
+     */
+    private void onCancelOrder(String ordersId, String supplierId, String cancelReason) {
+        String consumerId = UserManager.getUserId(mContext);
+        OkGo.<AppResponse>get(Api.ORDERS_DOCANCELORDER)//
+                .params("ordersId", ordersId)
+                .params("supplierId", supplierId)
+                .params("consumerId", consumerId)
+                .params("cancelReason", cancelReason)
+                .params("type", "0")
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.info(mContext, "取消订单成功").show();
+                        }
                     }
                 });
     }

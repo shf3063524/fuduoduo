@@ -39,48 +39,60 @@ public class MyOrderAdapter extends BaseQuickAdapter<DoQueryOrdersDetailsData, B
         // 商品状态
         switch (item.getOrder().getSaleState()) {
             case "1":
-                helper.setText(R.id.m_tv_shopping_status, "等待买家付款");
-                helper.setGone(R.id.m_tv_one,true);
-                helper.setGone(R.id.m_tv_two,true);
-                helper.setGone(R.id.m_tv_three,true);
-                helper.setGone(R.id.m_tv_four,false);
-                helper.setGone(R.id.m_tv_five,false);
-                helper.setGone(R.id.m_tv_six,false);
-                helper.setGone(R.id.m_tv_seven,false);
-                helper.setGone(R.id.m_tv_eight,false);
+                if ("3".equals(item.getOrder().getOrderState())) {
+                    helper.setText(R.id.m_tv_shopping_status, "交易关闭");
+                    helper.setGone(R.id.m_tv_one, false);
+                    helper.setGone(R.id.m_tv_two, false);
+                    helper.setGone(R.id.m_tv_three, false);
+                    helper.setGone(R.id.m_tv_four, false);
+                    helper.setGone(R.id.m_tv_five, false);
+                    helper.setGone(R.id.m_tv_six, false);
+                    helper.setGone(R.id.m_tv_seven, false);
+                    helper.setGone(R.id.m_tv_eight, false);
+                } else {
+                    helper.setText(R.id.m_tv_shopping_status, "等待买家付款");
+                    helper.setGone(R.id.m_tv_one, true);
+                    helper.setGone(R.id.m_tv_two, true);
+                    helper.setGone(R.id.m_tv_three, true);
+                    helper.setGone(R.id.m_tv_four, false);
+                    helper.setGone(R.id.m_tv_five, false);
+                    helper.setGone(R.id.m_tv_six, false);
+                    helper.setGone(R.id.m_tv_seven, false);
+                    helper.setGone(R.id.m_tv_eight, false);
+                }
                 break;
             case "2":
                 helper.setText(R.id.m_tv_shopping_status, "等待卖家发货");
-                helper.setGone(R.id.m_tv_one,false);
-                helper.setGone(R.id.m_tv_two,false);
-                helper.setGone(R.id.m_tv_three,false);
-                helper.setGone(R.id.m_tv_four,true);
-                helper.setGone(R.id.m_tv_five,false);
-                helper.setGone(R.id.m_tv_six,false);
-                helper.setGone(R.id.m_tv_seven,false);
-                helper.setGone(R.id.m_tv_eight,false);
+                helper.setGone(R.id.m_tv_one, false);
+                helper.setGone(R.id.m_tv_two, false);
+                helper.setGone(R.id.m_tv_three, false);
+                helper.setGone(R.id.m_tv_four, true);
+                helper.setGone(R.id.m_tv_five, false);
+                helper.setGone(R.id.m_tv_six, false);
+                helper.setGone(R.id.m_tv_seven, false);
+                helper.setGone(R.id.m_tv_eight, false);
                 break;
             case "3":
                 helper.setText(R.id.m_tv_shopping_status, "卖家已发货");
-                helper.setGone(R.id.m_tv_one,false);
-                helper.setGone(R.id.m_tv_two,false);
-                helper.setGone(R.id.m_tv_three,false);
-                helper.setGone(R.id.m_tv_four,false);
-                helper.setGone(R.id.m_tv_five,true);
-                helper.setGone(R.id.m_tv_six,true);
-                helper.setGone(R.id.m_tv_seven,false);
-                helper.setGone(R.id.m_tv_eight,false);
+                helper.setGone(R.id.m_tv_one, false);
+                helper.setGone(R.id.m_tv_two, false);
+                helper.setGone(R.id.m_tv_three, false);
+                helper.setGone(R.id.m_tv_four, false);
+                helper.setGone(R.id.m_tv_five, true);
+                helper.setGone(R.id.m_tv_six, true);
+                helper.setGone(R.id.m_tv_seven, false);
+                helper.setGone(R.id.m_tv_eight, false);
                 break;
             case "4":
                 helper.setText(R.id.m_tv_shopping_status, "交易完成");
-                helper.setGone(R.id.m_tv_one,false);
-                helper.setGone(R.id.m_tv_two,false);
-                helper.setGone(R.id.m_tv_three,false);
-                helper.setGone(R.id.m_tv_four,false);
-                helper.setGone(R.id.m_tv_five,false);
-                helper.setGone(R.id.m_tv_six,false);
-                helper.setGone(R.id.m_tv_seven,true);
-                helper.setGone(R.id.m_tv_eight,true);
+                helper.setGone(R.id.m_tv_one, false);
+                helper.setGone(R.id.m_tv_two, false);
+                helper.setGone(R.id.m_tv_three, false);
+                helper.setGone(R.id.m_tv_four, false);
+                helper.setGone(R.id.m_tv_five, false);
+                helper.setGone(R.id.m_tv_six, false);
+                helper.setGone(R.id.m_tv_seven, true);
+                helper.setGone(R.id.m_tv_eight, true);
                 break;
         }
 //        // 退款中，待处理等等

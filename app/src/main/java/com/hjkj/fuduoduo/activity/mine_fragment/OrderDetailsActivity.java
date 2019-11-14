@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -70,6 +71,14 @@ public class OrderDetailsActivity extends BaseActivity {
     TextView mTvPayNumber;
     @BindView(R.id.m_tv_time)
     TextView mTvTime;
+    @BindView(R.id.m_rl_bottom)
+    RelativeLayout mRlBottom;
+    @BindView(R.id.m_view_line)
+    View mViewLine;
+    @BindView(R.id.m_iv_head)
+    ImageView mIvHead;
+    @BindView(R.id.m_tv_head_name)
+    TextView mTvHeadName;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.m_scrollview)
@@ -83,6 +92,7 @@ public class OrderDetailsActivity extends BaseActivity {
 
     private ArrayList<TestBean> mData;
     private ShoppingFragmentAdapter mAdapter;
+    private ArrayList<DoQueryOrdersDetailsData> responseData;
 
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetailsActivity.class);
@@ -151,27 +161,8 @@ public class OrderDetailsActivity extends BaseActivity {
                 new CancelOrderDialog(OrderDetailsActivity.this)
                         .setListener(new CancelOrderDialog.OnCancleOrderClickListener() {
                             @Override
-                            public void onancleOrderClick(int cancleOrderType) {
-                                switch (cancleOrderType) {
-                                    case CancelOrderDialog.M_LAYOUT_ONE:
-                                        Toasty.info(OrderDetailsActivity.this, "ONE").show();
-                                        break;
-                                    case CancelOrderDialog.M_LAYOUT_TWO:
-                                        Toasty.info(OrderDetailsActivity.this, "TWO").show();
-                                        break;
-                                    case CancelOrderDialog.M_LAYOUT_THREE:
-                                        Toasty.info(OrderDetailsActivity.this, "THREE").show();
-                                        break;
-                                    case CancelOrderDialog.M_LAYOUT_FOUR:
-                                        Toasty.info(OrderDetailsActivity.this, "FOUR").show();
-                                        break;
-                                    case CancelOrderDialog.M_LAYOUT_FIVE:
-                                        Toasty.info(OrderDetailsActivity.this, "FIVE").show();
-                                        break;
-                                    case CancelOrderDialog.M_LAYOUT_SIX:
-                                        Toasty.info(OrderDetailsActivity.this, "SIX").show();
-                                        break;
-                                }
+                            public void onancleOrderClick(String cancleOrderType) {
+                                onCancelOrder(responseData.get(0).getOrder().getId(), responseData.get(0).getOrder().getSupplierId(), cancleOrderType);
                             }
                         }).show();
                 break;
@@ -181,6 +172,35 @@ public class OrderDetailsActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 取消订单
+     *
+     * @param ordersId     订单id
+     * @param supplierId   商户id
+     * @param cancelReason 取消原因
+     */
+    private void onCancelOrder(String ordersId, String supplierId, String cancelReason) {
+        String consumerId = UserManager.getUserId(OrderDetailsActivity.this);
+        OkGo.<AppResponse>get(Api.ORDERS_DOCANCELORDER)//
+                .params("ordersId", ordersId)
+                .params("supplierId", supplierId)
+                .params("consumerId", consumerId)
+                .params("cancelReason", cancelReason)
+                .params("type", "0")
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            orderDetails(ordersId);
+                            Toasty.info(OrderDetailsActivity.this, "取消订单成功").show();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * @param orderId
+     */
     private void orderDetails(String orderId) {
         String userId = UserManager.getUserId(OrderDetailsActivity.this);
         OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
@@ -191,8 +211,8 @@ public class OrderDetailsActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
-                            refreshUi(tempList);
+                            responseData = simpleResponseAppResponse.getData();
+                            refreshUi(responseData);
                         }
                     }
 
@@ -209,6 +229,21 @@ public class OrderDetailsActivity extends BaseActivity {
      * @param detailsData
      */
     private void refreshUi(ArrayList<DoQueryOrdersDetailsData> detailsData) {
+        String orderState = detailsData.get(0).getOrder().getOrderState();
+        if ("3".equals(orderState)) {
+            mIvHead.setImageDrawable(getResources().getDrawable(R.mipmap.ic_success_transaction));
+            mTvHeadName.setText("交易关闭");
+            mRlBottom.setVisibility(View.GONE);
+            mViewLine.setVisibility(View.GONE);
+            mTvTime.setVisibility(View.GONE);
+        } else {
+            mIvHead.setImageDrawable(getResources().getDrawable(R.mipmap.ic_waite_pay));
+            mTvHeadName.setText("等待买家付款");
+            mRlBottom.setVisibility(View.VISIBLE);
+            mViewLine.setVisibility(View.VISIBLE);
+            mTvTime.setVisibility(View.VISIBLE);
+        }
+
         // 地址
         DefaultAddressBean freightAddress = detailsData.get(0).getFreightAddress();
         // 邮寄人姓名
@@ -224,8 +259,8 @@ public class OrderDetailsActivity extends BaseActivity {
         // 订单相关
         OrderBean order = detailsData.get(0).getOrder();
         // 运费
-//        String freightPrice = order.getFreightPrice();
-//        mTvFreight.setText(DoubleUtil.double2Str(freightPrice) + "积分");
+        String freightPrice = order.getFreightPrice();
+        mTvFreight.setText(DoubleUtil.double2Str(freightPrice) + "积分");
         // 合计价格
         String actualPrice = order.getActualPrice();
         mTvTotalPrice.setText(DoubleUtil.double2Str(actualPrice) + "积分");
