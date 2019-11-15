@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="申请换货"
+            android:text="修改换货"
             android:textColor="@color/cl_333"
             android:textSize="17sp" />
 
@@ -64,10 +64,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_toEndOf="@+id/m_iv_shopping"
                 android:ellipsize="end"
                 android:lines="2"
                 android:maxEms="22"
-                android:layout_toEndOf="@+id/m_iv_shopping"
                 android:text="张裕第九代大师级解百纳干红葡萄酒蛇龙珠红酒玫瑰金版单支高端···"
                 android:textColor="@color/cl_333"
                 android:textSize="12sp" />
@@ -96,6 +96,16 @@
             </RelativeLayout>
         </RelativeLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_modify_application"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="  提示：修改申请售后操作仅能发起一次，请您谨慎修改！"
+            android:textColor="@color/cl_ffee6604"
+            android:textSize="11sp" />
 
         <RelativeLayout
             android:id="@+id/m_layout_reason_for_return"
@@ -210,11 +220,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
+                android:layout_toStartOf="@+id/m_iv_arrows02"
+                android:layout_toEndOf="@+id/m_tv_address"
                 android:ellipsize="end"
                 android:lines="2"
                 android:maxEms="22"
-                android:layout_toStartOf="@+id/m_iv_arrows02"
-                android:layout_toEndOf="@+id/m_tv_address"
                 android:text=""
                 android:textColor="@color/cl_333"
                 android:textSize="14sp" />
@@ -252,11 +262,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:textCursorDrawable="@drawable/color_cursor"
                 android:background="@color/transparent"
                 android:hint="选填"
                 android:paddingTop="16dp"
                 android:textColor="@color/cl_333"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="13sp" />
         </LinearLayout>
 

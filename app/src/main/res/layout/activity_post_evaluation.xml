@@ -65,14 +65,15 @@
                     android:id="@+id/m_iv_shopping"
                     android:layout_width="60dp"
                     android:layout_height="57dp"
-                    android:src="@color/cl_333" />
+                    android:background="@color/cl_f8" />
 
                 <TextView
+                    android:id="@+id/m_tv_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_toEndOf="@+id/m_iv_shopping"
-                    android:text="YSL圣罗兰纯口红N 方管正红色N°1正宫色YSL圣罗兰纯口红N口红"
+                    android:text=""
                     android:textColor="@color/cl_666"
                     android:textSize="13sp" />
             </RelativeLayout>
@@ -106,7 +107,7 @@
                     app:starImageHeight="24dp"
                     app:starImagePadding="15dp"
                     app:starImageWidth="24dp"
-                    app:starNum="3"
+                    app:starNum="5"
                     app:touchable="true" />
 
                 <TextView
@@ -137,7 +138,8 @@
                 android:paddingEnd="12dp">
 
                 <com.hjkj.fuduoduo.view.ClearEditText
-                    android:layout_width="wrap_content"
+                    android:id="@+id/m_et_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/transparent"
                     android:textCursorDrawable="@drawable/color_cursor"
@@ -205,7 +207,7 @@
                         app:starImageHeight="24dp"
                         app:starImagePadding="15dp"
                         app:starImageWidth="24dp"
-                        app:starNum="3"
+                        app:starNum="5"
                         app:touchable="true" />
 
                     <TextView
@@ -246,7 +248,7 @@
                         app:starImageHeight="24dp"
                         app:starImagePadding="15dp"
                         app:starImageWidth="24dp"
-                        app:starNum="3"
+                        app:starNum="5"
                         app:touchable="true" />
 
                     <TextView

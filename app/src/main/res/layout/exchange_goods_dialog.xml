@@ -5,16 +5,24 @@
     android:background="@drawable/shape_frame3_cl_fff"
     android:orientation="vertical">
 
-
+    <TextView
+        android:layout_marginTop="10dp"
+        android:paddingStart="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="规格："
+        android:textColor="@color/cl_333"
+        android:textSize="14sp"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="224dp"
+        android:layout_height="200dp"
         android:descendantFocusability="blocksDescendants">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/m_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp" />
     </RelativeLayout>
 
@@ -84,6 +92,7 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/m_tv_maximum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"

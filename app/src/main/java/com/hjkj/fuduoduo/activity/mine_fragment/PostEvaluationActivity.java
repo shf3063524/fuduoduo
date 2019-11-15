@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -14,19 +16,33 @@ import android.widget.TextView;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.adapter.ChooseImageAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
+import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
+import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
+import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
+import com.hjkj.fuduoduo.entity.net.AppResponse;
+import com.hjkj.fuduoduo.okgo.Api;
+import com.hjkj.fuduoduo.okgo.DialogCallBack;
+import com.hjkj.fuduoduo.okgo.JsonCallBack;
+import com.hjkj.fuduoduo.tool.GlideUtils;
+import com.hjkj.fuduoduo.tool.UserManager;
+import com.hjkj.fuduoduo.view.ClearEditText;
 import com.hjkj.fuduoduo.view.MyRatingBar;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.lzy.okgo.OkGo;
 import com.mylhyl.circledialog.CircleDialog;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 /**
  * 发表评价页面
@@ -34,10 +50,16 @@ import butterknife.OnClick;
 public class PostEvaluationActivity extends BaseActivity implements MyRatingBar.OnRatingChangeListener {
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
+    @BindView(R.id.m_iv_shopping)
+    ImageView mIvShopping;
+    @BindView(R.id.m_tv_content)
+    TextView mTvContent;
     @BindView(R.id.m_tv_release)
     TextView mTvRelease;
     @BindView(R.id.m_tv_evaluation)
     TextView mTvEvalution;
+    @BindView(R.id.m_et_content)
+    ClearEditText mEtContent;
     @BindView(R.id.m_tv_evaluation02)
     TextView mTvEvalution02;
     @BindView(R.id.m_tv_evaluation03)
@@ -62,18 +84,70 @@ public class PostEvaluationActivity extends BaseActivity implements MyRatingBar.
     /**
      * 上传腾讯云标识
      */
-    private int currentPosition = 0;
     private ChooseImageAdapter mAdapter;
     private List<LocalMedia> selectMediaCustomer = new ArrayList<>();
+    private ArrayList<DoQueryOrdersDetailsData> detailsData;
+    private String stars = "5";
+    private String freightStars = "5";
+    private String serviceStars = "5";
 
-    public static void openActivity(Context context) {
+    /**
+     * 客户上传图片集合
+     */
+    private List<String> selectClientPhotoPathList = new ArrayList<>();
+    private ArrayList<String> imagesList = new ArrayList<>();
+    private String uploadImages;
+    private String commodityIds;
+
+    public static void openActivity(Context context, ArrayList<DoQueryOrdersDetailsData> detailsData) {
         Intent intent = new Intent(context, PostEvaluationActivity.class);
+        intent.putExtra("detailsData", detailsData);
         context.startActivity(intent);
     }
 
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_post_evaluation;
+    }
+
+    @Override
+    protected void initPageData() {
+        detailsData = (ArrayList<DoQueryOrdersDetailsData>) getIntent().getSerializableExtra("detailsData");
+        ProgressData(detailsData);
+    }
+
+    /**
+     * 数据处理
+     *
+     * @param detailsData
+     */
+    private void ProgressData(ArrayList<DoQueryOrdersDetailsData> detailsData) {
+        // 商品图片
+        GlideUtils.loadImage(PostEvaluationActivity.this, detailsData.get(0).getOrderDetails().get(0).getSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+        // 商品名称
+        mTvContent.setText(detailsData.get(0).getOrderDetails().get(0).getCommodity().getName());
+
+        ArrayList<OrderDetailsBean> orderDetails = detailsData.get(0).getOrderDetails();
+        ArrayList<String> commodityIdss = new ArrayList<>();
+        for (OrderDetailsBean orderDetail : orderDetails) {
+            String id = orderDetail.getSpecification().getId();
+            commodityIdss.add(id);
+        }
+        StringBuilder sbClient = new StringBuilder();
+        if (commodityIdss.size() != 0) {
+            for (int i = 0; i < commodityIdss.size(); i++) {
+                if (i == 0) {
+                    sbClient.append(commodityIdss.get(i));
+                } else {
+                    sbClient.append(",").append(commodityIdss.get(i));
+                }
+            }
+        }
+        if (!sbClient.toString().isEmpty()) {
+            commodityIds = sbClient.toString();
+        } else {
+            commodityIds = "";
+        }
     }
 
     @Override
@@ -240,7 +314,7 @@ public class PostEvaluationActivity extends BaseActivity implements MyRatingBar.
 
             @Override
             public void onRemoveItemClick(int index) {
-                // selectClientPhotoPathList.remove(index);
+//                 selectClientPhotoPathList.remove(index);
             }
         });
     }
@@ -260,8 +334,24 @@ public class PostEvaluationActivity extends BaseActivity implements MyRatingBar.
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                     selectMediaCustomer.addAll(resultList);
-                    mAdapter.setList(selectMediaCustomer);
-                    mAdapter.notifyDataSetChanged();
+                    for (LocalMedia media : resultList) {
+                        String picture = "";
+                        if (media.isCut() && !media.isCompressed()) {
+                            // 裁剪过
+                            picture = media.getCutPath();
+                        } else if (media.isCompressed() || (media.isCut() && media.isCompressed())) {
+                            // 压缩过,或者裁剪同时压缩过,以最终压缩过图片为准
+                            picture = media.getCompressPath();
+                        } else {
+                            // 原图地址
+                            picture = media.getPath();
+                        }
+                        if (!TextUtils.isEmpty(picture)) {
+                            selectClientPhotoPathList.add(picture);
+                            mAdapter.setList(selectMediaCustomer);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
                     break;
             }
         }
@@ -276,7 +366,13 @@ public class PostEvaluationActivity extends BaseActivity implements MyRatingBar.
                 }
                 break;
             case R.id.m_tv_release: //发布
-                AppraiseSuccessfulActivity.openActivity(PostEvaluationActivity.this);
+                if (selectClientPhotoPathList.size() > 0 && selectClientPhotoPathList != null) {
+                    for (String pictures : selectClientPhotoPathList) {
+                        UploadAvatar(new File(pictures));
+                    }
+                    onImages();
+                }
+                onPostEvaluation();
                 break;
         }
     }
@@ -286,12 +382,63 @@ public class PostEvaluationActivity extends BaseActivity implements MyRatingBar.
         switch (bar.getId()) {
             case R.id.m_mrb_evaluation01: //整体评价
                 changeByStartTest(bar, RatingCount, mTvEvalution);
+                switch (getTextString(mTvEvalution)) {
+                    case "非常差":
+                        stars = "1";
+                        break;
+                    case "差":
+                        stars = "2";
+                        break;
+                    case "一般":
+                        stars = "3";
+                        break;
+                    case "满意":
+                        stars = "4";
+                        break;
+                    case "非常满意":
+                        stars = "5";
+                        break;
+                }
                 break;
             case R.id.m_mrb_evaluation02: // 物流服务
                 changeByStartTest(bar, RatingCount, mTvEvalution02);
+                switch (getTextString(mTvEvalution02)) {
+                    case "非常差":
+                        freightStars = "1";
+                        break;
+                    case "差":
+                        freightStars = "2";
+                        break;
+                    case "一般":
+                        freightStars = "3";
+                        break;
+                    case "满意":
+                        freightStars = "4";
+                        break;
+                    case "非常满意":
+                        freightStars = "5";
+                        break;
+                }
                 break;
             case R.id.m_mrb_evaluation03: // 服务态度
                 changeByStartTest(bar, RatingCount, mTvEvalution03);
+                switch (getTextString(mTvEvalution03)) {
+                    case "非常差":
+                        serviceStars = "1";
+                        break;
+                    case "差":
+                        serviceStars = "2";
+                        break;
+                    case "一般":
+                        serviceStars = "3";
+                        break;
+                    case "满意":
+                        serviceStars = "4";
+                        break;
+                    case "非常满意":
+                        serviceStars = "5";
+                        break;
+                }
                 break;
         }
     }
@@ -309,6 +456,7 @@ public class PostEvaluationActivity extends BaseActivity implements MyRatingBar.
             chage(bar, textView, amimia, smiling, getResources().getString(R.string.Better));
         } else if (star == 5.0f) {
             chage(bar, textView, amimia, smiling, getResources().getString(R.string.Best));
+
         }
     }
 
@@ -316,5 +464,70 @@ public class PostEvaluationActivity extends BaseActivity implements MyRatingBar.
         textView.setText(string);
         bar.setStarEmptyDrawable(empty);
         bar.setStarFillDrawable(full);
+    }
+
+    private void UploadAvatar(File file) {
+        OkGo.<AppResponse<VcodeLoginData>>post(Api.IMAGE_DOUPLOADPORTRAIT)//
+                .params("image", file)
+                .execute(new DialogCallBack<AppResponse<VcodeLoginData>>(this, "正在提交...") {
+                    @Override
+                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            // 图片返回地址
+                            String vcode = simpleResponseAppResponse.getData().getVcode();
+                            imagesList.add(vcode);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 发布评价接口
+     */
+    private void onPostEvaluation() {
+        String orderId = detailsData.get(0).getOrder().getId();
+        String supplierId = detailsData.get(0).getShop().getSupplierId();
+        String shopId = detailsData.get(0).getShop().getId();
+        String consumerId = UserManager.getUserId(PostEvaluationActivity.this);
+        String evaluationContent = getTextString(mEtContent);
+        OkGo.<AppResponse>get(Api.ORDERS_DOEVALUATE)//
+                .params("orderId", orderId) //	订单id
+                .params("supplierId", supplierId) //	供货商id
+                .params("shopId", shopId) //	店铺id
+                .params("consumerId", consumerId) //	买家id
+                .params("commodityIds", commodityIds) //	规格id
+                .params("stars", stars) //整体评价星级
+                .params("freightStars", freightStars) //	物流评价星级
+                .params("serviceStars", serviceStars) //	服务评价星级
+                .params("evaluationContent", evaluationContent) //	评价内容
+                .params("images", uploadImages) //	评价图片
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.info(PostEvaluationActivity.this, "评价成功").show();
+                            AppraiseSuccessfulActivity.openActivity(PostEvaluationActivity.this);
+                            finish();
+                        }
+                    }
+                });
+    }
+
+    private void onImages() {
+        StringBuilder sbClient = new StringBuilder();
+        if (imagesList.size() != 0) {
+            for (int i = 0; i < imagesList.size(); i++) {
+                if (i == 0) {
+                    sbClient.append(imagesList.get(i));
+                } else {
+                    sbClient.append(",").append(imagesList.get(i));
+                }
+            }
+        }
+        if (!sbClient.toString().isEmpty()) {
+            uploadImages = sbClient.toString();
+        } else {
+            uploadImages = "";
+        }
     }
 }

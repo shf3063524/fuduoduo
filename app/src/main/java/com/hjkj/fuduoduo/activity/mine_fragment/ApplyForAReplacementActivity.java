@@ -2,8 +2,11 @@ package com.hjkj.fuduoduo.activity.mine_fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -15,33 +18,63 @@ import com.hjkj.fuduoduo.adapter.ChooseImageAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.dialog.ExchangeGoodsDialog;
 import com.hjkj.fuduoduo.dialog.ReasonForReurn02Dialog;
+import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
+import com.hjkj.fuduoduo.entity.bean.DoQueryData;
+import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
+import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
+import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
+import com.hjkj.fuduoduo.entity.net.AppResponse;
+import com.hjkj.fuduoduo.okgo.Api;
+import com.hjkj.fuduoduo.okgo.DialogCallBack;
+import com.hjkj.fuduoduo.okgo.JsonCallBack;
+import com.hjkj.fuduoduo.tool.DoubleUtil;
+import com.hjkj.fuduoduo.tool.GlideUtils;
+import com.hjkj.fuduoduo.tool.UserManager;
+import com.hjkj.fuduoduo.view.ClearEditText;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.lzy.okgo.OkGo;
 import com.mylhyl.circledialog.CircleDialog;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 /**
  * 申请换货页面
  */
 public class ApplyForAReplacementActivity extends BaseActivity {
+    private static final int REQUEST_RECIPIENT_ADDRESS = 1015;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
+    @BindView(R.id.m_iv_shopping)
+    ImageView mIvShopping;
+    @BindView(R.id.m_tv_content)
+    TextView mTvContent;
+    @BindView(R.id.m_tv_specification)
+    TextView mTvSpecification;
     @BindView(R.id.m_tv_reason_for_return)
     TextView mTvReasonForReturn;
     @BindView(R.id.m_tv_exchange_goods)
     TextView mTvExchangeGoods;
+    @BindView(R.id.m_tv_address_name)
+    TextView mTvAddressName;
+    @BindView(R.id.m_et_content)
+    ClearEditText mEtContent;
     @BindView(R.id.m_layout_reason_for_return)
     RelativeLayout mLayoutResonForReturn;
+    @BindView(R.id.m_tv_submit)
+    TextView mTvSubmit;
     @BindView(R.id.m_layout_exchange_goods)
     RelativeLayout mLayoutExChangeGoods;
     @BindView(R.id.m_layout_address)
@@ -55,21 +88,64 @@ public class ApplyForAReplacementActivity extends BaseActivity {
      */
     private static final int maxSelectNum = 3;
 
-    /**
-     * 上传腾讯云标识
-     */
-    private int currentPosition = 0;
+
     private ChooseImageAdapter mAdapter;
     private List<LocalMedia> selectMediaCustomer = new ArrayList<>();
+    private OrderDetailsBean orderDetailsBean;
+    private ArrayList<DoQueryOrdersDetailsData> detailsData;
+    private String exchangeSpecificationId;
+    private String applyNumber;
+
+    /**
+     * 客户上传图片集合
+     */
+    private List<String> selectClientPhotoPathList = new ArrayList<>();
+    private ArrayList<String> imagesList = new ArrayList<>();
+    private String uploadImages;
+    private String freightAddressId;
 
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, ApplyForAReplacementActivity.class);
         context.startActivity(intent);
     }
 
+
+    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData) {
+        Intent intent = new Intent(context, ApplyForAReplacementActivity.class);
+        intent.putExtra("OrderDetailsBean", orderDetailsBean);
+        intent.putExtra("detailsData", detailsData);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_apply_for_a_replacement;
+    }
+
+    @Override
+    protected void initPageData() {
+        detailsData = (ArrayList<DoQueryOrdersDetailsData>) getIntent().getSerializableExtra("detailsData");
+        orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
+        onProcessData(orderDetailsBean, detailsData);
+    }
+
+    /**
+     * 数据处理
+     *
+     * @param orderDetailsBean 商品数据
+     * @param detailsData
+     */
+    private void onProcessData(OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData) {
+        // 规格图片
+        GlideUtils.loadImage(ApplyForAReplacementActivity.this, orderDetailsBean.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+        // 商品内容
+        mTvContent.setText(orderDetailsBean.getCommodity().getName());
+        // 规格
+        mTvSpecification.setText(orderDetailsBean.getSpecification().getCommoditySpecification());
+        DefaultAddressBean freightAddress = detailsData.get(0).getFreightAddress();
+        // 默认地址
+        mTvAddressName.setText(freightAddress.getName() + "  " + freightAddress.getMobilephoneNumber() + "  " + freightAddress.getProvince() + freightAddress.getCity() + freightAddress.getArea() + freightAddress.getStreet());
+        freightAddressId = freightAddress.getId();
     }
 
     @Override
@@ -233,9 +309,61 @@ public class ApplyForAReplacementActivity extends BaseActivity {
 
             @Override
             public void onRemoveItemClick(int index) {
-                // selectClientPhotoPathList.remove(index);
+                selectClientPhotoPathList.remove(index);
             }
         });
+    }
+
+    @OnClick({R.id.m_iv_arrow, R.id.m_layout_reason_for_return, R.id.m_layout_exchange_goods, R.id.m_layout_address, R.id.m_tv_submit})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.m_iv_arrow:   // 返回
+                if (!clickBack()) {
+                    finish();
+                }
+                break;
+            case R.id.m_layout_reason_for_return:   // 退款原因
+                new ReasonForReurn02Dialog(ApplyForAReplacementActivity.this)
+                        .setListener(new ReasonForReurn02Dialog.OnClickListener() {
+                            @Override
+                            public void onClick(String type) {
+                                mTvReasonForReturn.setText(type);
+                            }
+                        }).show();
+                break;
+
+            case R.id.m_layout_exchange_goods: // 换货商品
+                new ExchangeGoodsDialog(ApplyForAReplacementActivity.this, orderDetailsBean.getOrderDetail().getNumber(), orderDetailsBean.getCommodity().getId())
+                        .setListener(new ExchangeGoodsDialog.OnClickListener() {
+                            @Override
+                            public void onClick(String commoditySpecificationId, String commoditySpecification, String number) {
+                                mTvExchangeGoods.setText(number + "件" + commoditySpecification);
+                                exchangeSpecificationId = commoditySpecificationId;
+                                applyNumber = number;
+                            }
+                        }).show();
+                break;
+
+            case R.id.m_layout_address: // 申请换货
+                ApplyForAreplacementAddressActivity.openActivityForResult(ApplyForAReplacementActivity.this, REQUEST_RECIPIENT_ADDRESS);
+                break;
+            case R.id.m_tv_submit: // 提交
+                if ("请选择".equals(getTextString(mTvReasonForReturn))) {
+                    Toasty.info(ApplyForAReplacementActivity.this, "请选择退款原因").show();
+                    return;
+                }
+                if ("请选择".equals(getTextString(mTvExchangeGoods))) {
+                    Toasty.info(ApplyForAReplacementActivity.this, "请选择换货商品").show();
+                    return;
+                }
+                if (selectClientPhotoPathList.size() > 0 && selectClientPhotoPathList != null) {
+                    for (String pictures : selectClientPhotoPathList) {
+                        UploadAvatar(new File(pictures));
+                    }
+                }
+                onSubmitInformation();
+                break;
+        }
     }
 
     @Override
@@ -253,69 +381,113 @@ public class ApplyForAReplacementActivity extends BaseActivity {
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                     selectMediaCustomer.addAll(resultList);
-                    mAdapter.setList(selectMediaCustomer);
-                    mAdapter.notifyDataSetChanged();
+                    for (LocalMedia media : resultList) {
+                        String picture = "";
+                        if (media.isCut() && !media.isCompressed()) {
+                            // 裁剪过
+                            picture = media.getCutPath();
+                        } else if (media.isCompressed() || (media.isCut() && media.isCompressed())) {
+                            // 压缩过,或者裁剪同时压缩过,以最终压缩过图片为准
+                            picture = media.getCompressPath();
+                        } else {
+                            // 原图地址
+                            picture = media.getPath();
+                        }
+                        if (!TextUtils.isEmpty(picture)) {
+                            selectClientPhotoPathList.add(picture);
+                            mAdapter.setList(selectMediaCustomer);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    break;
+                case REQUEST_RECIPIENT_ADDRESS: // 收货地址返回数据
+                    DoQueryData doQueryData = (DoQueryData) data.getSerializableExtra("address");
+                    freightAddressId = doQueryData.getId();
+                    mTvAddressName.setText(doQueryData.getName() + "  " + doQueryData.getMobilephoneNumber() + "  " + doQueryData.getProvince() + doQueryData.getCity() + doQueryData.getArea() + doQueryData.getStreet());
                     break;
             }
         }
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_layout_reason_for_return, R.id.m_layout_exchange_goods, R.id.m_layout_address})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.m_iv_arrow:   // 返回
-                if (!clickBack()) {
-                    finish();
+    /**
+     * 上传图片
+     *
+     * @param file
+     */
+    private void UploadAvatar(File file) {
+        OkGo.<AppResponse<VcodeLoginData>>post(Api.IMAGE_DOUPLOADPORTRAIT)//
+                .params("image", file)
+                .execute(new DialogCallBack<AppResponse<VcodeLoginData>>(this, "正在提交...") {
+                    @Override
+                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            // 图片返回地址
+                            String vcode = simpleResponseAppResponse.getData().getVcode();
+                            imagesList.add(vcode);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 申请售后提交信息
+     */
+    private void onSubmitInformation() {
+        onImages();
+        String orderNumber = detailsData.get(0).getOrder().getOrderNumber();
+        String orderDetailsId = orderDetailsBean.getOrderDetail().getId();
+        String supplierId = orderDetailsBean.getCommodity().getSupplierId();
+        String consumerId = UserManager.getUserId(ApplyForAReplacementActivity.this);
+        String saleState = detailsData.get(0).getOrder().getSaleState();
+        String commodityId = orderDetailsBean.getCommodity().getId();
+        String commoditySpecificationId = orderDetailsBean.getSpecification().getId();
+        String returnDetailPrice = orderDetailsBean.getOrderDetail().getPrice();
+        String description = getTextString(mEtContent);
+        String returnReason = getTextString(mTvReasonForReturn);
+        OkGo.<AppResponse<VcodeLoginData>>post(Api.ORDERS_DORETURNORDERS)//
+                .params("orderNumber", orderNumber)// 订单编号
+                .params("orderDetailsId", orderDetailsId) //	订单详情id
+                .params("supplierId", supplierId) //	供货商id
+                .params("consumerId", consumerId) //用户id
+                .params("saleState", saleState)  //订单状态
+                .params("commodityId", commodityId) //商品id
+                .params("commoditySpecificationId", commoditySpecificationId) //商品规格id
+                .params("number", applyNumber)  //数量
+                .params("returnDetailPrice", returnDetailPrice)  //单价
+                .params("description", description) //申请描述
+                .params("returnReason", returnReason) //退货原因
+                .params("freightState", "1") //货物状态
+                .params("freightAddressId", freightAddressId) //货物状态
+                .params("exchangeSpecificationId", exchangeSpecificationId) //货物状态
+                .params("exchange", "0") //是否换货
+                .params("images", uploadImages) //	图片
+                .execute(new DialogCallBack<AppResponse<VcodeLoginData>>(this, "正在提交...") {
+                    @Override
+                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            // 换货详情
+                            ExchangeDetailsActivity.openActivity(ApplyForAReplacementActivity.this,orderDetailsBean.getOrderDetail().getId());
+                            finish();
+                        }
+                    }
+                });
+    }
+
+    private void onImages() {
+        StringBuilder sbClient = new StringBuilder();
+        if (imagesList.size() != 0) {
+            for (int i = 0; i < imagesList.size(); i++) {
+                if (i == 0) {
+                    sbClient.append(imagesList.get(i));
+                } else {
+                    sbClient.append(",").append(imagesList.get(i));
                 }
-                break;
-            case R.id.m_layout_reason_for_return:   // 退款原因
-                new ReasonForReurn02Dialog(ApplyForAReplacementActivity.this)
-                        .setListener(new ReasonForReurn02Dialog.OnClickListener() {
-                            @Override
-                            public void onClick(int type) {
-                                switch (type) {
-                                    case ReasonForReurn02Dialog.M_LAYOUT_ONE:
-                                        mTvReasonForReturn.setText("尺码拍错/不喜欢/效果差");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_TWO:
-                                        mTvReasonForReturn.setText("质量问题");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_THREE:
-                                        mTvReasonForReturn.setText("材质/面料与商品描述不符");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_FOUR:
-                                        mTvReasonForReturn.setText("大小尺寸与商品描述不符");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_FIVE:
-                                        mTvReasonForReturn.setText("颜色/款式/图案与描述不符");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_SIX:
-                                        mTvReasonForReturn.setText("卖家发错货");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_SEVEN:
-                                        mTvReasonForReturn.setText("假冒品牌");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_EIGHT:
-                                        mTvReasonForReturn.setText("收到商品少件或破损");
-                                        break;
-                                }
-                            }
-                        }).show();
-                break;
-
-            case R.id.m_layout_exchange_goods: // 换货商品
-                new ExchangeGoodsDialog(ApplyForAReplacementActivity.this)
-                        .setListener(new ExchangeGoodsDialog.OnClickListener() {
-                            @Override
-                            public void onClick(int type) {
-
-                            }
-                        }).show();
-                break;
-
-            case R.id.m_layout_address: // 申请换货
-                ApplyForAreplacementAddressActivity.openActivity(ApplyForAReplacementActivity.this);
-                break;
+            }
+        }
+        if (!sbClient.toString().isEmpty()) {
+            uploadImages = sbClient.toString();
+        } else {
+            uploadImages = "";
         }
     }
 }

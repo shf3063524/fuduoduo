@@ -31,6 +31,7 @@ import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
+import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.SpaceItemDecoration;
 import com.lzy.okgo.OkGo;
 
@@ -168,7 +169,9 @@ public class OrderDetails05Activity extends BaseActivity {
      * @param returnOrderId 售后订单id
      */
     private void orderDetails(String returnOrderId) {
+        String id = UserManager.getUserId(OrderDetails05Activity.this);
         OkGo.<AppResponse<ArrayList<DoqueryreturnordersData>>>get(Api.ORDERS_DOQUERYRETURNORDERS)//
+                .params("id", id)
                 .params("returnOrderId", returnOrderId)
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoqueryreturnordersData>>>() {
                     @Override

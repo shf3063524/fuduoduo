@@ -32,7 +32,7 @@ public class MyShippingAddressAdapter extends BaseQuickAdapter<DoQueryData, Base
         // 地址
         helper.setText(R.id.m_tv_address, item.getProvince() + item.getCity() + item.getArea() + item.getStreet());
         // 默认地址
-        if (item.getDefaultAddress().equals("1")){
+        if ("1".equals(item.getDefaultAddress())){
             helper.setGone(R.id.m_iv_default,true);
         }else {
             helper.setGone(R.id.m_iv_default,false);

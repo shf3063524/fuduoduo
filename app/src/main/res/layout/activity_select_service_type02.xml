@@ -58,13 +58,16 @@
                 android:id="@+id/m_iv_shopping"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:background="@color/cl_e51C23" />
+                android:background="@color/cl_f8" />
 
             <TextView
                 android:id="@+id/m_tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:ellipsize="end"
+                android:lines="2"
+                android:maxEms="22"
                 android:layout_toEndOf="@+id/m_iv_shopping"
                 android:text="张裕第九代大师级解百纳干红葡萄酒蛇龙珠红酒玫瑰金版单支高端···"
                 android:textColor="@color/cl_333"
@@ -72,6 +75,7 @@
 
 
             <TextView
+                android:id="@+id/m_tv_specification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/m_tv_content"

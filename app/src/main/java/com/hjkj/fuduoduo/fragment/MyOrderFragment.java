@@ -141,7 +141,7 @@ public class MyOrderFragment extends BaseFragment {
                         ViewLogisticsActivity.openActivity(mContext);
                         break;
                     case R.id.m_tv_eight: // 评价
-                        PostEvaluationActivity.openActivity(mContext);
+//                        PostEvaluationActivity.openActivity(mContext);
                         break;
                 }
             }

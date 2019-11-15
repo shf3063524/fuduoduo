@@ -1,5 +1,6 @@
 package com.hjkj.fuduoduo.activity.mine_fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,12 @@ import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.adapter.ApplyForAreplacementAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
+import com.hjkj.fuduoduo.entity.bean.DoQueryData;
+import com.hjkj.fuduoduo.entity.net.AppResponse;
+import com.hjkj.fuduoduo.okgo.Api;
+import com.hjkj.fuduoduo.okgo.JsonCallBack;
+import com.hjkj.fuduoduo.tool.UserManager;
+import com.lzy.okgo.OkGo;
 
 import java.util.ArrayList;
 
@@ -26,14 +33,17 @@ public class ApplyForAreplacementAddressActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
-    private ArrayList<TestBean> mData;
+    private ArrayList<DoQueryData> mData;
     private ApplyForAreplacementAdapter mAdapter;
 
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, ApplyForAreplacementAddressActivity.class);
         context.startActivity(intent);
     }
-
+    public static void openActivityForResult(Activity activity, int requestCode) {
+        Intent intent = new Intent(activity, ApplyForAreplacementAddressActivity.class);
+        activity.startActivityForResult(intent, requestCode);
+    }
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_apply_for_areplacement_address;
@@ -42,13 +52,12 @@ public class ApplyForAreplacementAddressActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        requestData();
     }
 
     private void initRecyclerView() {
         mData = new ArrayList<>();
         mAdapter = new ApplyForAreplacementAdapter(R.layout.item_apply_for_areplacement_address, mData);
-        // mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        // mAdapter.isFirstOnly(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(ApplyForAreplacementAddressActivity.this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -56,18 +65,15 @@ public class ApplyForAreplacementAddressActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
-        mData.clear();
-        for (int i = 0; i < 4; i++) {
-            mData.add(new TestBean("item" + i));
-        }
-        mAdapter.notifyDataSetChanged();
-
-
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 mData.get(position).setClickable(true);
                 mAdapter.notifyDataSetChanged();
+
+                Intent intent = new Intent();
+                intent.putExtra("address", mData.get(position));
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -82,5 +88,29 @@ public class ApplyForAreplacementAddressActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void requestData() {
+        String userId = UserManager.getUserId(ApplyForAreplacementAddressActivity.this);
+        OkGo.<AppResponse<ArrayList<DoQueryData>>>get(Api.FREIGHTADDRESS_DOQUERY)//
+                .params("userId", userId)
+                .params("type", "0")
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoQueryData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            ArrayList<DoQueryData> tempList = simpleResponseAppResponse.getData();
+                            mData.clear();
+                            mData.addAll(tempList);
+                        }
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 }

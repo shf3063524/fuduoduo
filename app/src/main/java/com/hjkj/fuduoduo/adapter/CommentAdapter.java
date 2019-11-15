@@ -32,6 +32,7 @@ public class CommentAdapter extends BaseQuickAdapter<DoQueryOrdersDetailsData, B
     protected void convert(BaseViewHolder helper, DoQueryOrdersDetailsData item) {
         helper.addOnClickListener(R.id.m_cv_item);
         helper.addOnClickListener(R.id.m_tv_one);
+        helper.addOnClickListener(R.id.m_tv_three);
         helper.addOnClickListener(R.id.m_cv_three);
         helper.addOnClickListener(R.id.m_layout_store);
         

@@ -172,7 +172,9 @@ public class OrderDetails02Activity extends BaseActivity {
     }
 
     private void orderDetails(String orderId) {
+        String id = UserManager.getUserId(OrderDetails02Activity.this);
         OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
+                .params("id",id)
                 .params("orderId", orderId)
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
                     @Override

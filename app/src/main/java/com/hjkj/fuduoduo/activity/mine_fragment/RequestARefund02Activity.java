@@ -267,33 +267,8 @@ public class RequestARefund02Activity extends BaseActivity {
                 new ReasonForReurn02Dialog(RequestARefund02Activity.this)
                         .setListener(new ReasonForReurn02Dialog.OnClickListener() {
                             @Override
-                            public void onClick(int type) {
-                                switch (type) {
-                                    case ReasonForReurn02Dialog.M_LAYOUT_ONE:
-                                        mTvReasonForReturn.setText("尺码拍错/不喜欢/效果差");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_TWO:
-                                        mTvReasonForReturn.setText("质量问题");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_THREE:
-                                        mTvReasonForReturn.setText("材质/面料与商品描述不符");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_FOUR:
-                                        mTvReasonForReturn.setText("大小尺寸与商品描述不符");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_FIVE:
-                                        mTvReasonForReturn.setText("颜色/款式/图案与描述不符");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_SIX:
-                                        mTvReasonForReturn.setText("卖家发错货");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_SEVEN:
-                                        mTvReasonForReturn.setText("假冒品牌");
-                                        break;
-                                    case ReasonForReurn02Dialog.M_LAYOUT_EIGHT:
-                                        mTvReasonForReturn.setText("收到商品少件或破损");
-                                        break;
-                                }
+                            public void onClick(String type) {
+                                mTvReasonForReturn.setText(type);
                             }
                         }).show();
                 break;

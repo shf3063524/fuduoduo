@@ -75,8 +75,6 @@ public class CommentFragment extends BaseFragment {
     private void initRecyclerView() {
         mData = new ArrayList<>();
         mAdapter = new CommentAdapter(R.layout.item_comment, mData);
-        // mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        // mAdapter.isFirstOnly(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -89,13 +87,13 @@ public class CommentFragment extends BaseFragment {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_cv_item: // 条目
-                        OrderDetails04Activity.openActivity(mContext,mData.get(position).getOrder().getId());
+                        OrderDetails04Activity.openActivity(mContext, mData.get(position).getOrder().getId());
                         break;
                     case R.id.m_tv_one: //查看物流
-                        ViewLogisticsActivity.openActivity(mContext);
+                        orderDetails(mData.get(position).getOrder().getId(), "查看物流");
                         break;
-                    case R.id.m_tv_two:// 评价
-                        PostEvaluationActivity.openActivity(mContext);
+                    case R.id.m_tv_three:// 评价
+                        orderDetails(mData.get(position).getOrder().getId(), "评价");
                         break;
                     case R.id.m_layout_store: // 店铺详情
                         StoreDetailsActivity.openActivity(mContext, mData.get(position).getOrder().getSupplierId());
@@ -131,6 +129,29 @@ public class CommentFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    /**
+     * @param orderId
+     */
+    private void orderDetails(String orderId, String state) {
+        String userId = UserManager.getUserId(mContext);
+        OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
+                .params("id", userId)
+                .params("orderId", orderId)
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            ArrayList<DoQueryOrdersDetailsData> responseData = simpleResponseAppResponse.getData();
+                            if ("查看物流".equals(state)) {
+                                ViewLogisticsActivity.openActivity(mContext, responseData.get(0).getOrder().getOrderNumber());
+                            } else {
+                                PostEvaluationActivity.openActivity(mContext, responseData);
+                            }
+                        }
                     }
                 });
     }

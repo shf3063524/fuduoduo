@@ -85,20 +85,8 @@ public class ShopCartDialog extends Dialog implements View.OnClickListener {
         mTvAdd.setOnClickListener(this);
         mIvDismiss.setOnClickListener(this);
         specification();
-        actionView();
     }
 
-    private void actionView() {
-//        mAdapter.setMoneyInputListener(new ShopCartListAdapter.MoneyInputListener() {
-//            @Override
-//            public void onGetMoneyInput(String commoditySpecification, String salePrice, String number, String specificationImage) {
-//                mTvSelected.setText("已选：" + commoditySpecification);
-//                mTvIntegral.setText(DoubleUtil.double2Str(salePrice));
-//                mTvStock.setText("库存" + number + "件");
-//                GlideUtils.loadImage(context, specificationImage, R.drawable.ic_all_background, mIvShopping);
-//            }
-//        });
-    }
 
     @Override
     public void show() {
@@ -114,9 +102,6 @@ public class ShopCartDialog extends Dialog implements View.OnClickListener {
             getWindow().setGravity(Gravity.BOTTOM);
             setCanceledOnTouchOutside(true);
         }
-        // if (!haveWXPay&&!haveAliPay&&!haveBalance){
-        //     dismiss();
-        // }
     }
 
     @Override

@@ -20,6 +20,15 @@ public class DoQueryData implements Serializable {
     private String telephoneNumber;
     private String mobilephoneNumber;
     private String defaultAddress;
+    private boolean clickable; // 显示与不显示
+
+    public boolean isClickable() {
+        return clickable;
+    }
+
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
+    }
 
     public String getProvince() {
         return province;

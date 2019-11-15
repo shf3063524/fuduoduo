@@ -1,6 +1,5 @@
 package com.hjkj.fuduoduo.activity.mine_fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,15 +14,17 @@ import android.widget.TextView;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.adapter.ChooseImageAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
-import com.hjkj.fuduoduo.dialog.ReasonForReturn02Dialog;
-import com.hjkj.fuduoduo.dialog.ReasonForReturnDialog;
+import com.hjkj.fuduoduo.dialog.ExchangeGoodsDialog;
+import com.hjkj.fuduoduo.dialog.ReasonForReurn02Dialog;
+import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
+import com.hjkj.fuduoduo.entity.bean.DoQueryData;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
+import com.hjkj.fuduoduo.entity.bean.DoqueryreturnorderdetailsData;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.DialogCallBack;
-import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.ClearEditText;
@@ -45,11 +46,10 @@ import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
 /**
- * 申请售后页面
- * Author：Created by shihongfei on 2019/10/10 16:10
- * Email：1511808259@qq.com
+ * 修改申请换货-页面
  */
-public class ApplyForAfterSaleActivity extends BaseActivity {
+public class ModifyApplication03Activity extends BaseActivity {
+    private static final int REQUEST_RECIPIENT_ADDRESS = 1015;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.m_iv_arrow)
@@ -60,18 +60,22 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
     TextView mTvContent;
     @BindView(R.id.m_tv_specification)
     TextView mTvSpecification;
-    @BindView(R.id.m_tv_refund_amount)
-    TextView mTvRefundAmount;
-    @BindView(R.id.m_tv_prompt)
-    TextView mTvPrompt;
-    @BindView(R.id.m_tv_submit)
-    TextView mTvSubmit;
-    @BindView(R.id.m_et_content)
-    ClearEditText mEtContent;
     @BindView(R.id.m_tv_reason_for_return)
     TextView mTvReasonForReturn;
-    @BindView(R.id.m_layout_symbol)
-    RelativeLayout mLayoutSymbol;
+    @BindView(R.id.m_tv_exchange_goods)
+    TextView mTvExchangeGoods;
+    @BindView(R.id.m_tv_address_name)
+    TextView mTvAddressName;
+    @BindView(R.id.m_et_content)
+    ClearEditText mEtContent;
+    @BindView(R.id.m_layout_reason_for_return)
+    RelativeLayout mLayoutResonForReturn;
+    @BindView(R.id.m_tv_submit)
+    TextView mTvSubmit;
+    @BindView(R.id.m_layout_exchange_goods)
+    RelativeLayout mLayoutExChangeGoods;
+    @BindView(R.id.m_layout_address)
+    RelativeLayout mLayoutAddress;
     @BindColor(R.color.cl_ff0481df)
     int cl_ff0481df;
     @BindColor(R.color.cl_e8f2ff)
@@ -81,61 +85,54 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
      */
     private static final int maxSelectNum = 3;
 
-    private int currentPosition = 0;
+
     private ChooseImageAdapter mAdapter;
     private List<LocalMedia> selectMediaCustomer = new ArrayList<>();
+    private String exchangeSpecificationId;
+    private String applyNumber;
 
     /**
      * 客户上传图片集合
      */
     private List<String> selectClientPhotoPathList = new ArrayList<>();
-    private OrderDetailsBean orderDetailsBean;
-    private ArrayList<DoQueryOrdersDetailsData> detailsData;
-
     private ArrayList<String> imagesList = new ArrayList<>();
     private String uploadImages;
-    private String freightPrice;
+    private String freightAddressId;
+    private DoqueryreturnorderdetailsData requestData;
 
-    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData, String freightPrice) {
-        Intent intent = new Intent(context, ApplyForAfterSaleActivity.class);
-        intent.putExtra("OrderDetailsBean", orderDetailsBean);
-        intent.putExtra("detailsData", detailsData);
-        intent.putExtra("freightPrice", freightPrice);
+    public static void openActivity(Context context, DoqueryreturnorderdetailsData doqueryreturnorderdetailsData) {
+        Intent intent = new Intent(context, ModifyApplication03Activity.class);
+        intent.putExtra("DoqueryreturnorderdetailsData", doqueryreturnorderdetailsData);
         context.startActivity(intent);
     }
 
     @Override
     protected int attachLayoutRes() {
-        return R.layout.activity_apply_for_after_sale;
+        return R.layout.activity_modify_application03;
     }
 
     @Override
     protected void initPageData() {
-        freightPrice = getIntent().getStringExtra("freightPrice");
-        detailsData = (ArrayList<DoQueryOrdersDetailsData>) getIntent().getSerializableExtra("detailsData");
-        orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
-        onProcessingData(freightPrice, orderDetailsBean);
+        requestData = (DoqueryreturnorderdetailsData) getIntent().getSerializableExtra("DoqueryreturnorderdetailsData");
+        onProcessData(requestData);
     }
 
     /**
-     * 处理传过来的数据
+     * 处理数据
      *
-     * @param freightPrice
-     * @param orderDetailsBean
+     * @param requestData
      */
-    private void onProcessingData(String freightPrice, OrderDetailsBean orderDetailsBean) {
+    private void onProcessData(DoqueryreturnorderdetailsData requestData) {
         // 规格图片
-        GlideUtils.loadImage(ApplyForAfterSaleActivity.this, orderDetailsBean.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
-        // 商品名称
-        mTvContent.setText(orderDetailsBean.getCommodity().getName());
+        GlideUtils.loadImage(ModifyApplication03Activity.this, requestData.getCommoditySpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+        // 商品内容
+        mTvContent.setText(requestData.getCommodity().getName());
         // 规格
-        mTvSpecification.setText(orderDetailsBean.getSpecification().getCommoditySpecification());
-        // 退款金额
-        Double mul = DoubleUtil.mul(Double.parseDouble(orderDetailsBean.getOrderDetail().getPrice()), Double.parseDouble(orderDetailsBean.getOrderDetail().getNumber()));
-        Double addTotalPrice = DoubleUtil.add(mul, Double.parseDouble(freightPrice));
-        mTvRefundAmount.setText(DoubleUtil.double2Str(String.valueOf(mul)));
-        // 提示
-        mTvPrompt.setText("最多" + DoubleUtil.double2Str(String.valueOf(addTotalPrice)) + "积分，含发货邮费" + DoubleUtil.double2Str(freightPrice) + "积分");
+        mTvSpecification.setText(requestData.getCommoditySpecification().getCommoditySpecification());
+        DefaultAddressBean freightAddress = requestData.getFreightAddress();
+        // 默认地址
+        mTvAddressName.setText(freightAddress.getName() + "  " + freightAddress.getMobilephoneNumber() + "  " + freightAddress.getProvince() + freightAddress.getCity() + freightAddress.getArea() + freightAddress.getStreet());
+        freightAddressId = freightAddress.getId();
     }
 
     @Override
@@ -143,10 +140,9 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
         initRecyclerView();
     }
 
-
     private void initRecyclerView() {
 
-        mAdapter = new ChooseImageAdapter(ApplyForAfterSaleActivity.this, onAddPicClickListener);
+        mAdapter = new ChooseImageAdapter(ModifyApplication03Activity.this, onAddPicClickListener);
         mAdapter.setList(selectMediaCustomer);
         mAdapter.setSelectMax(maxSelectNum);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,
@@ -188,7 +184,7 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
                                     selectPhoto();
                                     break;
                                 case "拍照":
-                                    PictureSelector.create(ApplyForAfterSaleActivity.this)
+                                    PictureSelector.create(ModifyApplication03Activity.this)
                                             .openCamera(PictureMimeType.ofImage())
                                             .enableCrop(true)// 是否裁剪
                                             .compress(true)// 是否压缩
@@ -224,7 +220,7 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
     private void selectPhoto() {
         // currentPosition = 0;
         // 进入相册 以下是例子：不需要的api可以不写
-        PictureSelector.create(ApplyForAfterSaleActivity.this)
+        PictureSelector.create(ModifyApplication03Activity.this)
                 .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .theme(R.style.picture_QQ_style)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
                 .maxSelectNum(maxSelectNum)// 最大图片选择数量
@@ -284,15 +280,15 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
                         case 1:
                             // 预览图片 可自定长按保存路径
                             //PictureSelector.create(NewVisitActivity.this).themeStyle(themeId).externalPicturePreview(position, "/custom_file", selectList);
-                            PictureSelector.create(ApplyForAfterSaleActivity.this).themeStyle(R.style.picture_QQ_style).openExternalPreview(position, selectMediaCustomer);
+                            PictureSelector.create(ModifyApplication03Activity.this).themeStyle(R.style.picture_QQ_style).openExternalPreview(position, selectMediaCustomer);
                             break;
                         case 2:
                             // 预览视频
-                            PictureSelector.create(ApplyForAfterSaleActivity.this).externalPictureVideo(media.getPath());
+                            PictureSelector.create(ModifyApplication03Activity.this).externalPictureVideo(media.getPath());
                             break;
                         case 3:
                             // 预览音频
-                            PictureSelector.create(ApplyForAfterSaleActivity.this).externalPictureAudio(media.getPath());
+                            PictureSelector.create(ModifyApplication03Activity.this).externalPictureAudio(media.getPath());
                             break;
                     }
                 }
@@ -300,9 +296,61 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
 
             @Override
             public void onRemoveItemClick(int index) {
-                 selectClientPhotoPathList.remove(index);
+                selectClientPhotoPathList.remove(index);
             }
         });
+    }
+
+    @OnClick({R.id.m_iv_arrow, R.id.m_layout_reason_for_return, R.id.m_layout_exchange_goods, R.id.m_layout_address, R.id.m_tv_submit})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.m_iv_arrow:   // 返回
+                if (!clickBack()) {
+                    finish();
+                }
+                break;
+            case R.id.m_layout_reason_for_return:   // 退款原因
+                new ReasonForReurn02Dialog(ModifyApplication03Activity.this)
+                        .setListener(new ReasonForReurn02Dialog.OnClickListener() {
+                            @Override
+                            public void onClick(String type) {
+                                mTvReasonForReturn.setText(type);
+                            }
+                        }).show();
+                break;
+
+            case R.id.m_layout_exchange_goods: // 换货商品
+                new ExchangeGoodsDialog(ModifyApplication03Activity.this, requestData.getOrderDetails().getNumber(), requestData.getCommodity().getId())
+                        .setListener(new ExchangeGoodsDialog.OnClickListener() {
+                            @Override
+                            public void onClick(String commoditySpecificationId, String commoditySpecification, String number) {
+                                mTvExchangeGoods.setText(number + "件" + commoditySpecification);
+                                exchangeSpecificationId = commoditySpecificationId;
+                                applyNumber = number;
+                            }
+                        }).show();
+                break;
+
+            case R.id.m_layout_address: // 申请换货
+                ApplyForAreplacementAddressActivity.openActivityForResult(ModifyApplication03Activity.this, REQUEST_RECIPIENT_ADDRESS);
+                break;
+            case R.id.m_tv_submit: // 提交
+                if ("请选择".equals(getTextString(mTvReasonForReturn))) {
+                    Toasty.info(ModifyApplication03Activity.this, "请选择退款原因").show();
+                    return;
+                }
+                if ("请选择".equals(getTextString(mTvExchangeGoods))) {
+                    Toasty.info(ModifyApplication03Activity.this, "请选择换货商品").show();
+                    return;
+                }
+                if (selectClientPhotoPathList.size() > 0 && selectClientPhotoPathList != null) {
+                    for (String pictures : selectClientPhotoPathList) {
+                        UploadAvatar(new File(pictures));
+                    }
+                }
+                onSubmitInformation();
+                break;
+        }
     }
 
     @Override
@@ -339,62 +387,20 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
                         }
                     }
                     break;
+                case REQUEST_RECIPIENT_ADDRESS: // 收货地址返回数据
+                    DoQueryData doQueryData = (DoQueryData) data.getSerializableExtra("address");
+                    freightAddressId = doQueryData.getId();
+                    mTvAddressName.setText(doQueryData.getName() + "  " + doQueryData.getMobilephoneNumber() + "  " + doQueryData.getProvince() + doQueryData.getCity() + doQueryData.getArea() + doQueryData.getStreet());
+                    break;
             }
         }
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_layout_symbol, R.id.m_tv_submit})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.m_iv_arrow:   // 返回
-                if (!clickBack()) {
-                    finish();
-                }
-                break;
-            case R.id.m_layout_symbol: // 退款原因
-                new ReasonForReturn02Dialog(ApplyForAfterSaleActivity.this)
-                        .setListener(new ReasonForReturn02Dialog.OnClickListener() {
-                            @Override
-                            public void onClick(int type) {
-                                switch (type) {
-                                    case ReasonForReturn02Dialog.M_LAYOUT_ONE:
-                                        mTvReasonForReturn.setText("多拍/拍错/不想要");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_TWO:
-                                        mTvReasonForReturn.setText("协商一致退款");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_THREE:
-                                        mTvReasonForReturn.setText("缺货");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_FOUR:
-                                        mTvReasonForReturn.setText("未按约定时间发货");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_FIVE:
-                                        mTvReasonForReturn.setText("空包裹/少货");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_SIX:
-                                        mTvReasonForReturn.setText("其他");
-                                        break;
-                                }
-                            }
-                        }).show();
-                break;
-            case R.id.m_tv_submit: // 提交
-                if ("请选择".equals(getTextString(mTvReasonForReturn))) {
-                    Toasty.info(ApplyForAfterSaleActivity.this, "请选择退款原因").show();
-                    return;
-                }
-                if (selectClientPhotoPathList.size() > 0 && selectClientPhotoPathList != null) {
-                    for (String pictures : selectClientPhotoPathList) {
-                        UploadAvatar(new File(pictures));
-                    }
-                    onImages();
-                }
-                onSubmitInformation();
-                break;
-        }
-    }
-
+    /**
+     * 上传图片
+     *
+     * @param file
+     */
     private void UploadAvatar(File file) {
         OkGo.<AppResponse<VcodeLoginData>>post(Api.IMAGE_DOUPLOADPORTRAIT)//
                 .params("image", file)
@@ -414,40 +420,22 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
      * 申请售后提交信息
      */
     private void onSubmitInformation() {
-        String orderNumber = detailsData.get(0).getOrder().getOrderNumber();
-        String orderDetailsId = orderDetailsBean.getOrderDetail().getId();
-        String supplierId = orderDetailsBean.getCommodity().getSupplierId();
-        String consumerId = UserManager.getUserId(ApplyForAfterSaleActivity.this);
-        Double mul = DoubleUtil.mul(Double.parseDouble(getTextString(mTvRefundAmount)), 100.00);
-        String saleState = detailsData.get(0).getOrder().getSaleState();
-        String commodityId = orderDetailsBean.getCommodity().getId();
-        String commoditySpecificationId = orderDetailsBean.getSpecification().getId();
-        String number = orderDetailsBean.getOrderDetail().getNumber();
-        String returnDetailPrice = orderDetailsBean.getOrderDetail().getPrice();
+        onImages();
+        String id = requestData.getReturnOrderDetails().getId();
         String description = getTextString(mEtContent);
         String returnReason = getTextString(mTvReasonForReturn);
-        OkGo.<AppResponse<VcodeLoginData>>get(Api.ORDERS_DORETURNORDERS)//
-                .params("orderNumber", orderNumber)// 订单编号
-                .params("orderDetailsId", orderDetailsId) //	订单详情id
-                .params("supplierId", supplierId) //	供货商id
-                .params("consumerId", consumerId) //用户id
-                .params("returnOrderPrice", DoubleUtil.doubleTransf(mul)) //退款金额
-                .params("saleState", saleState)  //订单状态
-                .params("commodityId", commodityId) //商品id
-                .params("commoditySpecificationId", commoditySpecificationId) //商品规格id
-                .params("number", number)  //数量
-                .params("returnDetailPrice", returnDetailPrice)  //单价
-                .params("description", description) //申请描述
+        OkGo.<AppResponse>get(Api.ORDERS_DOMODIFYRETURNORDER)//
+                .params("id", id) //	订单详情id
                 .params("returnReason", returnReason) //退货原因
-                .params("freightState", "0") //货物状态
-                .params("exchange", "1") //是否换货
+                .params("description", description) //申请描述
+                .params("exchangeSpecificationId", exchangeSpecificationId) //换货规格id
+                .params("freightAddressId", freightAddressId) //换货发货地址id
                 .params("images", uploadImages) //	图片
-                .execute(new DialogCallBack<AppResponse<VcodeLoginData>>(this, "正在提交...") {
+                .execute(new DialogCallBack<AppResponse>(this, "正在提交...") {
                     @Override
-                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                           // 退款详情
-                            OrderDetails02RefundDetailsActivity.openActivity(ApplyForAfterSaleActivity.this,orderDetailsBean,detailsData,freightPrice);
+//                            ExchangeDetailsActivity.openActivity(ModifyApplication03Activity.this,orderDetailsBean,detailsData,"");
                             finish();
                         }
                     }

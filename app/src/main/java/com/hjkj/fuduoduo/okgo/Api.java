@@ -149,6 +149,10 @@ public class Api {
      *  待付款取消订单
      */
     public static final String ORDERS_DOCANCELORDER = BASE_ORDERS + "/orders/doCancelOrder";
+    /**
+     *  待付款取消订单
+     */
+    public static final String ORDERS_DOEVALUATE = BASE_ORDERS + "/orders/doEvaluate";
 
     //************************************************    商品有关    **************************************************************
 

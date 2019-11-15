@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
+import com.hjkj.fuduoduo.entity.bean.ExpressBean;
 import com.hjkj.fuduoduo.entity.bean.OrderBean;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.bean.ShopBean;
@@ -73,6 +75,12 @@ public class OrderDetails04Activity extends BaseActivity {
     TextView mTvDeliveryTime;
     @BindView(R.id.m_tv_express_name)
     TextView mTvExpressName;
+    @BindView(R.id.m_tv_logistics_content)
+    TextView mTvLogisticeContent;
+    @BindView(R.id.m_tv_logistics_time)
+    TextView mTvLogisticeTime;
+    @BindView(R.id.m_layout_logistics)
+    LinearLayout mLayoutLogistics;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.m_scrollview)
@@ -86,6 +94,8 @@ public class OrderDetails04Activity extends BaseActivity {
 
     private ArrayList<TestBean> mData;
     private ShoppingFragmentAdapter mAdapter;
+    private ArrayList<DoQueryOrdersDetailsData> responseData;
+    private ArrayList<ExpressBean> express;
 
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetails04Activity.class);
@@ -142,15 +152,19 @@ public class OrderDetails04Activity extends BaseActivity {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
-                    case R.id.m_tv_item: // 选择服务类型
-                        SelectServiceType02Activity.openActivity(OrderDetails04Activity.this);
+                    case R.id.m_tv_refund: // 选择服务类型
+                        if ("等待商家处理换货申请".equals(mOrderDetailsData.get(position).getRefunding())) {
+                            ExchangeDetailsActivity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                        } else {
+                            SelectServiceType02Activity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position), responseData);
+                        }
                         break;
                 }
             }
         });
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_tv_one, R.id.m_tv_two, R.id.m_tv_three})
+    @OnClick({R.id.m_iv_arrow, R.id.m_tv_one, R.id.m_tv_two, R.id.m_tv_three, R.id.m_layout_logistics})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -162,10 +176,13 @@ public class OrderDetails04Activity extends BaseActivity {
                 Toasty.info(this, "联系卖家").show();
                 break;
             case R.id.m_tv_two: // 查看物流
-                ViewLogisticsActivity.openActivity(OrderDetails04Activity.this);
+                ViewLogisticsActivity.openActivity(OrderDetails04Activity.this, responseData.get(0).getOrder().getOrderNumber());
                 break;
             case R.id.m_tv_three: // 评价-发表评价
-                PostEvaluationActivity.openActivity(OrderDetails04Activity.this);
+                PostEvaluationActivity.openActivity(OrderDetails04Activity.this, responseData);
+                break;
+            case R.id.m_layout_logistics: // 物流信息
+                LogisticsInfoActivity.openActivity(OrderDetails04Activity.this, express);
                 break;
         }
     }
@@ -174,20 +191,14 @@ public class OrderDetails04Activity extends BaseActivity {
         String userId = UserManager.getUserId(OrderDetails04Activity.this);
         OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
                 .params("id", userId)
-                .params("saleState", "4")
                 .params("orderId", orderId)
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
-                            refreshUi(tempList);
+                            responseData = simpleResponseAppResponse.getData();
+                            refreshUi(responseData);
                         }
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
                     }
                 });
     }
@@ -212,8 +223,8 @@ public class OrderDetails04Activity extends BaseActivity {
         // 订单相关
         OrderBean order = detailsData.get(0).getOrder();
         // 运费
-//        String freightPrice = order.getFreightPrice();
-//        mTvFreight.setText(DoubleUtil.double2Str(freightPrice) + "积分");
+        String freightPrice = order.getFreightPrice();
+        mTvFreight.setText(DoubleUtil.double2Str(freightPrice) + "积分");
         // 合计价格
         String actualPrice = order.getActualPrice();
         mTvTotalPrice.setText(DoubleUtil.double2Str(actualPrice) + "积分");
@@ -227,6 +238,13 @@ public class OrderDetails04Activity extends BaseActivity {
         mTvExpressName.setText(detailsData.get(0).getFreight().getFreightCompany());
         // 发货时间
         mTvDeliveryTime.setText(detailsData.get(0).getFreight().getCreateTime());
+        // 物流信息
+        express = detailsData.get(0).getExpress();
+        // 物流内容
+        mTvLogisticeContent.setText(express.get(0).getContext());
+        // 物流时间
+        mTvLogisticeTime.setText(express.get(0).getTime());
+
 
         ArrayList<OrderDetailsBean> orderDetails = detailsData.get(0).getOrderDetails();
         mOrderDetailsData.clear();

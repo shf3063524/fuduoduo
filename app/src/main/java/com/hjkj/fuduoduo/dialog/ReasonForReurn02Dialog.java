@@ -42,7 +42,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
 
     private TextView mTvClose;
 
-    private int type = 1;//默认第一种
+    private String type = "尺码拍错/不喜欢/效果差";//默认第一种
     private OnClickListener listener;
 
     public ReasonForReurn02Dialog(@NonNull Context context) {
@@ -119,7 +119,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_ONE;
+                type = "尺码拍错/不喜欢/效果差";
                 break;
             case R.id.m_layout_two:
                 mCbOne.setChecked(false);
@@ -128,7 +128,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_TWO;
+                type = "质量问题";
                 break;
             case R.id.m_layout_three:
                 mCbOne.setChecked(false);
@@ -137,7 +137,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_THREE;
+                type = "材质/面料与商品描述不符";
                 break;
             case R.id.m_layout_four:
                 mCbOne.setChecked(false);
@@ -146,7 +146,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
                 mCbFour.setChecked(true);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_FOUR;
+                type = "大小尺寸与商品描述不符";
                 break;
             case R.id.m_layout_five:
                 mCbOne.setChecked(false);
@@ -155,7 +155,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(true);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_FIVE;
+                type = "颜色/款式/图案与描述不符";
                 break;
             case R.id.m_layout_six:
                 mCbOne.setChecked(false);
@@ -164,7 +164,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(true);
-                type = M_LAYOUT_SIX;
+                type = "卖家发错货";
                 break;
             case R.id.m_layout_seven:
                 mCbOne.setChecked(false);
@@ -175,7 +175,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
                 mCbSix.setChecked(false);
                 mCbSeven.setChecked(true);
                 mCbEight.setChecked(false);
-                type = M_LAYOUT_SEVEN;
+                type = "假冒品牌";
                 break;
             case R.id.m_layout_eight:
                 mCbOne.setChecked(false);
@@ -186,7 +186,7 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
                 mCbSix.setChecked(false);
                 mCbSeven.setChecked(false);
                 mCbEight.setChecked(true);
-                type = M_LAYOUT_EIGHT;
+                type = "收到商品少件或破损";
                 break;
             case R.id.m_tv_close:
                 listener.onClick(type);
@@ -196,6 +196,6 @@ public class ReasonForReurn02Dialog extends Dialog implements View.OnClickListen
     }
 
     public interface OnClickListener {
-        void onClick(int type);
+        void onClick(String type);
     }
 }

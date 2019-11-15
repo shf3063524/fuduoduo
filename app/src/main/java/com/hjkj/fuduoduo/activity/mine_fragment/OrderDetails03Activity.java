@@ -224,8 +224,8 @@ public class OrderDetails03Activity extends BaseActivity {
         // 订单相关
         OrderBean order = detailsData.get(0).getOrder();
         // 运费
-//        String freightPrice = order.getFreightPrice();
-//        mTvFreight.setText(DoubleUtil.double2Str(freightPrice) + "积分");
+        String freightPrice = order.getFreightPrice();
+        mTvFreight.setText(DoubleUtil.double2Str(freightPrice) + "积分");
         // 合计价格
         String actualPrice = order.getActualPrice();
         mTvTotalPrice.setText(DoubleUtil.double2Str(actualPrice) + "积分");

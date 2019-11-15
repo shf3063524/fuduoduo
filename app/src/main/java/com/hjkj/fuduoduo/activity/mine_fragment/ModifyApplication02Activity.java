@@ -397,7 +397,7 @@ public class ModifyApplication02Activity extends BaseActivity {
         String id = doqueryreturnordersData.getReturnDetailsList().getReturnOrderDetails().getId();
         String description = getTextString(mEtContent);
         String returnReason = getTextString(mTvReasonForReturn);
-        OkGo.<AppResponse>get(Api.ORDERS_DOMODIFYRETURNORDER)//
+        OkGo.<AppResponse>post(Api.ORDERS_DOMODIFYRETURNORDER)//
                 .params("id", id) //	订单详情id
                 .params("returnReason", returnReason) //退货原因
                 .params("description", description) //申请描述
