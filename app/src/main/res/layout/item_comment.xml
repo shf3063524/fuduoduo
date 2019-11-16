@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="交易完成"
+                android:text=""
                 android:textColor="@color/cl_e51C23"
                 android:textSize="12sp" />
         </RelativeLayout>

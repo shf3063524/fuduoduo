@@ -146,10 +146,17 @@
         <activity android:name=".activity.mine_fragment.OrderDetails05Activity" />
         <activity android:name=".activity.mine_fragment.OrderDetails05RefundDetailsActivity" />
         <activity
+            android:name=".activity.mine_fragment.ApplyForAReplacement02Activity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
+        <activity
             android:name=".activity.mine_fragment.ModifyApplication02Activity"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
         <activity
             android:name=".activity.mine_fragment.ModifyApplication03Activity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
+        <activity android:name=".activity.mine_fragment.ExchangeDetails02Activity" />
+        <activity
+            android:name=".activity.mine_fragment.ChooseCompanyActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
     </application>
 

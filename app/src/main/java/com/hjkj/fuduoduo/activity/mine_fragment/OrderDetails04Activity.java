@@ -155,6 +155,8 @@ public class OrderDetails04Activity extends BaseActivity {
                     case R.id.m_tv_refund: // 选择服务类型
                         if ("等待商家处理换货申请".equals(mOrderDetailsData.get(position).getRefunding())) {
                             ExchangeDetailsActivity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                        } else if ("换货中".equals(mOrderDetailsData.get(position).getRefunding())) {
+                            ExchangeDetails02Activity.openActivity(OrderDetails04Activity.this,mOrderDetailsData.get(position).getOrderDetail().getId());
                         } else {
                             SelectServiceType02Activity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position), responseData);
                         }

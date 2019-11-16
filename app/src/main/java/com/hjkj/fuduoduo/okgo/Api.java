@@ -78,7 +78,7 @@ public class Api {
     // 服务器地址--和订单有关
     private static final String BASE_ORDERS = "http://192.168.1.11:1001/orders-service";
     /**
-     * 查询收货地址
+     * 查询交易明细
      */
     public static final String ORDERS_DOQUERYTRANSACTIONRECORD = BASE_ORDERS + "/orders/doQueryTransactionRecord";
     /**
@@ -153,6 +153,10 @@ public class Api {
      *  待付款取消订单
      */
     public static final String ORDERS_DOEVALUATE = BASE_ORDERS + "/orders/doEvaluate";
+    /**
+     *  查询物流公司
+     */
+    public static final String ORDERS_DOQUERYEXPRESSCOMPANY = BASE_ORDERS + "/orders/doQueryExpressCompany";
 
     //************************************************    商品有关    **************************************************************
 

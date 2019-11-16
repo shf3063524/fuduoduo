@@ -4,15 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.hjkj.fuduoduo.R;
-import com.hjkj.fuduoduo.adapter.ExchangeDetailsAdapter;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.dialog.ApplicationCanceledDialog;
@@ -33,14 +32,11 @@ import java.util.ArrayList;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
-import es.dmoral.toasty.Toasty;
 
 /**
- * 换货详情-页面
- * Author：Created by shihongfei on 2019/10/10 10:12
- * Email：1511808259@qq.com
+ * 换货详情-已发货页面
  */
-public class ExchangeDetailsActivity extends BaseActivity {
+public class ExchangeDetails03Activity extends BaseActivity {
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
     @BindView(R.id.m_iv_shopping)
@@ -63,10 +59,10 @@ public class ExchangeDetailsActivity extends BaseActivity {
     TextView mTvAddress;
     @BindView(R.id.m_cv_negotiation_history)
     CardView mCvNegotiationHistory;
+    @BindView(R.id.m_layout_logistics)
+    LinearLayout mLayoutLogistics;
     @BindView(R.id.m_tv_application_canceled)
     TextView mTvApplicationCancled;
-    @BindView(R.id.m_tv_modify_application)
-    TextView mTvmodifyApplication;
     @BindView(R.id.m_tv_specification)
     TextView mTvSpecification;
     @BindView(R.id.m_scrollview)
@@ -78,43 +74,29 @@ public class ExchangeDetailsActivity extends BaseActivity {
 
     private ArrayList<TestBean> mData;
     private ShoppingFragmentAdapter mAdapter;
-    private DoqueryreturnorderdetailsData appResponseData;
-    private String orderDetailsId;
 
     public static void openActivity(Context context, String orderDetailsId) {
-        Intent intent = new Intent(context, ExchangeDetailsActivity.class);
+        Intent intent = new Intent(context, ExchangeDetails03Activity.class);
         intent.putExtra("orderDetailsId", orderDetailsId);
         context.startActivity(intent);
     }
 
     @Override
     protected int attachLayoutRes() {
-        return R.layout.activity_exchange_details;
-    }
-
-    @Override
-    protected void initPageData() {
-        orderDetailsId = getIntent().getStringExtra("orderDetailsId");
-        onRefundDetails(orderDetailsId);
+        return R.layout.activity_exchange_details03;
     }
 
     @Override
     protected void initViews() {
-        StatusBarUtil.setColor(ExchangeDetailsActivity.this, cl_e51C23, 1);
+        StatusBarUtil.setColor(ExchangeDetails03Activity.this, cl_e51C23, 1);
         initRecyclerView();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        onRefundDetails(orderDetailsId);
     }
 
     private void initRecyclerView() {
         mData = new ArrayList<>();
         mAdapter = new ShoppingFragmentAdapter(R.layout.item_shopping_fragment, mData);
         mLoveRecyclerView.setNestedScrollingEnabled(false);
-        mLoveRecyclerView.setLayoutManager(new GridLayoutManager(ExchangeDetailsActivity.this, 2));
+        mLoveRecyclerView.setLayoutManager(new GridLayoutManager(ExchangeDetails03Activity.this, 2));
         mLoveRecyclerView.addItemDecoration(new SpaceItemDecoration(2, 12, false));
 
         mLoveRecyclerView.setAdapter(mAdapter);
@@ -130,7 +112,7 @@ public class ExchangeDetailsActivity extends BaseActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_cv_negotiation_history, R.id.m_tv_application_canceled, R.id.m_tv_modify_application})
+    @OnClick({R.id.m_iv_arrow, R.id.m_cv_negotiation_history, R.id.m_tv_application_canceled, R.id.m_layout_logistics})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -139,43 +121,39 @@ public class ExchangeDetailsActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_cv_negotiation_history: // 协商历史
-                NegotiationHistoryActivity.openActivity(ExchangeDetailsActivity.this, appResponseData.getReturnOrderDetails().getId(), appResponseData.getCommodity().getSupplierId());
+//                NegotiationHistoryActivity.openActivity(ExchangeDetails02Activity.this, appResponseData.getReturnOrderDetails().getId(), appResponseData.getCommodity().getSupplierId());
                 break;
             case R.id.m_tv_application_canceled: // 撤销申请
-                new ApplicationCanceledDialog(ExchangeDetailsActivity.this)
-                        .setListener(new ApplicationCanceledDialog.OnClickListener() {
-                            @Override
-                            public void onClick() {
-                                onApplicationCanceled();
-                            }
-                        }).show();
+//                new ApplicationCanceledDialog(ExchangeDetails02Activity.this)
+//                        .setListener(new ApplicationCanceledDialog.OnClickListener() {
+//                            @Override
+//                            public void onClick() {
+//                                onApplicationCanceled();
+//                            }
+//                        }).show();
                 break;
-            case R.id.m_tv_modify_application: // 修改申请
-                if (appResponseData.getReturnOrderDetails().getCreateTime().equals(appResponseData.getReturnOrderDetails().getUpdateTime())) {
-                    ModifyApplication03Activity.openActivity(ExchangeDetailsActivity.this, appResponseData);
-                } else {
-                    Toasty.info(ExchangeDetailsActivity.this, "抱歉，您目前没有可发起的服务类型").show();
-                    return;
-                }
+            case R.id.m_layout_logistics: // 物流信息
+                ViewLogistics02Activity.openActivity(ExchangeDetails03Activity.this);
                 break;
         }
     }
-    /**
-     * 撤销申请接口
-     */
-    private void onApplicationCanceled() {
-        OkGo.<AppResponse>get(Api.ORDERS_DOCANCELRETURNORDER)//
-                .params("id", appResponseData.getReturnOrderDetails().getId()) //退货订单详情id
-                .params("agree", "5") //	撤销申请
-                .execute(new DialogCallBack<AppResponse>(this, "") {
-                    @Override
-                    public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        if (simpleResponseAppResponse.isSucess()) {
-                            finish();
-                        }
-                    }
-                });
-    }
+//    /**
+//     * 撤销申请接口
+//     */
+//    private void onApplicationCanceled() {
+//        OkGo.<AppResponse>get(Api.ORDERS_DOCANCELRETURNORDER)//
+//                .params("id", appResponseData.getReturnOrderDetails().getId()) //退货订单详情id
+//                .params("agree", "5") //	撤销申请
+//                .execute(new DialogCallBack<AppResponse>(this, "") {
+//                    @Override
+//                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+//                        if (simpleResponseAppResponse.isSucess()) {
+//                            finish();
+//                        }
+//                    }
+//                });
+//    }
+
     /**
      * 查询退货订单详情
      */
@@ -186,8 +164,8 @@ public class ExchangeDetailsActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<DoqueryreturnorderdetailsData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            appResponseData = simpleResponseAppResponse.getData();
-                            refreshUi(appResponseData);
+//                            appResponseData = simpleResponseAppResponse.getData();
+//                            refreshUi(appResponseData);
                         }
                     }
                 });
@@ -200,7 +178,7 @@ public class ExchangeDetailsActivity extends BaseActivity {
      */
     private void refreshUi(DoqueryreturnorderdetailsData appResponseData) {
         // 商品图片
-        GlideUtils.loadImage(ExchangeDetailsActivity.this, appResponseData.getExchangeSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+        GlideUtils.loadImage(ExchangeDetails03Activity.this, appResponseData.getExchangeSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
         // 商品名称
         mTvContent.setText(appResponseData.getCommodity().getName());
         //换成

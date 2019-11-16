@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:gravity="center"
+    android:layout_marginBottom="2dp"
+    android:background="@color/cl_fff">
+
+    <TextView
+        android:id="@+id/m_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="圆通快递"
+        android:textColor="@color/cl_333"
+        android:textSize="18sp" />
+</LinearLayout>
