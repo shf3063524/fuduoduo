@@ -162,7 +162,13 @@ public class OrderDetails03Activity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_tv_refund: // 选择服务类型
-                        SelectServiceTypeActivity.openActivity(OrderDetails03Activity.this);
+                        if ("等待商家处理换货申请".equals(mOrderDetailsData.get(position).getRefunding())) {
+                            ExchangeDetailsActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                        } else if ("换货中".equals(mOrderDetailsData.get(position).getRefunding())) {
+                            ExchangeDetails02Activity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                        } else {
+                            SelectServiceTypeActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position), detailsData);
+                        }
                         break;
                 }
             }
@@ -181,13 +187,13 @@ public class OrderDetails03Activity extends BaseActivity {
                 Toasty.info(this, "联系卖家").show();
                 break;
             case R.id.m_tv_two:// 查看物流
-                ViewLogisticsActivity.openActivity(OrderDetails03Activity.this,detailsData.get(0).getOrder().getOrderNumber());
+                ViewLogisticsActivity.openActivity(OrderDetails03Activity.this, detailsData.get(0).getOrder().getOrderNumber());
                 break;
             case R.id.m_tv_three: // 确认收货
                 Toasty.info(this, "确认收货").show();
                 break;
             case R.id.m_layout_logistics: // 物流信息
-                LogisticsInfoActivity.openActivity(OrderDetails03Activity.this,express);
+                LogisticsInfoActivity.openActivity(OrderDetails03Activity.this, express);
                 break;
         }
     }

@@ -33,6 +33,13 @@ public class OrderDetails03Adapter extends BaseQuickAdapter<OrderDetailsBean, Ba
         helper.setText(R.id.m_tv_specification, item.getSpecification().getCommoditySpecification());
         // 选择商品数量+价格
         helper.setText(R.id.m_tv_price_num, DoubleUtil.double2Str(item.getOrderDetail().getPrice()) + "积分 x" + item.getOrderDetail().getNumber());
-
+        switch (item.getRefunding()) {
+            case "等待商家处理换货申请":
+                helper.setText(R.id.m_tv_refund, "售后处理中");
+                break;
+            case "":
+                helper.setText(R.id.m_tv_refund, "退换");
+                break;
+        }
     }
 }
