@@ -38,7 +38,7 @@ public class ReasonForReturnDialog extends Dialog implements View.OnClickListene
     private CheckBox mCbSix;
     private TextView mTvClose;
 
-    private int type = 1;//默认第一种
+    private String type = "多拍/拍错/不想要";//默认第一种
     private OnClickListener listener;
 
     public ReasonForReturnDialog(@NonNull Context context) {
@@ -109,7 +109,7 @@ public class ReasonForReturnDialog extends Dialog implements View.OnClickListene
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_ONE;
+                type = "多拍/拍错/不想要";
                 break;
             case R.id.m_layout_two:
                 mCbOne.setChecked(false);
@@ -118,7 +118,7 @@ public class ReasonForReturnDialog extends Dialog implements View.OnClickListene
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_TWO;
+                type = "快递一直未送到";
                 break;
             case R.id.m_layout_three:
                 mCbOne.setChecked(false);
@@ -127,7 +127,7 @@ public class ReasonForReturnDialog extends Dialog implements View.OnClickListene
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_THREE;
+                type = "未按约定时间发货";
                 break;
             case R.id.m_layout_four:
                 mCbOne.setChecked(false);
@@ -136,7 +136,7 @@ public class ReasonForReturnDialog extends Dialog implements View.OnClickListene
                 mCbFour.setChecked(true);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_FOUR;
+                type = "快递无跟踪记录";
                 break;
             case R.id.m_layout_five:
                 mCbOne.setChecked(false);
@@ -145,7 +145,7 @@ public class ReasonForReturnDialog extends Dialog implements View.OnClickListene
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(true);
                 mCbSix.setChecked(false);
-                type = M_LAYOUT_FIVE;
+                type = "空包裹/少货";
                 break;
             case R.id.m_layout_six:
                 mCbOne.setChecked(false);
@@ -154,7 +154,7 @@ public class ReasonForReturnDialog extends Dialog implements View.OnClickListene
                 mCbFour.setChecked(false);
                 mCbFive.setChecked(false);
                 mCbSix.setChecked(true);
-                type = M_LAYOUT_SIX;
+                type = "其他";
                 break;
             case R.id.m_tv_close:
                 listener.onClick(type);
@@ -164,6 +164,6 @@ public class ReasonForReturnDialog extends Dialog implements View.OnClickListene
     }
 
     public interface OnClickListener {
-        void onClick(int type);
+        void onClick(String type);
     }
 }

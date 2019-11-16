@@ -248,7 +248,7 @@ public class OrderDetails02Activity extends BaseActivity {
                         if (simpleResponseAppResponse.isSucess()) {
                             String freightPrice = simpleResponseAppResponse.getData().getVcode();
                             if ("仅退款处理中".equals(mOrderDetailsData.get(position).getRefunding())) {
-                                OrderDetails02RefundDetailsActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice);
+                                OrderDetails02RefundDetailsActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice,"OrderDetails02Activity");
                             } else if ("退款成功".equals(mOrderDetailsData.get(position).getRefunding())) {
                                 RefundDetailsActivity.openActivity(OrderDetails02Activity.this);
                             } else {

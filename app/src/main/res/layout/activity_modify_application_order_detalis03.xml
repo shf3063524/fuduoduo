@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="申请退款"
+            android:text="修改申请"
             android:textColor="@color/cl_333"
             android:textSize="17sp" />
 
@@ -95,6 +95,17 @@
 
             </RelativeLayout>
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_modify_application"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="  提示：修改申请售后操作仅能发起一次，请您谨慎修改！"
+            android:textColor="@color/cl_ffee6604"
+            android:textSize="11sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -81,6 +81,7 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
     private ArrayList<DoQueryOrdersDetailsData> detailsData;
     private OrderDetailsBean orderDetailsBean;
     private DoqueryreturnorderdetailsData appResponseData;
+    private String jumpKey;
 
     /**
      * @param context
@@ -88,11 +89,12 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
      * @param detailsData      整个订单数据
      * @param freightPrice     计算的运费
      */
-    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData, String freightPrice) {
+    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData, String freightPrice, String jumpKey) {
         Intent intent = new Intent(context, OrderDetails02RefundDetailsActivity.class);
         intent.putExtra("OrderDetailsBean", orderDetailsBean);
         intent.putExtra("detailsData", detailsData);
         intent.putExtra("freightPrice", freightPrice);
+        intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
 
@@ -104,6 +106,7 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
 
     @Override
     protected void initPageData() {
+        jumpKey = getIntent().getStringExtra("jumpKey");
         freightPrice = getIntent().getStringExtra("freightPrice");
         detailsData = (ArrayList<DoQueryOrdersDetailsData>) getIntent().getSerializableExtra("detailsData");
         orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
@@ -130,6 +133,12 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
     protected void initViews() {
         StatusBarUtil.setColor(OrderDetails02RefundDetailsActivity.this, cl_e51C23, 1);
         initRecyclerView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onRefundDetails(orderDetailsBean.getOrderDetail().getId());
     }
 
     private void initRecyclerView() {
@@ -173,14 +182,20 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
                 break;
             case R.id.m_tv_modify_application: // 修改申请
                 if (appResponseData.getReturnOrderDetails().getCreateTime().equals(appResponseData.getReturnOrderDetails().getUpdateTime())) {
-                    ModifyApplicationActivity.openActivity(OrderDetails02RefundDetailsActivity.this, detailsData, orderDetailsBean, freightPrice, appResponseData);
+                    if ("OrderDetails03Activity".equals(jumpKey) || "RequestARefundActivity".equals(jumpKey)) {
+                        ModifyApplicationOrderDetails03Activity.openActivity(OrderDetails02RefundDetailsActivity.this, detailsData, orderDetailsBean, freightPrice, appResponseData);
+
+                    } else if ("OrderDetails02Activity".equals(jumpKey) || "ApplyForAfterSaleActivity".equals(jumpKey)) {
+                        ModifyApplicationActivity.openActivity(OrderDetails02RefundDetailsActivity.this, detailsData, orderDetailsBean, freightPrice, appResponseData);
+                    }
+
                 } else {
                     Toasty.info(OrderDetails02RefundDetailsActivity.this, "抱歉，您目前没有可发起的服务类型").show();
                     return;
                 }
                 break;
             case R.id.m_cv_negotiation_history: // 协商历史
-                NegotiationHistoryActivity.openActivity(OrderDetails02RefundDetailsActivity.this,orderDetailsBean.getOrderDetail().getId(),orderDetailsBean.getCommodity().getSupplierId());
+                NegotiationHistoryActivity.openActivity(OrderDetails02RefundDetailsActivity.this, orderDetailsBean.getOrderDetail().getId(), orderDetailsBean.getCommodity().getSupplierId());
                 break;
         }
     }
@@ -231,7 +246,7 @@ public class OrderDetails02RefundDetailsActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            OrderDetails02RefundDetails02Activity.openActivity(OrderDetails02RefundDetailsActivity.this,orderDetailsBean);
+                            OrderDetails02RefundDetails02Activity.openActivity(OrderDetails02RefundDetailsActivity.this, orderDetailsBean);
                             finish();
                         }
                     }

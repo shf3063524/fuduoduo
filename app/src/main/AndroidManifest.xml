@@ -158,6 +158,9 @@
         <activity
             android:name=".activity.mine_fragment.ChooseCompanyActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
+        <activity android:name=".activity.mine_fragment.ReplacementCompletedActivity"/>
+        <activity android:name=".activity.mine_fragment.ModifyApplicationOrderDetails03Activity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden"/>
     </application>
 
 </manifest>

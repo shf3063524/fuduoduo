@@ -11,7 +11,12 @@ import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
+import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
+import com.hjkj.fuduoduo.entity.net.AppResponse;
+import com.hjkj.fuduoduo.okgo.Api;
+import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.GlideUtils;
+import com.lzy.okgo.OkGo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -69,7 +74,7 @@ public class SelectServiceTypeActivity extends BaseActivity {
      */
     private void onProcessData(OrderDetailsBean orderDetailsBean) {
         // 商品图片
-        GlideUtils.loadImage(SelectServiceTypeActivity.this,orderDetailsBean.getSpecification().getSpecificationImage(),R.drawable.ic_all_background,mIvShopping);
+        GlideUtils.loadImage(SelectServiceTypeActivity.this, orderDetailsBean.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
         // 商品名称
         mTvContent.setText(orderDetailsBean.getCommodity().getName());
         // 商品规格
@@ -90,14 +95,37 @@ public class SelectServiceTypeActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_layout_refund:   // 我要退款 申请退款
-                RequestARefundActivity.openActivity(SelectServiceTypeActivity.this);
+                onFreightCalculation(orderDetailsBean.getCommodity().getSupplierId(),orderDetailsBean.getCommodity().getFreightTemplateName(),orderDetailsBean.getOrderDetail().getNumber());
                 break;
             case R.id.m_layout_refund_china_pic:   // 我要退货退款
                 RequestARefund02Activity.openActivity(SelectServiceTypeActivity.this);
                 break;
             case R.id.m_layout_rechange_china_pic:   // 我要换货 申请换货
-                ApplyForAReplacementActivity.openActivity(SelectServiceTypeActivity.this,orderDetailsBean,detailsData);
+                ApplyForAReplacementActivity.openActivity(SelectServiceTypeActivity.this, orderDetailsBean, detailsData);
                 break;
         }
+    }
+
+    /**
+     * 单个商品订单详情运费计算
+     *
+     * @param supplierId 商户id
+     * @param name       运费模板名称
+     * @param number     商品数量
+     */
+    private void onFreightCalculation(String supplierId, String name, String number) {
+        OkGo.<AppResponse<VcodeLoginData>>get(Api.ORDERS_DOCOUNTFREIGHTPRICE)//
+                .params("supplierId", supplierId)
+                .params("name", name)
+                .params("number", number)
+                .execute(new JsonCallBack<AppResponse<VcodeLoginData>>() {
+                    @Override
+                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            String freightPrice = simpleResponseAppResponse.getData().getVcode();
+                            RequestARefundActivity.openActivity(SelectServiceTypeActivity.this, orderDetailsBean, detailsData,freightPrice);
+                        }
+                    }
+                });
     }
 }

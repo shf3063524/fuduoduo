@@ -25,6 +25,7 @@ import com.hjkj.fuduoduo.entity.bean.ExpressBean;
 import com.hjkj.fuduoduo.entity.bean.OrderBean;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.bean.ShopBean;
+import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
@@ -162,12 +163,48 @@ public class OrderDetails03Activity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_tv_refund: // 选择服务类型
-                        if ("等待商家处理换货申请".equals(mOrderDetailsData.get(position).getRefunding())) {
-                            ExchangeDetailsActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
-                        } else if ("换货中".equals(mOrderDetailsData.get(position).getRefunding())) {
-                            ExchangeDetails02Activity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
-                        } else {
-                            SelectServiceTypeActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position), detailsData);
+                        switch (mOrderDetailsData.get(position).getRefunding()) {
+                            case "卖家申请换货":
+                                ExchangeDetailsActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                                break;
+                            case "等待商家处理换货申请":
+                                ExchangeDetailsActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                                break;
+                            case "换货中":
+                                ExchangeDetails02Activity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                                break;
+                            case "商家拒绝换货请求":
+
+                                break;
+                            case "换货完成":
+                                ReplacementCompletedActivity.openActivity(OrderDetails03Activity.this);
+                                break;
+                            case "商家发起仅退款":
+                                onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
+                                break;
+                            case "仅退款处理中":
+                                onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
+                                break;
+                            case "商家发起退货退款":
+                                onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
+                                break;
+                            case "退货退款处理中":
+                                onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
+                                break;
+                            case "退款中":
+                                onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
+                                break;
+                            case "商家拒绝退款":
+                                break;
+                            case "退款成功":
+                                RefundDetailsActivity.openActivity(OrderDetails03Activity.this);
+                                break;
+                            case "买家取消":
+                                OrderDetails02RefundDetails02Activity.openActivity(OrderDetails03Activity.this,mOrderDetailsData.get(position));
+                                break;
+                            case "":
+                                SelectServiceTypeActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position), detailsData);
+                                break;
                         }
                         break;
                 }
@@ -260,6 +297,29 @@ public class OrderDetails03Activity extends BaseActivity {
         mTvLogisticeTime.setText(express.get(0).getTime());
     }
 
+    /**
+     * 单个商品订单详情运费计算
+     *
+     * @param supplierId 商户id
+     * @param name       运费模板名称
+     * @param number     商品数量
+     * @param position
+     */
+    private void onFreightCalculation(String supplierId, String name, String number, int position) {
+        OkGo.<AppResponse<VcodeLoginData>>get(Api.ORDERS_DOCOUNTFREIGHTPRICE)//
+                .params("supplierId", supplierId)
+                .params("name", name)
+                .params("number", number)
+                .execute(new JsonCallBack<AppResponse<VcodeLoginData>>() {
+                    @Override
+                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            String freightPrice = simpleResponseAppResponse.getData().getVcode();
+                            OrderDetails02RefundDetailsActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position), detailsData, freightPrice,"OrderDetails03Activity");
+                        }
+                    }
+                });
+    }
 }
 
 

@@ -424,7 +424,7 @@ public class ModifyApplicationActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            OrderDetails02RefundDetailsActivity.openActivity(ModifyApplicationActivity.this,orderDetailsBean,detailsData,"");
+//                            OrderDetails02RefundDetailsActivity.openActivity(ModifyApplicationActivity.this,orderDetailsBean,detailsData,"","");
                             finish();
                         }
                     }
