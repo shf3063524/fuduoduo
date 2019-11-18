@@ -175,6 +175,11 @@ public class Api {
      */
     public static final String ORDERS_DOCONFIRMFOREIGNCOMMODITIES = BASE_ORDERS + "/orders/doConfirmForeignCommodities";
 
+    /**
+     *  换货确认收货
+     */
+    public static final String ORDERS_DORECEIVERETURNORDERS = BASE_ORDERS + "/orders/doReceiveReturnOrders";
+
     //************************************************    商品有关    **************************************************************
 
     // 图片地址---和商品有关

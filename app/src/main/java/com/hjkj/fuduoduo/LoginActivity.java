@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -20,6 +21,7 @@ import android.widget.ToggleButton;
 import com.hjkj.fuduoduo.activity.login.ForgetPasswordActivity;
 import com.hjkj.fuduoduo.activity.login.UserActivationActivity;
 import com.hjkj.fuduoduo.activity.mine_fragment.PersonalCenterActivity;
+import com.hjkj.fuduoduo.activity.mine_fragment.SetActivity;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.bean.ConsumerBean;
 import com.hjkj.fuduoduo.entity.bean.PasswordLoginData;
@@ -93,6 +95,12 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        String accessToken = UserManager.getUserId(LoginActivity.this);
+        if (!TextUtils.isEmpty(accessToken)) {
+            MainActivity.openActivity(this);
+            finish();
+        }
+
         mTvLoginVcode.setText("验证码登录");
     }
 
@@ -226,7 +234,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<PasswordLoginData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            String message = simpleResponseAppResponse.getMessage();
+                            String message = simpleResponseAppResponse.getMessage(); //判断是否是0：新用户还是1：老用户
                             PasswordLoginData data = simpleResponseAppResponse.getData();
 
 
@@ -234,8 +242,11 @@ public class LoginActivity extends BaseActivity {
                             ConsumerBean consumer = data.getConsumer();
                             UserManager.setPhoneNumber(LoginActivity.this, consumer.getPhoneNumber());
                             UserManager.setUserId(LoginActivity.this, consumer.getId());
-
+                            if ("0".equals(message)) {
+                                PersonalCenterActivity.openActivity(LoginActivity.this, "LoginActivity");
+                            } else {
                                 MainActivity.openActivity(LoginActivity.this, message, "LoginActivity");
+                            }
                         }
                     }
                 });
@@ -264,8 +275,7 @@ public class LoginActivity extends BaseActivity {
                             UserManager.setPhoneNumber(LoginActivity.this, consumer.getPhoneNumber());
                             UserManager.setUserId(LoginActivity.this, consumer.getId());
 
-
-//                            MainActivity.openActivity(LoginActivity.this, message);
+                            MainActivity.openActivity(LoginActivity.this, message, "LoginActivity");
                         }
                     }
                 });

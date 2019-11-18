@@ -5,23 +5,18 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.hjkj.fuduoduo.LoginActivity;
-import com.hjkj.fuduoduo.MainActivity;
 import com.hjkj.fuduoduo.R;
-import com.hjkj.fuduoduo.activity.mine_fragment.MyCollectionActivity;
+import com.hjkj.fuduoduo.kefu.LoginKeFuActivity;
 import com.hjkj.fuduoduo.adapter.ProductPagerAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.dialog.BasicServicesDialog;
@@ -30,21 +25,19 @@ import com.hjkj.fuduoduo.dialog.ShopCartDialog;
 import com.hjkj.fuduoduo.entity.bean.AttributesBean;
 import com.hjkj.fuduoduo.entity.bean.CommodityBean;
 import com.hjkj.fuduoduo.entity.bean.ConsumerBean;
-import com.hjkj.fuduoduo.entity.bean.DoQueryCategoryDetailsData;
 import com.hjkj.fuduoduo.entity.bean.DoQueryCommodityDetailsData;
 import com.hjkj.fuduoduo.entity.bean.Evaluation;
 import com.hjkj.fuduoduo.entity.bean.EvaluationBeans;
 import com.hjkj.fuduoduo.entity.bean.EvaluationsBean;
 import com.hjkj.fuduoduo.entity.bean.FreightTemplateBean;
-import com.hjkj.fuduoduo.entity.bean.PasswordLoginData;
 import com.hjkj.fuduoduo.entity.bean.SpecificationBeans;
 import com.hjkj.fuduoduo.entity.bean.SpecificationsBean;
 import com.hjkj.fuduoduo.entity.bean.SupplierBean;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
-import com.hjkj.fuduoduo.okgo.DialogCallBack;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
+import com.hjkj.fuduoduo.tool.kefutool.Constant;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.GetJsonDataUtil;
 import com.hjkj.fuduoduo.tool.GlideUtils;
@@ -52,9 +45,10 @@ import com.hjkj.fuduoduo.tool.SharedPrefUtil;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.ObservableScrollView;
+import com.hyphenate.helpdesk.easeui.util.IntentBuilder;
+import com.hyphenate.helpdesk.model.ContentFactory;
 import com.lzy.okgo.OkGo;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -134,6 +128,8 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
     RelativeLayout mLayoutReview;
     @BindView(R.id.m_layout_collect)
     RelativeLayout mLayoutCollect;
+    @BindView(R.id.m_rl_service)
+    RelativeLayout mRlService;
     @BindView(R.id.m_layout_review_one)
     LinearLayout mLayoutReviewOne;
     @BindView(R.id.m_web_view)
@@ -270,7 +266,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
     }
 
     @OnClick({R.id.iv_back, R.id.m_layout_service, R.id.m_layout_select, R.id.m_layout_parameter, R.id.m_layout_review, R.id.tv_shop_cart,
-            R.id.m_tv_buy, R.id.m_layout_store, R.id.m_layout_collect, R.id.iv_shopping_cart})
+            R.id.m_tv_buy, R.id.m_layout_store, R.id.m_layout_collect, R.id.iv_shopping_cart,R.id.m_rl_service})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:   // 返回
@@ -348,6 +344,16 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
                 break;
             case R.id.iv_shopping_cart: // 跳转购物车Frgment
 //                MainActivity.openActivity(ProductDetailsActivity.this, "", "ProductDetailsActivity");
+                break;
+            case R.id.m_rl_service:
+                ProductDetailsActivity.this.startActivity(new Intent(ProductDetailsActivity.this, LoginKeFuActivity.class).putExtra(Constant.MESSAGE_TO_INTENT_EXTRA,
+                        Constant.MESSAGE_TO_PRE_SALES));
+
+//                Intent intent = new IntentBuilder(this)
+//                        .setServiceIMNumber("Lh20150930")
+//                        .setScheduleAgent(ContentFactory.createAgentIdentityInfo("six_hao@163.com")) //需填写正确的客服的邮箱地址
+//                        .build();
+//                startActivity(intent);
                 break;
         }
     }

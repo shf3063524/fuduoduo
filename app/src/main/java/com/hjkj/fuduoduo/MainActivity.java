@@ -60,6 +60,11 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
+    public static void openActivity(Context context, String jumpKey) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("jumpKey", jumpKey);
+        context.startActivity(intent);
+    }
     /**
      * @param context
      * @param message 判断是否是0：新用户还是1：老用户

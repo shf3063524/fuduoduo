@@ -124,7 +124,7 @@ public class ReplacementCompletedActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_rl_negotiation_history: // 协商历史
-                ReplacementCompletedActivity.openActivity(ReplacementCompletedActivity.this,orderDetailsId);
+                NegotiationHistoryActivity.openActivity(ReplacementCompletedActivity.this, appResponseData.getReturnOrderDetails().getId(), appResponseData.getCommodity().getSupplierId());
 
                 break;
         }

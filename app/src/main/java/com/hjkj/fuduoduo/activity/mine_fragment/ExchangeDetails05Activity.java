@@ -135,7 +135,7 @@ public class ExchangeDetails05Activity extends BaseActivity {
                 NegotiationHistoryActivity.openActivity(ExchangeDetails05Activity.this, appResponseData.getReturnOrderDetails().getId(), appResponseData.getCommodity().getSupplierId());
                 break;
             case R.id.m_tv_finish: // 确认收货
-                ReplacementCompletedActivity.openActivity(ExchangeDetails05Activity.this,orderDetailsId);
+                onConfirm();
                 break;
             case R.id.m_layout_logistics: // 物流信息
                 ViewLogistics02Activity.openActivity(ExchangeDetails05Activity.this, appResponseData.getCommoditySpecification().getSpecificationImage(), appResponseData.getFreightMap());
@@ -194,5 +194,24 @@ public class ExchangeDetails05Activity extends BaseActivity {
         // 地址
         mTvAddress.setText(freightAddress.getName() + "  " + freightAddress.getMobilephoneNumber() + "  " + freightAddress.getProvince() + freightAddress.getCity() + freightAddress.getArea() + freightAddress.getStreet());
 
+    }
+    /**
+     * 换货确认收货接口
+     */
+    private void onConfirm(){
+        String id = appResponseData.getOrderDetails().getId();
+        String ordersId = appResponseData.getOrderDetails().getOrdersId();
+        OkGo.<AppResponse>get(Api.ORDERS_DORECEIVERETURNORDERS)//
+                .params("id", id) //退货订单详情id
+                .params("ordersId", ordersId) //	订单id
+                .execute(new DialogCallBack<AppResponse>(this, "") {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            ReplacementCompletedActivity.openActivity(ExchangeDetails05Activity.this,orderDetailsId);
+                            finish();
+                        }
+                    }
+                });
     }
 }

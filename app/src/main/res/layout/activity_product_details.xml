@@ -85,6 +85,7 @@
         android:weightSum="8">
 
         <RelativeLayout
+            android:id="@+id/m_rl_service"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

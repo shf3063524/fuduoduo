@@ -6,4 +6,18 @@
     <string name="Good">一般</string>
     <string name="Better">满意</string>
     <string name="Best">非常满意</string>
+
+    <string name="is_contact_customer">正在联系客服，请稍等...</string>
+    <string name="system_is_regist">系统正在自动为您注册用户...</string>
+    <string name="network_unavailable">网络连接不可用，请检查网络</string>
+    <string name="no_register_authority">无开放注册权限</string>
+    <string name="illegal_user_name">用户名不合法</string>
+    <string name="register_user_fail">注册失败!</string>
+    <string name="is_contact_customer_failure_seconed">联系客服失败:</string>
+    <string name="user_already_exists">用户已经存在</string>
+    <string name="em_example3_text">缪缪女士高跟鞋</string>
+    <string name="em_example4_text">卡地亚的一块手表</string>
+    <string name="order_number">订单号</string>
+    <string name="em_example1_text">古驰亮色夹克</string>
+    <string name="em_example2_text">铂金女士手提袋</string>
 </resources>

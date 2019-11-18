@@ -11,8 +11,16 @@ android {
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
         multiDexEnabled true
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+        ndk {
+            //选择要添加的对应cpu类型的.so库
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+            //还可以添加 'armeabi', 'x86'
+        }
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     dexOptions {
         preDexLibraries = false
         javaMaxHeapSize "2g"
@@ -92,4 +100,11 @@ dependencies {
     implementation rootProject.ext.dependencies["DeMon-JS-PDF"]
     //jsoup解析器
     implementation rootProject.ext.dependencies["jsoup"]
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //环信客服SDK
+    implementation 'com.hyphenate:kefu-easeui-android:latest.release'
+    //EaseUI中 头像获取用到了glide，请添加glide库
+    implementation 'com.github.bumptech.glide:glide:4.7.1' //其他版本也可以
 }

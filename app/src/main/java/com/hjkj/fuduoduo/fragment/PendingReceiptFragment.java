@@ -57,7 +57,7 @@ public class PendingReceiptFragment extends BaseFragment {
         super.initPageData(bundle);
         if (getArguments() != null) {
             saleState = getArguments().getString("saleState");
-            orderData(saleState);
+            orderData();
         }
     }
 
@@ -69,7 +69,7 @@ public class PendingReceiptFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        orderData(saleState);
+        orderData();
     }
 
     private void initRecyclerView() {
@@ -89,13 +89,13 @@ public class PendingReceiptFragment extends BaseFragment {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_cv_item: // 条目
-                        OrderDetails03Activity.openActivity(mContext,mData.get(position).getOrder().getId());
+                        OrderDetails03Activity.openActivity(mContext, mData.get(position).getOrder().getId());
                         break;
                     case R.id.m_tv_one: // 查看物流
                         ViewLogisticsActivity.openActivity(mContext);
                         break;
                     case R.id.m_tv_three: // 确认收货
-                        Toasty.info(mContext, "确认收货").show();
+                        onConfirm(mData.get(position).getOrder().getId());
                         break;
                     case R.id.m_layout_store: // 店铺详情
                         StoreDetailsActivity.openActivity(mContext, mData.get(position).getOrder().getSupplierId());
@@ -110,7 +110,7 @@ public class PendingReceiptFragment extends BaseFragment {
 
     }
 
-    private void orderData(String saleState) {
+    private void orderData() {
         String userId = UserManager.getUserId(mContext);
         OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
                 .params("id", userId)
@@ -131,6 +131,25 @@ public class PendingReceiptFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    /**
+     * 订单确认收货
+     */
+    private void onConfirm(String id) {
+        OkGo.<AppResponse>get(Api.ORDERS_DORECEIVE)//
+                .params("id", id) // 订单id
+                .params("saleState", "4") //交易状态
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.info(mContext,"确认收货成功").show();
+                            mData.clear();
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
     }

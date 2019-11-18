@@ -100,7 +100,7 @@ public class SetActivity extends BaseActivity {
 
                 break;
             case R.id.m_layout_personal_center:   // 个人中心
-                PersonalCenterActivity.openActivity(SetActivity.this,responseData.getConsumer());
+                PersonalCenterActivity.openActivity(SetActivity.this,responseData.getConsumer(),"SetActivity");
                 break;
         }
     }

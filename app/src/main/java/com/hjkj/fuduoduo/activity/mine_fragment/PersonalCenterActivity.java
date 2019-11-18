@@ -14,6 +14,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.hjkj.fuduoduo.LoginActivity;
+import com.hjkj.fuduoduo.MainActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.bean.ConsumerBean;
@@ -80,10 +81,17 @@ public class PersonalCenterActivity extends BaseActivity {
     private TimePickerView pvTime;
     private String gender;
     private String logoHead = null;
+    private String jumpKey;
 
-    public static void openActivity(Context context, ConsumerBean consumerBean) {
+    public static void openActivity(Context context,String jumpKey) {
         Intent intent = new Intent(context, PersonalCenterActivity.class);
-        intent.putExtra("ConsumerBean",consumerBean);
+        intent.putExtra("jumpKey", jumpKey);
+        context.startActivity(intent);
+    }
+    public static void openActivity(Context context, ConsumerBean consumerBean, String jumpKey) {
+        Intent intent = new Intent(context, PersonalCenterActivity.class);
+        intent.putExtra("ConsumerBean", consumerBean);
+        intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
 
@@ -94,8 +102,11 @@ public class PersonalCenterActivity extends BaseActivity {
 
     @Override
     protected void initPageData() {
-        ConsumerBean consumerBean =(ConsumerBean) getIntent().getSerializableExtra("ConsumerBean");
-        uploadedProfileDisplay(consumerBean);
+        ConsumerBean consumerBean = (ConsumerBean) getIntent().getSerializableExtra("ConsumerBean");
+        jumpKey = getIntent().getStringExtra("jumpKey");
+        if ("SetActivity".equals(jumpKey)) {
+            uploadedProfileDisplay(consumerBean);
+        }
     }
 
     @Override
@@ -371,6 +382,7 @@ public class PersonalCenterActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         Toasty.normal(PersonalCenterActivity.this, "保存成功").show();
+                        MainActivity.openActivity(PersonalCenterActivity.this,jumpKey);
                         finish();
                     }
                 });
@@ -396,11 +408,12 @@ public class PersonalCenterActivity extends BaseActivity {
 
     /**
      * 已经上传的个人资料展示
+     *
      * @param consumerBean
      */
-    private void uploadedProfileDisplay(ConsumerBean consumerBean){
+    private void uploadedProfileDisplay(ConsumerBean consumerBean) {
         // 头像
-        GlideUtils.loadCircleHeadImage(PersonalCenterActivity.this,consumerBean.getLogo(),R.drawable.ic_all_background,mIvHead);
+        GlideUtils.loadCircleHeadImage(PersonalCenterActivity.this, consumerBean.getLogo(), R.drawable.ic_all_background, mIvHead);
         // 用户名
         mEtUsername.setText(consumerBean.getUsername());
         // 昵称
@@ -408,7 +421,7 @@ public class PersonalCenterActivity extends BaseActivity {
         // 手机号
         mEtPhone.setText(consumerBean.getPhoneNumber());
         // 性别
-        switch (consumerBean.getGender()){
+        switch (consumerBean.getGender()) {
             case "1":
                 mTvWriteGender.setText("男");
                 break;

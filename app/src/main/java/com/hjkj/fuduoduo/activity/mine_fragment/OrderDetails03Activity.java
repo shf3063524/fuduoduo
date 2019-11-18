@@ -236,7 +236,7 @@ public class OrderDetails03Activity extends BaseActivity {
                 ViewLogisticsActivity.openActivity(OrderDetails03Activity.this, detailsData.get(0).getOrder().getOrderNumber());
                 break;
             case R.id.m_tv_three: // 确认收货
-                Toasty.info(this, "确认收货").show();
+                onConfirm(detailsData.get(0).getOrder().getId());
                 break;
             case R.id.m_layout_logistics: // 物流信息
                 LogisticsInfoActivity.openActivity(OrderDetails03Activity.this, express);
@@ -351,6 +351,24 @@ public class OrderDetails03Activity extends BaseActivity {
                             }else if ("4".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())){
                                 ExchangeDetails05Activity.openActivity(OrderDetails03Activity.this, orderDetailsId);
                             }
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 订单确认收货
+     */
+    private void onConfirm(String id) {
+        OkGo.<AppResponse>get(Api.ORDERS_DORECEIVE)//
+                .params("id", id) // 订单id
+                .params("saleState", "4") //交易状态
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.info(OrderDetails03Activity.this,"确认收货成功").show();
+                           finish();
                         }
                     }
                 });
