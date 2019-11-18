@@ -106,7 +106,7 @@
                             android:id="@+id/m_tv_title02"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="请等待商家收货并再次发货"
+                            android:text="等待商家再次发货"
                             android:textColor="@color/cl_fff"
                             android:textSize="18sp" />
 
@@ -131,69 +131,55 @@
                         android:orientation="vertical"
                         android:padding="16dp">
 
-                        <TextView
-                            android:id="@+id/m_tv_title03"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="如果商家收到货并验收无误，将再次发货给您"
-                            android:textColor="@color/cl_333"
-                            android:textSize="14sp" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginBottom="16dp"
-                            android:background="@color/cl_eee" />
-
-                        <LinearLayout
-                            android:id="@+id/m_layout_logistics"
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
-                            android:orientation="horizontal">
+                            android:layout_marginBottom="8dp">
 
                             <ImageView
-                                android:id="@+id/m_iv_logistics"
+                                android:id="@+id/m_iv_recipient_button"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginEnd="6dp"
-                                android:src="@mipmap/ic_logistics" />
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="14dp"
+                                android:src="@drawable/ic_recipient_button" />
 
                             <RelativeLayout
+                                android:id="@+id/m_layout_one"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:layout_toEndOf="@+id/m_iv_recipient_button">
 
                                 <TextView
-                                    android:id="@+id/m_tv_logistics_content"
+                                    android:id="@+id/m_tv_address_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:lines="3"
-                                    android:maxEms="16"
-                                    android:text="退货物流：韵达快递(237199173917）快件已到达杭州市，准备发往萧山区转运中心"
-                                    android:textColor="@color/cl_ff0481df"
-                                    android:textSize="15sp" />
-
-                                <TextView
-                                    android:id="@+id/m_tv_logistics_time"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/m_tv_logistics_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="2019-09-12 09:41:17"
+                                    android:text="收货人：李四"
                                     android:textColor="@color/cl_666"
                                     android:textSize="13sp" />
 
-                                <ImageView
+                                <TextView
+                                    android:id="@+id/m_tv_addres_phone"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
-                                    android:layout_centerVertical="true"
-                                    android:src="@mipmap/ic_right_arrow" />
+                                    android:text="18379273922"
+                                    android:textColor="@color/cl_666"
+                                    android:textSize="13sp" />
+
                             </RelativeLayout>
 
-                        </LinearLayout>
+                            <TextView
+                                android:id="@+id/m_tv_address_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/m_layout_one"
+                                android:layout_toEndOf="@+id/m_iv_recipient_button"
+                                android:text="浙江省杭州市萧山区 新街县新街镇 新街镇村693号2号楼8楼"
+                                android:textColor="@color/cl_666"
+                                android:textSize="13sp" />
+                        </RelativeLayout>
 
                         <View
                             android:layout_width="match_parent"
@@ -218,7 +204,7 @@
                                 android:id="@+id/m_tv_text01"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="如果商家拒绝，您可以咨询客服小秘解决。"
+                                android:text="如果您的收货信息有误，请及时与商家联系。"
                                 android:textColor="@color/cl_666"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -240,7 +226,29 @@
                                 android:id="@+id/m_tv_text02"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="如果商家超时未处理，商家将自动确认收货。"
+                                android:text="如果商家超时未发货，可联系客服小秘解决。"
+                                android:textColor="@color/cl_666"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="11dp"
+                                android:src="@mipmap/ic_smaller" />
+
+                            <TextView
+                                android:id="@+id/m_tv_text03"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="若商家超时不响应：若线上库存充足则默认达成换货申请，若不足或商品已下架，则换货申请失败。"
                                 android:textColor="@color/cl_666"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -339,7 +347,7 @@
                     android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/m_tv_title04"
+                        android:id="@+id/m_tv_title03"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="17dp"
@@ -392,12 +400,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/m_tv_change_to"
                                 android:layout_marginTop="2dp"
+                                android:background="@drawable/shape_frame_cl_f8"
                                 android:paddingStart="6dp"
                                 android:paddingTop="1dp"
                                 android:paddingEnd="6dp"
                                 android:paddingBottom="1dp"
                                 android:text="原有：N°1正宫色"
-                                android:background="@drawable/shape_frame_cl_f8"
                                 android:textColor="@color/cl_999"
                                 android:textSize="11sp" />
                         </RelativeLayout>

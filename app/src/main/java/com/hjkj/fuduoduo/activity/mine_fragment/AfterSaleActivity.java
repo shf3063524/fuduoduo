@@ -20,11 +20,13 @@ import com.hjkj.fuduoduo.okgo.DialogCallBack;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 售后页面
@@ -36,6 +38,10 @@ public class AfterSaleActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
     private ArrayList<DoqueryreturnordersData> mData;
     private AfterSaleAdapter mAdapter;
 
@@ -51,8 +57,20 @@ public class AfterSaleActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        initRefreshLayout();
         initRecyclerView();
         requestData();
+    }
+
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+        mLoadingLayout.setEmptyImage(R.drawable.ic_backgroud_shop);
+        mLoadingLayout.setEmptyText("暂无售后");
+    }
+
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(false);
     }
 
     @Override
@@ -64,8 +82,6 @@ public class AfterSaleActivity extends BaseActivity {
     private void initRecyclerView() {
         mData = new ArrayList<>();
         mAdapter = new AfterSaleAdapter(R.layout.item_after_sale, mData);
-        // mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        // mAdapter.isFirstOnly(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(AfterSaleActivity.this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -78,9 +94,6 @@ public class AfterSaleActivity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_cv_item:
-//                         ExchangeDetailsActivity.openActivity(AfterSaleActivity.this); //换货详情页面
-//                        RefundDetailsActivity.openActivity(AfterSaleActivity.this);//退款详情页面
-
                         switch (mData.get(position).getRefunding()) {
                             case "买家取消":
                             case "卖家取消":
@@ -127,6 +140,11 @@ public class AfterSaleActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0) {
+                            mLoadingLayout.showContent();
+                        } else {
+                            mLoadingLayout.showEmpty();
+                        }
                     }
                 });
     }

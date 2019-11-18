@@ -20,10 +20,19 @@ public class ReturnOrderDetailBean implements Serializable {
     private String returnReason;
     private String freightState;
     private String exchange;
+    private String returnFreightType;
     private String images;
     private String description;
     private String saleState;
     private String activityId;
+
+    public String getReturnFreightType() {
+        return returnFreightType;
+    }
+
+    public void setReturnFreightType(String returnFreightType) {
+        this.returnFreightType = returnFreightType;
+    }
 
     public String getCreateTime() {
         return createTime;

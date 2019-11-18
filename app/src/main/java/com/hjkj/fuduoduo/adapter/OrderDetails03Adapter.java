@@ -41,7 +41,7 @@ public class OrderDetails03Adapter extends BaseQuickAdapter<OrderDetailsBean, Ba
                 helper.setText(R.id.m_tv_refund, "售后处理中");
                 break;
             case "换货中":
-                helper.setText(R.id.m_tv_refund, "售后处理中");
+                helper.setText(R.id.m_tv_refund, "换货中");
                 break;
             case "商家拒绝换货请求":
                 helper.setText(R.id.m_tv_refund, "售后关闭");

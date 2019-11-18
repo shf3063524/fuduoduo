@@ -21,6 +21,7 @@ import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.DialogCallBack;
 import com.hjkj.fuduoduo.tool.GlideUtils;
+import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.ClearEditText;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -37,6 +38,7 @@ import java.util.List;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 /**
  * 申请换货填写物流信息
@@ -53,6 +55,8 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
     TextView mTvPhone;
     @BindView(R.id.m_tv_submit)
     TextView mTvSubmit;
+    @BindView(R.id.m_tv_title)
+    TextView mTvTtile;
     @BindView(R.id.m_tv_specification)
     TextView mTvSpecification;
     @BindView(R.id.m_etshipment_number)
@@ -84,10 +88,14 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
 
     private ArrayList<String> imagesList = new ArrayList<>();
     private String uploadImages;
+    private DoqueryreturnorderdetailsData doqueryreturnorderdetailsData;
+    private String isReturn;
+    private String jumpKey;
 
-    public static void openActivity(Context context, DoqueryreturnorderdetailsData doqueryreturnorderdetailsData) {
+    public static void openActivity(Context context, DoqueryreturnorderdetailsData doqueryreturnorderdetailsData, String jumpKey) {
         Intent intent = new Intent(context, ApplyForAReplacement02Activity.class);
         intent.putExtra("DoqueryreturnorderdetailsData", doqueryreturnorderdetailsData);
+        intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
 
@@ -98,22 +106,38 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
 
     @Override
     protected void initPageData() {
-        DoqueryreturnorderdetailsData doqueryreturnorderdetailsData = (DoqueryreturnorderdetailsData) getIntent().getSerializableExtra("DoqueryreturnorderdetailsData");
-        onProcessData(doqueryreturnorderdetailsData);
+        doqueryreturnorderdetailsData = (DoqueryreturnorderdetailsData) getIntent().getSerializableExtra("DoqueryreturnorderdetailsData");
+        jumpKey = getIntent().getStringExtra("jumpKey");
+        onProcessData(jumpKey, doqueryreturnorderdetailsData);
     }
 
     /**
      * 处理从上一个页面传过来的数据
      *
+     * @param jumpKey
      * @param requestData
      */
-    private void onProcessData(DoqueryreturnorderdetailsData requestData) {
-        // 图片
-        GlideUtils.loadImage(ApplyForAReplacement02Activity.this, requestData.getExchangeSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
-        // 商品名称
-        mTvContent.setText(requestData.getCommodity().getName());
-        // 商品规格
-        mTvSpecification.setText(requestData.getExchangeSpecification().getCommoditySpecification());
+    private void onProcessData(String jumpKey, DoqueryreturnorderdetailsData requestData) {
+        if ("换货中".equals(jumpKey)) {
+            mTvTtile.setText("申请换货");
+            // 图片
+            GlideUtils.loadImage(ApplyForAReplacement02Activity.this, requestData.getExchangeSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+            // 商品名称
+            mTvContent.setText(requestData.getCommodity().getName());
+            // 商品规格
+            mTvSpecification.setText(requestData.getExchangeSpecification().getCommoditySpecification());
+            isReturn = "1";
+        } else if ("退款中".equals(jumpKey)) {
+            mTvTtile.setText("申请退货");
+            // 图片
+            GlideUtils.loadImage(ApplyForAReplacement02Activity.this, requestData.getCommoditySpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+            // 商品名称
+            mTvContent.setText(requestData.getCommodity().getName());
+            // 商品规格
+            mTvSpecification.setText(requestData.getCommoditySpecification().getCommoditySpecification());
+
+            isReturn = "2";
+        }
 
     }
 
@@ -338,14 +362,21 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
                 ChooseCompanyActivity.openActivityForResult(ApplyForAReplacement02Activity.this, REQUEST_LOGISTICS_COMPANY);
                 break;
             case R.id.m_tv_submit: // 提交
-//                if (selectClientPhotoPathList.size() > 0 && selectClientPhotoPathList != null) {
-//                    for (String pictures : selectClientPhotoPathList) {
-//                        UploadAvatar(new File(pictures));
-//                    }
-//                    onImages();
-//                }
+                if ("请选择物流公司".equals(getTextString(mTvReasonForReturn))) {
+                    Toasty.info(ApplyForAReplacement02Activity.this, "请选择物流公司").show();
+                    return;
+                }
+                if (textIsEmpty(mEtShipmentNumber)) {
+                    Toasty.info(ApplyForAReplacement02Activity.this, "请填写物流单号").show();
+                    return;
+                }
 
-                ExchangeDetails03Activity.openActivity(ApplyForAReplacement02Activity.this,"");
+                if (selectClientPhotoPathList.size() > 0 && selectClientPhotoPathList != null) {
+                    for (String pictures : selectClientPhotoPathList) {
+                        UploadAvatar(new File(pictures));
+                    }
+                }
+                onDoSaveReturnFreight();
                 break;
         }
     }
@@ -364,6 +395,40 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
                     }
                 });
     }
+
+    /**
+     * 添加退换货物流接口
+     */
+    private void onDoSaveReturnFreight() {
+        onImages();
+        String consumerId = UserManager.getUserId(ApplyForAReplacement02Activity.this);
+        String supplierId = doqueryreturnorderdetailsData.getCommodity().getSupplierId();
+        String orderNumber = doqueryreturnorderdetailsData.getReturnOrder().getOrderNumber();
+        String freightCode = getTextString(mEtShipmentNumber);
+        String freightCompany = getTextString(mTvReasonForReturn);
+        String reMarks = getTextString(mEtContent);
+        String returnOrderId = doqueryreturnorderdetailsData.getReturnOrder().getId();
+        OkGo.<AppResponse>post(Api.ORDERS_DOSAVERETURNFREIGHT)//
+                .params("consumerId", consumerId) //买家id
+                .params("supplierId", supplierId) // 供货商id
+                .params("orderNumber", orderNumber) // 订单编号
+                .params("freightCode", freightCode) //	运单号码
+                .params("freightCompany", freightCompany) //物流公司
+                .params("isReturn", isReturn) //是否是原订单 1:换货 2：退货
+                .params("reMarks", reMarks) //说明
+                .params("returnOrderId", returnOrderId) //	退货订单id
+                .params("images", uploadImages) //	图片
+                .execute(new DialogCallBack<AppResponse>(this, "正在提交...") {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            ExchangeDetails03Activity.openActivity(ApplyForAReplacement02Activity.this, doqueryreturnorderdetailsData.getOrderDetails().getId(),jumpKey);
+                            finish();
+                        }
+                    }
+                });
+    }
+
 
     private void onImages() {
         StringBuilder sbClient = new StringBuilder();

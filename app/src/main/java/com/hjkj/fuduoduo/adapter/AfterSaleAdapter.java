@@ -32,15 +32,16 @@ public class AfterSaleAdapter extends BaseQuickAdapter<DoqueryreturnordersData, 
         helper.setText(R.id.m_tv_store, "  " + item.getShop().getName() + " ");
         // 换货中、仅退款，退款成功
         helper.setText(R.id.m_tv_refunding, item.getRefunding());
-        // 商品图片
+
         GlideUtils.loadImage(mContext, item.getReturnDetailsList().getSpecification().getSpecificationImage(), R.drawable.ic_all_background, helper.getView(R.id.m_iv_shopping));
+
         // 商品内容
         helper.setText(R.id.m_tv_content, item.getReturnDetailsList().getCommodity().getName());
         // 商品数量
         helper.setText(R.id.m_tv_number, "x " + item.getReturnDetailsList().getReturnOrderDetails().getNumber());
         // 换成
         if (item.getReturnDetailsList().getExchange() != null) {
-            helper.setText(R.id.m_tv_sale_name,"换成：" + item.getReturnDetailsList().getExchange().getCommoditySpecification());
+            helper.setText(R.id.m_tv_sale_name, "换成：" + item.getReturnDetailsList().getExchange().getCommoditySpecification());
         }
     }
 }

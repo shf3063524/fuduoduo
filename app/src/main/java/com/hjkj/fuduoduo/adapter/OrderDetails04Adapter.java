@@ -33,10 +33,28 @@ public class OrderDetails04Adapter extends BaseQuickAdapter<OrderDetailsBean, Ba
         // 选择商品数量+价格
         helper.setText(R.id.m_tv_price_num, DoubleUtil.double2Str(item.getOrderDetail().getPrice()) + "积分 x" + item.getOrderDetail().getNumber());
         // 商品状态
-        if ("等待商家处理换货申请".equals(item.getRefunding())) {
-            helper.setText(R.id.m_tv_refund, "售后处理中");
-        }  else {
-            helper.setText(R.id.m_tv_refund, "申请售后");
+        switch (item.getRefunding()) {
+            case "卖家申请换货":
+                helper.setText(R.id.m_tv_refund, "售后处理中");
+                break;
+            case "等待商家处理换货申请":
+                helper.setText(R.id.m_tv_refund, "售后处理中");
+                break;
+            case "换货中":
+                helper.setText(R.id.m_tv_refund, "换货中");
+                break;
+            case "商家拒绝换货请求":
+                helper.setText(R.id.m_tv_refund, "售后关闭");
+                break;
+            case "换货完成":
+                helper.setText(R.id.m_tv_refund, "换货完成");
+                break;
+            case "买家取消":
+                helper.setText(R.id.m_tv_refund, "退款关闭");
+                break;
+            case "":
+                helper.setText(R.id.m_tv_refund, "申请售后");
+                break;
         }
     }
 }

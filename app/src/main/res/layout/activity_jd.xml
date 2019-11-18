@@ -22,7 +22,7 @@
                 android:layout_height="310dp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_test_jd" />
+                android:background="@color/cl_f8" />
 
             <include layout="@layout/layout_backgroud_f6"/>
 

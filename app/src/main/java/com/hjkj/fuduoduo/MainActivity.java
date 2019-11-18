@@ -123,19 +123,19 @@ public class MainActivity extends BaseActivity {
             public void onTabSelect(int position) {
                 switch (position) {
                     case 0:
-                        replaceFragment(R.id.fl_change, HomeFragment.newInstance(message));
+//                        replaceFragment(R.id.fl_change, HomeFragment.newInstance(message));
                         StatusBarUtil.setColor(MainActivity.this, cl_fff, 1);
                         break;
                     case 1:
-                        replaceFragment(R.id.fl_change, SortFragment.newInstance());
+//                        replaceFragment(R.id.fl_change, SortFragment.newInstance());
                         StatusBarUtil.setColor(MainActivity.this, cl_fff, 1);
                         break;
                     case 2:
-                        replaceFragment(R.id.fl_change, ShoppingFragment.newInstance());
+//                        replaceFragment(R.id.fl_change, ShoppingFragment.newInstance());
                         StatusBarUtil.setColor(MainActivity.this, cl_fff, 1);
                         break;
                     case 3:
-                        replaceFragment(R.id.fl_change, MineFragment.newInstance());
+//                        replaceFragment(R.id.fl_change, MineFragment.newInstance());
                         StatusBarUtil.setColor(MainActivity.this, cl_e51C23, 1);
                         break;
                 }

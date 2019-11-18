@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="38dp"
+    android:layout_marginEnd="37dp"
+    android:background="@drawable/shape_frame_cl_cd_cl_fff"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/m_tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="14dp"
+        android:text="请分开结算以下商品"
+        android:textColor="@color/cl_333"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/m_rl_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp">
+
+        <CheckBox
+            android:id="@+id/ic_chekbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:button="@drawable/check_box_bg"
+            android:checked="true"
+            android:clickable="false"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/ic_chekbox"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="进口商品"
+                android:textColor="@color/cl_333"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/m_tv_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="1件"
+                android:textColor="@color/cl_666"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/m_rl_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="19dp">
+
+        <CheckBox
+            android:id="@+id/ic_chekbox02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:button="@drawable/check_box_bg"
+            android:checked="false"
+            android:clickable="false"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/ic_chekbox02"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="其他商品"
+                android:textColor="@color/cl_333"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/m_tv_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="1件"
+                android:textColor="@color/cl_666"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/m_tv_close"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_frame_cl_cd_cl_fff"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="返回购物车"
+            android:textColor="@color/cl_333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/m_tv_determine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/cl_e51C23"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="去结算"
+            android:textColor="@color/cl_fff"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

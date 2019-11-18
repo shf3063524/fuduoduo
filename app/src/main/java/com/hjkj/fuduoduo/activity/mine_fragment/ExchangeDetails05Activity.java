@@ -2,22 +2,23 @@ package com.hjkj.fuduoduo.activity.mine_fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
+import com.hjkj.fuduoduo.dialog.ApplicationCanceledDialog;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
 import com.hjkj.fuduoduo.entity.bean.DoqueryreturnorderdetailsData;
 import com.hjkj.fuduoduo.entity.bean.FreightMapBean;
-import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.DialogCallBack;
@@ -34,19 +35,19 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 换货详情-换货完成
+ *
  */
-public class ReplacementCompletedActivity extends BaseActivity {
+public class ExchangeDetails05Activity extends BaseActivity {
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
     @BindView(R.id.m_iv_shopping)
     ImageView mIvShopping;
     @BindView(R.id.m_tv_content)
     TextView mTvContent;
-    @BindView(R.id.m_tv_specification)
-    TextView mTvSpecification;
     @BindView(R.id.m_tv_change_to)
     TextView mTvChangeto;
+    @BindView(R.id.m_tv_time)
+    TextView mTvTime;
     @BindView(R.id.m_tv_exchange_reason)
     TextView mTvExchangeReason;
     @BindView(R.id.m_tv_exchange_number)
@@ -57,48 +58,56 @@ public class ReplacementCompletedActivity extends BaseActivity {
     TextView mTvExchangenumbering;
     @BindView(R.id.m_tv_address)
     TextView mTvAddress;
-    @BindView(R.id.m_tv_remaining_time)
-    TextView mTvRemainingTime;
-    @BindView(R.id.m_rl_negotiation_history)
-    RelativeLayout mRlNegotiationHistory;
+    @BindView(R.id.m_cv_negotiation_history)
+    CardView mCvNegotiationHistory;
+    @BindView(R.id.m_tv_finish)
+    TextView mTvFinish;
+    @BindView(R.id.m_tv_logistics_content)
+    TextView mTvLogisticeContent;
+    @BindView(R.id.m_tv_logistics_time)
+    TextView mTvLogisticeTime;
+    @BindView(R.id.m_layout_logistics)
+    LinearLayout mLayoutLogistics;
+    @BindView(R.id.m_tv_specification)
+    TextView mTvSpecification;
     @BindView(R.id.m_scrollview)
     ScrollView myScrollView;
     @BindView(R.id.m_love_recycler_view)
     RecyclerView mLoveRecyclerView;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
-
     private ArrayList<TestBean> mData;
     private ShoppingFragmentAdapter mAdapter;
     private DoqueryreturnorderdetailsData appResponseData;
     private String orderDetailsId;
+
     public static void openActivity(Context context, String orderDetailsId) {
-        Intent intent = new Intent(context, ReplacementCompletedActivity.class);
+        Intent intent = new Intent(context, ExchangeDetails05Activity.class);
         intent.putExtra("orderDetailsId", orderDetailsId);
         context.startActivity(intent);
     }
-
     @Override
     protected int attachLayoutRes() {
-        return R.layout.activity_replacement_completed;
+        return R.layout.activity_exchange_details05;
     }
+
     @Override
     protected void initPageData() {
         orderDetailsId = getIntent().getStringExtra("orderDetailsId");
         onRefundDetails(orderDetailsId);
     }
+
     @Override
     protected void initViews() {
-        StatusBarUtil.setColor(ReplacementCompletedActivity.this, cl_e51C23, 1);
+        StatusBarUtil.setColor(ExchangeDetails05Activity.this, cl_e51C23, 1);
         initRecyclerView();
     }
 
     private void initRecyclerView() {
-
         mData = new ArrayList<>();
         mAdapter = new ShoppingFragmentAdapter(R.layout.item_shopping_fragment, mData);
         mLoveRecyclerView.setNestedScrollingEnabled(false);
-        mLoveRecyclerView.setLayoutManager(new GridLayoutManager(ReplacementCompletedActivity.this, 2));
+        mLoveRecyclerView.setLayoutManager(new GridLayoutManager(ExchangeDetails05Activity.this, 2));
         mLoveRecyclerView.addItemDecoration(new SpaceItemDecoration(2, 12, false));
 
         mLoveRecyclerView.setAdapter(mAdapter);
@@ -106,7 +115,6 @@ public class ReplacementCompletedActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
-
         mData.clear();
         for (int i = 0; i < 10; i++) {
             mData.add(new TestBean("item" + i));
@@ -115,7 +123,7 @@ public class ReplacementCompletedActivity extends BaseActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    @OnClick({R.id.m_iv_arrow,R.id.m_rl_negotiation_history})
+    @OnClick({R.id.m_iv_arrow, R.id.m_cv_negotiation_history, R.id.m_tv_finish,R.id.m_layout_logistics})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -123,9 +131,14 @@ public class ReplacementCompletedActivity extends BaseActivity {
                     finish();
                 }
                 break;
-            case R.id.m_rl_negotiation_history: // 协商历史
-                ReplacementCompletedActivity.openActivity(ReplacementCompletedActivity.this,orderDetailsId);
-
+            case R.id.m_cv_negotiation_history: // 协商历史
+                NegotiationHistoryActivity.openActivity(ExchangeDetails05Activity.this, appResponseData.getReturnOrderDetails().getId(), appResponseData.getCommodity().getSupplierId());
+                break;
+            case R.id.m_tv_finish: // 确认收货
+                ReplacementCompletedActivity.openActivity(ExchangeDetails05Activity.this,orderDetailsId);
+                break;
+            case R.id.m_layout_logistics: // 物流信息
+                ViewLogistics02Activity.openActivity(ExchangeDetails05Activity.this, appResponseData.getCommoditySpecification().getSpecificationImage(), appResponseData.getFreightMap());
                 break;
         }
     }
@@ -154,7 +167,7 @@ public class ReplacementCompletedActivity extends BaseActivity {
      */
     private void refreshUi(DoqueryreturnorderdetailsData appResponseData) {
         // 商品图片
-        GlideUtils.loadImage(ReplacementCompletedActivity.this, appResponseData.getExchangeSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+        GlideUtils.loadImage(ExchangeDetails05Activity.this, appResponseData.getExchangeSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
         //换成
         mTvChangeto.setText("换成：" + appResponseData.getExchangeSpecification().getCommoditySpecification());
         // 商品名称
@@ -168,9 +181,15 @@ public class ReplacementCompletedActivity extends BaseActivity {
         // 申请时间：
         mTvApplicationTime.setText("申请时间：" + appResponseData.getReturnOrderDetails().getCreateTime());
         // 换货时间倒计时
-        mTvRemainingTime.setText(TimeLeftUtil2.doCalculate(appResponseData.getReturnOrderDetails().getCreateTime()));
+        mTvTime.setText(TimeLeftUtil2.doCalculate(appResponseData.getReturnOrderDetails().getCreateTime()));
         // 换货编号:
         mTvExchangenumbering.setText("换货编号：" + appResponseData.getReturnOrderDetails().getReturnOrderNumber());
+
+        FreightMapBean freightMap = appResponseData.getFreightMap();
+        // 退货物流
+        mTvLogisticeContent.setText(freightMap.getFreightDate().get(0).getContext());
+        // 物流时间
+        mTvLogisticeTime.setText(freightMap.getFreightDate().get(0).getFtime());
         DefaultAddressBean freightAddress = appResponseData.getFreightAddress();
         // 地址
         mTvAddress.setText(freightAddress.getName() + "  " + freightAddress.getMobilephoneNumber() + "  " + freightAddress.getProvince() + freightAddress.getCity() + freightAddress.getArea() + freightAddress.getStreet());

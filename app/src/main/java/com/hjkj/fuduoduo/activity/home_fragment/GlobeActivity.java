@@ -74,17 +74,17 @@ public class GlobeActivity extends BaseActivity implements ObservableScrollView.
         initRecyclerView();
     }
     private void initRecyclerView() {
-        mData = new ArrayList<>();
-        mAdapter = new NationalDayAdapter(R.layout.item_jd, mData);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(GlobeActivity.this,3,GridLayoutManager.VERTICAL,false){
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 10, true));
-        mRecyclerView.setAdapter(mAdapter);
+//        mData = new ArrayList<>();
+//        mAdapter = new NationalDayAdapter(R.layout.item_jd, mData);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(GlobeActivity.this,3,GridLayoutManager.VERTICAL,false){
+//            @Override
+//            public boolean canScrollVertically() {
+//                return false;
+//            }
+//        };
+//        mRecyclerView.setLayoutManager(gridLayoutManager);
+//        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 10, true));
+//        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initListener() {
@@ -166,17 +166,17 @@ public class GlobeActivity extends BaseActivity implements ObservableScrollView.
         //     }
         // });
 
-        mData.clear();
-        for (int i = 0; i < 10; i++) {
-            mData.add(new TestBean("item" + i));
-        }
-        mAdapter.notifyDataSetChanged();
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ProductDetailsActivity.openActivity(GlobeActivity.this);
-            }
-        });
+//        mData.clear();
+//        for (int i = 0; i < 10; i++) {
+//            mData.add(new TestBean("item" + i));
+//        }
+//        mAdapter.notifyDataSetChanged();
+//        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                ProductDetailsActivity.openActivity(GlobeActivity.this);
+//            }
+//        });
     }
 
     @OnClick({R.id.iv_back,R.id.m_cv_one,R.id.m_cv_two})

@@ -19,6 +19,8 @@ import com.hjkj.fuduoduo.activity.shop_fragment.ConfirmOrder02Activtiy;
 import com.hjkj.fuduoduo.adapter.ShopcartExpandableListViewAdapter;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
 import com.hjkj.fuduoduo.base.BaseFragment;
+import com.hjkj.fuduoduo.dialog.GoodsStatusDialog;
+import com.hjkj.fuduoduo.dialog.ShoppingSortDialog;
 import com.hjkj.fuduoduo.entity.bean.CartBean;
 import com.hjkj.fuduoduo.entity.bean.CartDoQueryData;
 import com.hjkj.fuduoduo.entity.bean.GroupInfo;
@@ -297,23 +299,34 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
                     Toast.makeText(mContext, "请选择要支付的商品", Toast.LENGTH_LONG).show();
                     return;
                 }
-                new CircleDialog.Builder()
-                        .setCanceledOnTouchOutside(false)
-                        .setCancelable(false)
-                        .setTitle("")
-                        .setText("总计:\n" + totalCount + "种商品\n" + totalPrice + "积分")
-                        .configText(params -> {
-                            // params.gravity = Gravity.LEFT | Gravity.TOP;
-                            params.padding = new int[]{100, 0, 100, 50};
-                        })
-                        .setNegative("取消", null)
-                        .setPositive("确定", new View.OnClickListener() {
+//                new CircleDialog.Builder()
+//                        .setCanceledOnTouchOutside(false)
+//                        .setCancelable(false)
+//                        .setTitle("")
+//                        .setText("总计:\n" + totalCount + "种商品\n" + totalPrice + "积分")
+//                        .configText(params -> {
+//                            // params.gravity = Gravity.LEFT | Gravity.TOP;
+//                            params.padding = new int[]{100, 0, 100, 50};
+//                        })
+//                        .setNegative("取消", null)
+//                        .setPositive("确定", new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                onOrders();
+//                            }
+//                        })
+//                        .show(getChildFragmentManager());
+                new ShoppingSortDialog(mContext,mDatas)
+                        .setListener(new ShoppingSortDialog.OnClickListener() {
                             @Override
-                            public void onClick(View view) {
-                                onOrders();
+                            public void onClick(String type) {
+                                if (type == null || type.isEmpty()){
+                                    Toasty.info(mContext,"您没有可以进行结算的商品").show();
+                                    return;
+                                }
+                                onOrders(type);
                             }
-                        })
-                        .show(getChildFragmentManager());
+                        }).show();
                 break;
             case R.id.m_tv_delete:
                 if (totalCount == 0) {
@@ -509,12 +522,13 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
 
     /**
      * 购物车多规格确认订单接口上传参数
+     * @param type
      */
-    private void onOrders() {
+    private void onOrders(String type) {
         String userId = UserManager.getUserId(mContext);
         OkGo.<AppResponse<OrdersDoConfirmOrdersData>>post(Api.ORDERS_DOCONFIRMORDERS)//
                 .params("consumerId", userId)
-                .params("orderDetails", getOrderUploadParameter())
+                .params("orderDetails", type)
                 .execute(new DialogCallBack<AppResponse<OrdersDoConfirmOrdersData>>(mContext,"") {
 
                     @Override
@@ -528,19 +542,19 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
                 });
     }
 
-    private String getOrderUploadParameter() {
-        ArrayList<UserBillingBean> userBillingBeans = new ArrayList<>();
-        for (CartDoQueryData data : mDatas) {
-            for (CartBean cartBean : data.getCart()) {
-                if (cartBean.isChoosed()) {
-                    String number = cartBean.getCart().getNumber();
-                    String id = cartBean.getCommoditySpecification().getId();
-                    userBillingBeans.add(new UserBillingBean(id, number));
-                }
-            }
-        }
-        return new Gson().toJson(userBillingBeans);
-    }
+//    private String getOrderUploadParameter() {
+//        ArrayList<UserBillingBean> userBillingBeans = new ArrayList<>();
+//        for (CartDoQueryData data : mDatas) {
+//            for (CartBean cartBean : data.getCart()) {
+//                if (cartBean.isChoosed()) {
+//                    String number = cartBean.getCart().getNumber();
+//                    String id = cartBean.getCommoditySpecification().getId();
+//                    userBillingBeans.add(new UserBillingBean(id, number));
+//                }
+//            }
+//        }
+//        return new Gson().toJson(userBillingBeans);
+//    }
 }
 
 

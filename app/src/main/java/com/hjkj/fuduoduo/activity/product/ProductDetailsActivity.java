@@ -347,7 +347,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
                 }
                 break;
             case R.id.iv_shopping_cart: // 跳转购物车Frgment
-                MainActivity.openActivity(ProductDetailsActivity.this, "", "ProductDetailsActivity");
+//                MainActivity.openActivity(ProductDetailsActivity.this, "", "ProductDetailsActivity");
                 break;
         }
     }

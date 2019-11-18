@@ -50,10 +50,7 @@ public class RequestARefund02Activity extends BaseActivity {
      */
     private static final int maxSelectNum = 3;
 
-    /**
-     * 上传腾讯云标识
-     */
-    private int currentPosition = 0;
+
     private ChooseImageAdapter mAdapter;
     private List<LocalMedia> selectMediaCustomer = new ArrayList<>();
 

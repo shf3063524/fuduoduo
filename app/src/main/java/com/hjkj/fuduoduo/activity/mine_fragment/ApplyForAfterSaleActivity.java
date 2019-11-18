@@ -17,6 +17,7 @@ import com.hjkj.fuduoduo.adapter.ChooseImageAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.dialog.ReasonForReturn02Dialog;
 import com.hjkj.fuduoduo.dialog.ReasonForReturnDialog;
+import com.hjkj.fuduoduo.dialog.ReasonForReurn02Dialog;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
@@ -64,6 +65,8 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
     TextView mTvRefundAmount;
     @BindView(R.id.m_tv_prompt)
     TextView mTvPrompt;
+    @BindView(R.id.m_tv_title)
+    TextView mTvTitle;
     @BindView(R.id.m_tv_submit)
     TextView mTvSubmit;
     @BindView(R.id.m_et_content)
@@ -94,12 +97,14 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
     private ArrayList<String> imagesList = new ArrayList<>();
     private String uploadImages;
     private String freightPrice;
+    private String jumpKey;
 
-    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData, String freightPrice) {
+    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData, String freightPrice,String jumpKey) {
         Intent intent = new Intent(context, ApplyForAfterSaleActivity.class);
         intent.putExtra("OrderDetailsBean", orderDetailsBean);
         intent.putExtra("detailsData", detailsData);
         intent.putExtra("freightPrice", freightPrice);
+        intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
 
@@ -110,19 +115,26 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
 
     @Override
     protected void initPageData() {
+        jumpKey = getIntent().getStringExtra("jumpKey");
         freightPrice = getIntent().getStringExtra("freightPrice");
         detailsData = (ArrayList<DoQueryOrdersDetailsData>) getIntent().getSerializableExtra("detailsData");
         orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
-        onProcessingData(freightPrice, orderDetailsBean);
+        onProcessingData(jumpKey,freightPrice, orderDetailsBean);
     }
 
     /**
      * 处理传过来的数据
      *
+     * @param jumpKey
      * @param freightPrice
      * @param orderDetailsBean
      */
-    private void onProcessingData(String freightPrice, OrderDetailsBean orderDetailsBean) {
+    private void onProcessingData(String jumpKey, String freightPrice, OrderDetailsBean orderDetailsBean) {
+        if (jumpKey.equals("OrderDetails02Activity")){
+            mTvTitle.setText("申请售后");
+        }else if (jumpKey.equals("SelectServiceTypeActivity")){
+            mTvTitle.setText("申请退款");
+        }
         // 规格图片
         GlideUtils.loadImage(ApplyForAfterSaleActivity.this, orderDetailsBean.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
         // 商品名称
@@ -351,32 +363,23 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_layout_symbol: // 退款原因
-                new ReasonForReturn02Dialog(ApplyForAfterSaleActivity.this)
-                        .setListener(new ReasonForReturn02Dialog.OnClickListener() {
-                            @Override
-                            public void onClick(int type) {
-                                switch (type) {
-                                    case ReasonForReturn02Dialog.M_LAYOUT_ONE:
-                                        mTvReasonForReturn.setText("多拍/拍错/不想要");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_TWO:
-                                        mTvReasonForReturn.setText("协商一致退款");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_THREE:
-                                        mTvReasonForReturn.setText("缺货");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_FOUR:
-                                        mTvReasonForReturn.setText("未按约定时间发货");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_FIVE:
-                                        mTvReasonForReturn.setText("空包裹/少货");
-                                        break;
-                                    case ReasonForReturn02Dialog.M_LAYOUT_SIX:
-                                        mTvReasonForReturn.setText("其他");
-                                        break;
+                if (jumpKey.equals("OrderDetails02Activity")) {
+                    new ReasonForReturnDialog(ApplyForAfterSaleActivity.this)
+                            .setListener(new ReasonForReturnDialog.OnClickListener() {
+                                @Override
+                                public void onClick(String type) {
+                                    mTvReasonForReturn.setText(type);
                                 }
-                            }
-                        }).show();
+                            }).show();
+                }else if (jumpKey.equals("SelectServiceTypeActivity")){
+                    new ReasonForReurn02Dialog(ApplyForAfterSaleActivity.this)
+                            .setListener(new ReasonForReurn02Dialog.OnClickListener() {
+                                @Override
+                                public void onClick(String type) {
+                                    mTvReasonForReturn.setText(type);
+                                }
+                            }).show();
+                }
                 break;
             case R.id.m_tv_submit: // 提交
                 if ("请选择".equals(getTextString(mTvReasonForReturn))) {

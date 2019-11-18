@@ -16,6 +16,15 @@ public class DoqueryreturnorderdetailsData implements Serializable {
     private ReturnOrderBean returnOrder;
     private ExchangeBean exchange;
     private DefaultAddressBean freightAddress;
+    private FreightMapBean freightMap;
+
+    public FreightMapBean getFreightMap() {
+        return freightMap;
+    }
+
+    public void setFreightMap(FreightMapBean freightMap) {
+        this.freightMap = freightMap;
+    }
 
     public OrderDetailsBeans getOrderDetails() {
         return orderDetails;

@@ -110,6 +110,7 @@
                             android:textSize="18sp" />
 
                         <TextView
+                            android:id="@+id/m_tv_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -145,6 +146,7 @@
                                 android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/m_tv_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_toStartOf="@+id/m_tv_integral"
@@ -168,8 +170,39 @@
                             android:layout_height="1dp"
                             android:layout_marginBottom="12dp"
                             android:background="@color/cl_eee" />
-
                         <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="17dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="退回余额"
+                                android:textColor="@color/cl_666"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/m_tv_price02"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toStartOf="@+id/m_tv_integral02"
+                                android:text="320.00"
+                                android:textColor="@color/cl_666"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/m_tv_integral02"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginStart="4dp"
+                                android:text="积分"
+                                android:textColor="@color/cl_666"
+                                android:textSize="12sp" />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:id="@+id/m_layout_negotiation_history"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -246,20 +279,64 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="17dp"
-                        android:text="换货信息"
+                        android:text="退款信息"
                         android:textColor="@color/cl_333"
                         android:textSize="14sp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:descendantFocusability="blocksDescendants">
+                        android:layout_height="wrap_content">
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/m_recycler_view"
+                        <ImageView
+                            android:id="@+id/m_iv_shopping"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:background="@color/cl_f8" />
+
+                        <TextView
+                            android:id="@+id/m_tv_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_toEndOf="@+id/m_iv_shopping"
+                            android:ellipsize="end"
+                            android:lines="2"
+                            android:maxEms="18"
+                            android:text="的房价来看的房价高了开发的进口量发达国家地方"
+                            android:textColor="@color/cl_333"
+                            android:textSize="12sp" />
+
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scrollbars="none" />
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/m_tv_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_toEndOf="@+id/m_iv_shopping">
+
+                            <TextView
+                                android:id="@+id/m_tv_change_to"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textColor="#ffe51c23"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:id="@+id/m_tv_specification"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/m_tv_change_to"
+                                android:layout_marginTop="2dp"
+                                android:paddingStart="6dp"
+                                android:paddingTop="1dp"
+                                android:paddingEnd="6dp"
+                                android:paddingBottom="1dp"
+                                android:text="原有：N°1正宫色"
+                                android:background="@drawable/shape_frame_cl_f8"
+                                android:textColor="@color/cl_999"
+                                android:textSize="11sp" />
+                        </RelativeLayout>
                     </RelativeLayout>
 
                     <View
@@ -270,33 +347,37 @@
                         android:background="@color/cl_eee" />
 
                     <TextView
+                        android:id="@+id/m_tv_exchange_reason"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="退款原因：不想要了"
+                        android:text=""
                         android:textColor="@color/cl_666"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/m_tv_exchange_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="退款金额：320.00积分"
+                        android:text=""
                         android:textColor="@color/cl_666"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/m_tv_application_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="申请时间：2019-9-11"
+                        android:text=""
                         android:textColor="@color/cl_666"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/m_tv_exchange_numbering"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="退款编号：3669832083208099"
+                        android:text=""
                         android:textColor="@color/cl_666"
                         android:textSize="12sp" />
                 </LinearLayout>

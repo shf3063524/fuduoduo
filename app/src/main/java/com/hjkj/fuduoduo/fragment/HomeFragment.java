@@ -30,6 +30,7 @@ import com.hjkj.fuduoduo.adapter.PageSortsAdapter;
 import com.hjkj.fuduoduo.entity.bean.BestSellingData;
 import com.hjkj.fuduoduo.entity.bean.DoFindCategoryData;
 import com.hjkj.fuduoduo.entity.bean.DoFindHomePageSortsData;
+import com.hjkj.fuduoduo.entity.bean.DoqueryhotsaleData;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
@@ -149,6 +150,7 @@ public class HomeFragment extends BaseFragment {
     private ArrayList<DoFindHomePageSortsData> mPageSortsData;
     private PageSortsAdapter mPageSortsAdapter;
     private MyFragmentPagerAdapter mTabAdapter;
+    private ArrayList<DoqueryhotsaleData> responseData;
 
     public static HomeFragment newInstance(String message) {
         HomeFragment fragment = new HomeFragment();
@@ -184,6 +186,7 @@ public class HomeFragment extends BaseFragment {
         initRecyclerView();
         classificationType();
         sortType();
+        onDoQueryHotSale();
     }
 
     private void initRecyclerView() {
@@ -247,9 +250,9 @@ public class HomeFragment extends BaseFragment {
         for (int i = 0; i < 4; i++) {
             Carousel("newConsumer", i);
         }
-        for (int i = 0; i < 5; i++) {
-            Carousel("Recommend", i);
-        }
+//        for (int i = 0; i < 5; i++) {
+//            Carousel("Recommend", i);
+//        }
     }
 
     @Override
@@ -260,13 +263,14 @@ public class HomeFragment extends BaseFragment {
                 String jumpType = mPageSortsData.get(position).getJumpType();
                 switch (jumpType) {
                     case "1": //京东，乐高，防暑，差旅
-                        JdActivity.openActivity(mContext);
+                        JdActivity.openActivity(mContext, mPageSortsData.get(position).getId());
                         break;
                     case "2"://劳保，婚孕，生日
-                        LabourActivity.openActivity(mContext);
+                        JdActivity.openActivity(mContext, mPageSortsData.get(position).getId());
+//                        LabourActivity.openActivity(mContext);
                         break;
                     case "3"://扶贫
-                        ReductionActivity.openActivity(mContext);
+                        JdActivity.openActivity(mContext, mPageSortsData.get(position).getId());
                         break;
                     case "4"://捐赠
                         Toasty.info(mContext, "捐赠").show();
@@ -294,22 +298,22 @@ public class HomeFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_national:   // 欢度国庆
-                NationalDayActivity.openActivity(mContext);
+                NationalDayActivity.openActivity(mContext, responseData.get(0).getId());
                 break;
             case R.id.m_iv_outdoor_sports:   // 户外活动
-                OutdoorActivity.openActivity(mContext);
+                NationalDayActivity.openActivity(mContext, responseData.get(1).getId());
                 break;
             case R.id.m_iv_overseas:   // 海外精选
-                OverseasActivity.openActivity(mContext);
+                NationalDayActivity.openActivity(mContext, responseData.get(2).getId());
                 break;
             case R.id.m_iv_day_work:   // 日用洗护
-                DayWorkActivity.openActivity(mContext);
+                NationalDayActivity.openActivity(mContext, responseData.get(3).getId());
                 break;
             case R.id.m_iv_beauty:   // 美妆防嗮
-                BeautyActivity.openActivity(mContext);
+                NationalDayActivity.openActivity(mContext, responseData.get(4).getId());
                 break;
             case R.id.m_layout_jd:   // 京东
-                JdActivity.openActivity(mContext);
+//                JdActivity.openActivity(mContext);
                 break;
             case R.id.m_layout_globe:   // 乐高
                 GlobeActivity.openActivity(mContext);
@@ -497,5 +501,39 @@ public class HomeFragment extends BaseFragment {
                         mTabAdapter.notifyDataSetChanged();
                     }
                 });
+    }
+
+    /**
+     * 首页热卖活动信息获取接口
+     */
+    private void onDoQueryHotSale() {
+        OkGo.<AppResponse<ArrayList<DoqueryhotsaleData>>>get(Api.HOMEPAGESORT_DOQUERYHOTSALE)//
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoqueryhotsaleData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoqueryhotsaleData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            responseData = simpleResponseAppResponse.getData();
+                            refreshUi(responseData);
+                        }
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+
+                    }
+                });
+    }
+
+    /**
+     * @param responseData
+     */
+    private void refreshUi(ArrayList<DoqueryhotsaleData> responseData) {
+        // 欢度国庆
+        GlideUtils.loadImage(mContext, responseData.get(0).getSortImage(), R.drawable.ic_all_background, mIvNational);
+        GlideUtils.loadImage(mContext,  responseData.get(1).getSortImage(), R.drawable.ic_all_background, mIvOvrseas);
+        GlideUtils.loadImage(mContext,  responseData.get(2).getSortImage(), R.drawable.ic_all_background, mIvOutdoorSports);
+        GlideUtils.loadImage(mContext,  responseData.get(3).getSortImage(), R.drawable.ic_all_background, mIvBeauty);
+        GlideUtils.loadImage(mContext,  responseData.get(4).getSortImage(), R.drawable.ic_all_background, mIvDayWork);
     }
 }

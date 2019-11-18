@@ -22,7 +22,7 @@
                 android:layout_height="513dp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_national_day" />
+                android:src="@drawable/ic_all_background" />
 
             <include layout="@layout/layout_backgroud_ffdfb7"/>
 

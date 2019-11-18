@@ -157,6 +157,23 @@ public class Api {
      *  查询物流公司
      */
     public static final String ORDERS_DOQUERYEXPRESSCOMPANY = BASE_ORDERS + "/orders/doQueryExpressCompany";
+    /**
+     *  查询退货物流地址
+     */
+    public static final String ORDERS_DOQUERYRETURNFREIGHTADDRESS = BASE_ORDERS + "/orders/doQueryReturnFreightAddress";
+    /**
+     *  添加退换货物流
+     */
+    public static final String ORDERS_DOSAVERETURNFREIGHT = BASE_ORDERS + "/orders/doSaveReturnFreight";
+    /**
+     *  确认收货(订单)
+     */
+    public static final String ORDERS_DORECEIVE = BASE_ORDERS + "/orders/doReceive";
+
+    /**
+     *  购物车国外物品查询
+     */
+    public static final String ORDERS_DOCONFIRMFOREIGNCOMMODITIES = BASE_ORDERS + "/orders/doConfirmForeignCommodities";
 
     //************************************************    商品有关    **************************************************************
 
@@ -223,4 +240,17 @@ public class Api {
      * 店铺商品详情查询（综合）
      */
     public static final String COMMODITY_DOQUERYSHOPDETAILS = BASE_IMAGE_URL + "/commodity/doQueryShopDetails";
+
+    /**
+     *  首页分类详情（京东优选）接口
+     */
+    public static final String HOMEPAGESORT_DOFINDJUMPINFO = BASE_IMAGE_URL + "/homePageSort/doFindJumpInfo";
+    /**
+     *  首页热卖活动信息获取
+     */
+    public static final String HOMEPAGESORT_DOQUERYHOTSALE = BASE_IMAGE_URL + "/homePageSort/doQueryHotSale";
+    /**
+     *  首页热卖活动详细信息查询
+     */
+    public static final String HOMEPAGESORT_DOQUERYHOTSALEDETAILS = BASE_IMAGE_URL + "/homePageSort/doQueryHotSaleDetails";
 }

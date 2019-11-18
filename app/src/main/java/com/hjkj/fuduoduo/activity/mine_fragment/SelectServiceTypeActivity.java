@@ -46,6 +46,10 @@ public class SelectServiceTypeActivity extends BaseActivity {
     RelativeLayout mLayoutRechangeChinaPic;
     private ArrayList<DoQueryOrdersDetailsData> detailsData;
     private OrderDetailsBean orderDetailsBean;
+    /**
+     * 跳转二级页面标识
+     */
+    private String positionSate ;
 
     public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData) {
         Intent intent = new Intent(context, SelectServiceTypeActivity.class);
@@ -95,10 +99,12 @@ public class SelectServiceTypeActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_layout_refund:   // 我要退款 申请退款
-                onFreightCalculation(orderDetailsBean.getCommodity().getSupplierId(),orderDetailsBean.getCommodity().getFreightTemplateName(),orderDetailsBean.getOrderDetail().getNumber());
+                positionSate = "0";
+                onFreightCalculation(orderDetailsBean.getCommodity().getSupplierId(), orderDetailsBean.getCommodity().getFreightTemplateName(), orderDetailsBean.getOrderDetail().getNumber());
                 break;
             case R.id.m_layout_refund_china_pic:   // 我要退货退款
-                RequestARefund02Activity.openActivity(SelectServiceTypeActivity.this);
+                positionSate = "1";
+                onFreightCalculation(orderDetailsBean.getCommodity().getSupplierId(), orderDetailsBean.getCommodity().getFreightTemplateName(), orderDetailsBean.getOrderDetail().getNumber());
                 break;
             case R.id.m_layout_rechange_china_pic:   // 我要换货 申请换货
                 ApplyForAReplacementActivity.openActivity(SelectServiceTypeActivity.this, orderDetailsBean, detailsData);
@@ -123,7 +129,11 @@ public class SelectServiceTypeActivity extends BaseActivity {
                     public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             String freightPrice = simpleResponseAppResponse.getData().getVcode();
-                            RequestARefundActivity.openActivity(SelectServiceTypeActivity.this, orderDetailsBean, detailsData,freightPrice);
+                            if ("0".equals(positionSate)) {
+                                RequestARefundActivity.openActivity(SelectServiceTypeActivity.this, orderDetailsBean, detailsData, freightPrice);
+                            } else {
+                                ApplyForAfterSaleActivity.openActivity(SelectServiceTypeActivity.this, orderDetailsBean, detailsData, freightPrice,"SelectServiceTypeActivity");
+                            }
                         }
                     }
                 });

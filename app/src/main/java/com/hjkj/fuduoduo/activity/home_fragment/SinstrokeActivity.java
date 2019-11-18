@@ -77,17 +77,17 @@ public class SinstrokeActivity extends BaseActivity implements ObservableScrollV
     }
 
     private void initRecyclerView() {
-        mData = new ArrayList<>();
-        mAdapter = new NationalDayAdapter(R.layout.item_jd, mData);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(SinstrokeActivity.this,3,GridLayoutManager.VERTICAL,false){
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 10, true));
-        mRecyclerView.setAdapter(mAdapter);
+//        mData = new ArrayList<>();
+//        mAdapter = new NationalDayAdapter(R.layout.item_jd, mData);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(SinstrokeActivity.this,3,GridLayoutManager.VERTICAL,false){
+//            @Override
+//            public boolean canScrollVertically() {
+//                return false;
+//            }
+//        };
+//        mRecyclerView.setLayoutManager(gridLayoutManager);
+//        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 10, true));
+//        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initListener() {

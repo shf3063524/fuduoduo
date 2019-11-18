@@ -19,12 +19,14 @@ import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
+import com.hjkj.fuduoduo.entity.bean.DoqueryreturnorderdetailsData;
 import com.hjkj.fuduoduo.entity.bean.ExpressBean;
 import com.hjkj.fuduoduo.entity.bean.OrderBean;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.bean.ShopBean;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
+import com.hjkj.fuduoduo.okgo.DialogCallBack;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
@@ -153,12 +155,26 @@ public class OrderDetails04Activity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_tv_refund: // 选择服务类型
-                        if ("等待商家处理换货申请".equals(mOrderDetailsData.get(position).getRefunding())) {
-                            ExchangeDetailsActivity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
-                        } else if ("换货中".equals(mOrderDetailsData.get(position).getRefunding())) {
-                            ExchangeDetails02Activity.openActivity(OrderDetails04Activity.this,mOrderDetailsData.get(position).getOrderDetail().getId());
-                        } else {
-                            SelectServiceType02Activity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position), responseData);
+                        switch (mOrderDetailsData.get(position).getRefunding()) {
+                            case "卖家申请换货":
+                                ExchangeDetailsActivity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                                break;
+                            case "等待商家处理换货申请":
+                                ExchangeDetailsActivity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                                break;
+                            case "换货中":
+                                onRefundDetails(mOrderDetailsData.get(position).getOrderDetail().getId(), "换货中");
+                                break;
+                            case "商家拒绝换货请求":
+                                break;
+                            case "换货完成":
+                                ReplacementCompletedActivity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                                break;
+                            case "买家取消":
+                                break;
+                            case "":
+                                SelectServiceType02Activity.openActivity(OrderDetails04Activity.this, mOrderDetailsData.get(position), responseData);
+                                break;
                         }
                         break;
                 }
@@ -252,5 +268,30 @@ public class OrderDetails04Activity extends BaseActivity {
         mOrderDetailsData.clear();
         mOrderDetailsData.addAll(orderDetails);
         mOrderDetailsAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 查询退货订单详情
+     */
+    private void onRefundDetails(String orderDetailsId, String jumpKey) {
+        OkGo.<AppResponse<DoqueryreturnorderdetailsData>>get(Api.ORDERS_DOQUERYRETURNORDERDETAILS)//
+                .params("orderDetailsId", orderDetailsId) //订单详情
+                .execute(new DialogCallBack<AppResponse<DoqueryreturnorderdetailsData>>(this, "") {
+                    @Override
+                    public void onSuccess(AppResponse<DoqueryreturnorderdetailsData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            DoqueryreturnorderdetailsData appResponseData = simpleResponseAppResponse.getData();
+                            if ("1".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails02Activity.openActivity(OrderDetails04Activity.this, orderDetailsId, jumpKey);
+                            } else if ("2".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails03Activity.openActivity(OrderDetails04Activity.this, orderDetailsId, jumpKey);
+                            } else if ("3".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails04Activity.openActivity(OrderDetails04Activity.this, orderDetailsId);
+                            } else if ("4".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails05Activity.openActivity(OrderDetails04Activity.this, orderDetailsId);
+                            }
+                        }
+                    }
+                });
     }
 }

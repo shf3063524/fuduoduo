@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hjkj.fuduoduo.R;
@@ -17,9 +18,21 @@ import com.hjkj.fuduoduo.activity.product.ProductDetailsActivity;
 import com.hjkj.fuduoduo.adapter.NationalDayAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
+import com.hjkj.fuduoduo.entity.bean.DoFindHomePageSortsData;
+import com.hjkj.fuduoduo.entity.bean.DofindjumpinfoData;
+import com.hjkj.fuduoduo.entity.bean.HomePageSortBean;
+import com.hjkj.fuduoduo.entity.bean.MultipleListBean;
+import com.hjkj.fuduoduo.entity.bean.SingleListBean;
+import com.hjkj.fuduoduo.entity.net.AppResponse;
+import com.hjkj.fuduoduo.okgo.Api;
+import com.hjkj.fuduoduo.okgo.JsonCallBack;
+import com.hjkj.fuduoduo.tool.DoubleUtil;
+import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
 import com.hjkj.fuduoduo.view.ObservableScrollView;
 import com.luck.picture.lib.decoration.GridSpacingItemDecoration;
+import com.luck.picture.lib.tools.PictureFileUtils;
+import com.lzy.okgo.OkGo;
 
 import java.util.ArrayList;
 
@@ -50,14 +63,29 @@ public class JdActivity extends BaseActivity implements ObservableScrollView.Scr
     CardView mCvOne;
     @BindView(R.id.m_cv_two)
     CardView mCvTwo;
+    @BindView(R.id.m_tv_content)
+    TextView mTvContent;
+    @BindView(R.id.m_tv_content02)
+    TextView mTvContent02;
+    @BindView(R.id.m_tv_price)
+    TextView mTvPrice;
+    @BindView(R.id.m_tv_price02)
+    TextView mTvPrice02;
+    @BindView(R.id.m_iv_shopping01)
+    ImageView mIvShopping01;
+    @BindView(R.id.m_iv_shopping02)
+    ImageView mIvShopping02;
     private int imageHeight; //图片高度
+    private ArrayList<SingleListBean> singleList;
+    private DofindjumpinfoData responseData;
 
-    public static void openActivity(Context context) {
+    public static void openActivity(Context context, String sortId) {
         Intent intent = new Intent(context, JdActivity.class);
+        intent.putExtra("sortId", sortId);
         context.startActivity(intent);
     }
 
-    private ArrayList<TestBean> mData;
+    private ArrayList<MultipleListBean> mData;
     private NationalDayAdapter mAdapter;
 
     @Override
@@ -71,6 +99,12 @@ public class JdActivity extends BaseActivity implements ObservableScrollView.Scr
     }
 
     @Override
+    protected void initPageData() {
+        String sortId = getIntent().getStringExtra("sortId");
+        onProcessData(sortId);
+    }
+
+    @Override
     protected void initViews() {
         initListener();
         initRecyclerView();
@@ -80,7 +114,7 @@ public class JdActivity extends BaseActivity implements ObservableScrollView.Scr
     private void initRecyclerView() {
         mData = new ArrayList<>();
         mAdapter = new NationalDayAdapter(R.layout.item_jd, mData);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(JdActivity.this,3,GridLayoutManager.VERTICAL,false){
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(JdActivity.this, 3, GridLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -138,20 +172,16 @@ public class JdActivity extends BaseActivity implements ObservableScrollView.Scr
 
     @Override
     protected void actionView() {
-        mData.clear();
-        for (int i = 0; i < 10; i++) {
-            mData.add(new TestBean("item" + i));
-        }
-        mAdapter.notifyDataSetChanged();
+
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ProductDetailsActivity.openActivity(JdActivity.this);
+                ProductDetailsActivity.openActivity(JdActivity.this,mData.get(position).getId());
             }
         });
     }
 
-    @OnClick({R.id.iv_back,R.id.m_cv_one,R.id.m_cv_two})
+    @OnClick({R.id.iv_back, R.id.m_cv_one, R.id.m_cv_two})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:   // 返回
@@ -160,11 +190,62 @@ public class JdActivity extends BaseActivity implements ObservableScrollView.Scr
                 }
                 break;
             case R.id.m_cv_one: // 条目一
-                ProductDetailsActivity.openActivity(JdActivity.this);
+                ProductDetailsActivity.openActivity(JdActivity.this,responseData.getSingleList().get(0).getId());
                 break;
             case R.id.m_cv_two:// 条目二
-                ProductDetailsActivity.openActivity(JdActivity.this);
+                ProductDetailsActivity.openActivity(JdActivity.this,responseData.getSingleList().get(1).getId());
                 break;
         }
+    }
+
+    private void onProcessData(String sortId) {
+        OkGo.<AppResponse<DofindjumpinfoData>>get(Api.HOMEPAGESORT_DOFINDJUMPINFO)//
+                .params("sortId", sortId)
+                .execute(new JsonCallBack<AppResponse<DofindjumpinfoData>>() {
+                    @Override
+                    public void onSuccess(AppResponse<DofindjumpinfoData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            responseData = simpleResponseAppResponse.getData();
+                            refreshUi(responseData);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+
+                    }
+                });
+    }
+
+    /**
+     * 数据处理
+     *
+     * @param responseData
+     */
+    private void refreshUi(DofindjumpinfoData responseData) {
+        // 头部图片
+        HomePageSortBean homePageSort = responseData.getHomePageSort();
+        GlideUtils.loadImage(JdActivity.this, homePageSort.getBackImage(), R.drawable.ic_all_background, headerIv);
+        // 下面两个商品
+        ArrayList<SingleListBean> singleList = responseData.getSingleList();
+        // 第一件商品名称
+        mTvContent.setText(singleList.get(0).getName());
+        // 第一件商品价格
+        mTvPrice.setText(DoubleUtil.double2Str(singleList.get(0).getPrice()));
+        // 第一件商品图片
+        GlideUtils.loadImage(JdActivity.this, PictureFileUtils.getImage(singleList.get(0).getImages()), R.drawable.ic_all_background, mIvShopping01);
+
+        // 第二件商品名称
+        mTvContent02.setText(singleList.get(1).getName());
+        // 第二件商品价格
+        mTvPrice02.setText(DoubleUtil.double2Str(singleList.get(1).getPrice()));
+        // 第二件商品图片
+        GlideUtils.loadImage(JdActivity.this, PictureFileUtils.getImage(singleList.get(1).getImages()), R.drawable.ic_all_background, mIvShopping02);
+        mData.clear();
+        ArrayList<MultipleListBean> multipleList = responseData.getMultipleList();
+        mData.addAll(multipleList);
+        mAdapter.notifyDataSetChanged();
     }
 }

@@ -21,6 +21,7 @@ import com.hjkj.fuduoduo.entity.bean.DoqueryreturnorderdetailsData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.DialogCallBack;
+import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
 import com.hjkj.fuduoduo.tool.TimeLeftUtil2;
@@ -59,6 +60,24 @@ public class ExchangeDetails02Activity extends BaseActivity {
     TextView mTvExchangenumbering;
     @BindView(R.id.m_tv_address)
     TextView mTvAddress;
+    @BindView(R.id.m_tv_title)
+    TextView mTvTtile;
+    @BindView(R.id.m_tv_title02)
+    TextView mTvTtile02;
+    @BindView(R.id.m_tv_title03)
+    TextView mTvTtile03;
+    @BindView(R.id.m_tv_text01)
+    TextView mTvText01;
+    @BindView(R.id.m_tv_text02)
+    TextView mTvText02;
+    @BindView(R.id.m_tv_text03)
+    TextView mTvText03;
+    @BindView(R.id.m_tv_address_name)
+    TextView mTvAddressName;
+    @BindView(R.id.m_tv_addres_phone)
+    TextView mTvAddressPhone;
+    @BindView(R.id.m_tv_address_address)
+    TextView mTvAddressAddress;
     @BindView(R.id.m_cv_negotiation_history)
     CardView mCvNegotiationHistory;
     @BindView(R.id.m_tv_application_canceled)
@@ -76,10 +95,12 @@ public class ExchangeDetails02Activity extends BaseActivity {
     private ShoppingFragmentAdapter mAdapter;
     private DoqueryreturnorderdetailsData appResponseData;
     private String orderDetailsId;
+    private String jumpKey;
 
-    public static void openActivity(Context context, String orderDetailsId) {
+    public static void openActivity(Context context, String orderDetailsId, String jumpKey) {
         Intent intent = new Intent(context, ExchangeDetails02Activity.class);
         intent.putExtra("orderDetailsId", orderDetailsId);
+        intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
 
@@ -90,8 +111,9 @@ public class ExchangeDetails02Activity extends BaseActivity {
 
     @Override
     protected void initPageData() {
+        jumpKey = getIntent().getStringExtra("jumpKey");
         orderDetailsId = getIntent().getStringExtra("orderDetailsId");
-        onRefundDetails(orderDetailsId);
+        onRefundDetails(jumpKey, orderDetailsId);
     }
 
     @Override
@@ -141,7 +163,11 @@ public class ExchangeDetails02Activity extends BaseActivity {
                         }).show();
                 break;
             case R.id.m_layout_modify_application: // 我已寄出 申请换货
-                ApplyForAReplacement02Activity.openActivity(ExchangeDetails02Activity.this,appResponseData);
+                if (jumpKey.equals("换货中")) {
+                ApplyForAReplacement02Activity.openActivity(ExchangeDetails02Activity.this, appResponseData,"换货中");
+                } else if (jumpKey.equals("退款中")) {
+                ApplyForAReplacement02Activity.openActivity(ExchangeDetails02Activity.this, appResponseData,"退款中");
+                }
                 break;
         }
     }
@@ -166,7 +192,7 @@ public class ExchangeDetails02Activity extends BaseActivity {
     /**
      * 查询退货订单详情
      */
-    private void onRefundDetails(String orderDetailsId) {
+    private void onRefundDetails(String jumpKey, String orderDetailsId) {
         OkGo.<AppResponse<DoqueryreturnorderdetailsData>>get(Api.ORDERS_DOQUERYRETURNORDERDETAILS)//
                 .params("orderDetailsId", orderDetailsId) //订单详情
                 .execute(new DialogCallBack<AppResponse<DoqueryreturnorderdetailsData>>(this, "") {
@@ -174,38 +200,107 @@ public class ExchangeDetails02Activity extends BaseActivity {
                     public void onSuccess(AppResponse<DoqueryreturnorderdetailsData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             appResponseData = simpleResponseAppResponse.getData();
-                            refreshUi(appResponseData);
+                            refreshUi(jumpKey, appResponseData);
+                            onCheckAddress(appResponseData.getCommodity().getSupplierId());
                         }
                     }
                 });
     }
+
     /**
      * 处理数据
      *
      * @param appResponseData
+     * @param jumpKey
      */
-    private void refreshUi(DoqueryreturnorderdetailsData appResponseData) {
-        // 商品图片
-        GlideUtils.loadImage(ExchangeDetails02Activity.this, appResponseData.getExchangeSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
-        // 商品名称
-        mTvContent.setText(appResponseData.getCommodity().getName());
-        //换成
-        mTvChangeto.setText("换成：" + appResponseData.getExchangeSpecification().getCommoditySpecification());
-        // 原有
-        mTvSpecification.setText("原有：" + appResponseData.getCommoditySpecification().getCommoditySpecification());
-        // 换货原因
-        mTvExchangeReason.setText("换货原因：" + appResponseData.getReturnOrderDetails().getReturnReason());
-        // 换货数量
-        mTvExchangeNumber.setText("换货数量：" + appResponseData.getReturnOrderDetails().getNumber());
-        // 申请时间：
-        mTvApplicationTime.setText("申请时间：" + appResponseData.getReturnOrderDetails().getCreateTime());
-        // 换货时间倒计时
-        mTvTime.setText(TimeLeftUtil2.doCalculate(appResponseData.getReturnOrderDetails().getCreateTime()));
-        // 换货编号:
-        mTvExchangenumbering.setText("换货编号：" + appResponseData.getReturnOrderDetails().getReturnOrderNumber());
+    private void refreshUi(String jumpKey, DoqueryreturnorderdetailsData appResponseData) {
+        if (jumpKey.equals("换货中")) {
+            mTvTtile.setText("换货详情");
+            mTvTtile02.setText("请退货并填写物流信息收件人按钮");
+            mTvTtile03.setText("换货信息");
+            mTvText01.setText("若商家同意：换货申请达成，请您及时退货。");
+            mTvText02.setText("若商家拒绝：换货申请将关闭，您可以联系商家协商处理。");
+            mTvText03.setText("若商家超时不响应：若线上库存充足则默认达成换货申请，若不足或商品已下架，则换货申请失败。");
+            // 商品图片
+            GlideUtils.loadImage(ExchangeDetails02Activity.this, appResponseData.getExchangeSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+            //换成
+            mTvChangeto.setText("换成：" + appResponseData.getExchangeSpecification().getCommoditySpecification());
+            // 商品名称
+            mTvContent.setText(appResponseData.getCommodity().getName());
+            // 原有
+            mTvSpecification.setText("原有：" + appResponseData.getCommoditySpecification().getCommoditySpecification());
+            // 换货原因
+            mTvExchangeReason.setText("换货原因：" + appResponseData.getReturnOrderDetails().getReturnReason());
+            // 换货数量
+            mTvExchangeNumber.setText("换货数量：" + appResponseData.getReturnOrderDetails().getNumber());
+            // 申请时间：
+            mTvApplicationTime.setText("申请时间：" + appResponseData.getReturnOrderDetails().getCreateTime());
+            // 换货时间倒计时
+            mTvTime.setText(TimeLeftUtil2.doCalculate(appResponseData.getReturnOrderDetails().getCreateTime()));
+            // 换货编号:
+            mTvExchangenumbering.setText("换货编号：" + appResponseData.getReturnOrderDetails().getReturnOrderNumber());
 
-        DefaultAddressBean freightAddress = appResponseData.getFreightAddress();
-        // 地址
-        mTvAddress.setText(freightAddress.getName() + "  " + freightAddress.getMobilephoneNumber() + "  " + freightAddress.getProvince() + freightAddress.getCity() + freightAddress.getArea() + freightAddress.getStreet());
+            DefaultAddressBean freightAddress = appResponseData.getFreightAddress();
+            // 地址
+            mTvAddress.setText("收货地址：" + freightAddress.getName() + "  " + freightAddress.getMobilephoneNumber() + "  " + freightAddress.getProvince() + freightAddress.getCity() + freightAddress.getArea() + freightAddress.getStreet());
+        } else if (jumpKey.equals("退款中")) {
+            mTvTtile.setText("退款详情");
+            mTvTtile02.setText("请退货并填写物流信息");
+            mTvTtile03.setText("退款信息");
+            mTvText01.setText("未与商家协商一致，请勿使用到付或平邮，以免商家拒签货物。");
+            mTvText02.setText("交易的钱款还在福多多中间账号，确保您资金安全。");
+            mTvText03.setText("请填写真实的物流信息，逾期未填写，退货申请将撤销。");
+            // 商品图片
+            GlideUtils.loadImage(ExchangeDetails02Activity.this, appResponseData.getCommoditySpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
+            // 商品名称
+            mTvContent.setText(appResponseData.getCommodity().getName());
+            // 原有
+            mTvSpecification.setText(appResponseData.getCommoditySpecification().getCommoditySpecification());
+            // 退款原因
+            mTvExchangeReason.setText("退款原因：" + appResponseData.getReturnOrderDetails().getReturnReason());
+            // 退款金额
+            mTvExchangeNumber.setText("退款金额：" + DoubleUtil.double2Str(appResponseData.getReturnOrder().getPrice()) + "积分");
+            // 申请时间：
+            mTvApplicationTime.setText("申请时间：" + appResponseData.getReturnOrderDetails().getCreateTime());
+            // 换货时间倒计时
+            mTvTime.setText(TimeLeftUtil2.doCalculate(appResponseData.getReturnOrderDetails().getCreateTime()));
+            // 退款编号:
+            mTvExchangenumbering.setText("退款编号：" + appResponseData.getReturnOrder().getReturnNumber());
+        }
     }
+
+    /**
+     * 查询退货物流地址
+     *
+     * @param supplierId
+     */
+    private void onCheckAddress(String supplierId) {
+        OkGo.<AppResponse<DefaultAddressBean>>get(Api.ORDERS_DOQUERYRETURNFREIGHTADDRESS)//
+                .params("supplierId", supplierId) //订单详情
+                .execute(new DialogCallBack<AppResponse<DefaultAddressBean>>(this, "") {
+                    @Override
+                    public void onSuccess(AppResponse<DefaultAddressBean> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            DefaultAddressBean responseAppResponseData = simpleResponseAppResponse.getData();
+                            onAddress(responseAppResponseData);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 商家收货地址数据
+     *
+     * @param responseAppResponseData
+     */
+    private void onAddress(DefaultAddressBean responseAppResponseData) {
+        // 收货人
+        mTvAddressName.setText(responseAppResponseData.getName());
+        // 收货人电话
+        mTvAddressPhone.setText(responseAppResponseData.getMobilephoneNumber());
+        // 收货人地址
+        mTvAddressAddress.setText(responseAppResponseData.getProvince() + responseAppResponseData.getCity() + responseAppResponseData.getArea() + responseAppResponseData.getStreet());
+    }
+
+
 }

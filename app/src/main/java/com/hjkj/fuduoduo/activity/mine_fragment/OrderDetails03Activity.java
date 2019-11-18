@@ -21,6 +21,7 @@ import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
+import com.hjkj.fuduoduo.entity.bean.DoqueryreturnorderdetailsData;
 import com.hjkj.fuduoduo.entity.bean.ExpressBean;
 import com.hjkj.fuduoduo.entity.bean.OrderBean;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
@@ -28,6 +29,7 @@ import com.hjkj.fuduoduo.entity.bean.ShopBean;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
+import com.hjkj.fuduoduo.okgo.DialogCallBack;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.GsonHelper;
@@ -106,6 +108,7 @@ public class OrderDetails03Activity extends BaseActivity {
     private ShoppingFragmentAdapter mAdapter;
     private ArrayList<ExpressBean> express;
     private ArrayList<DoQueryOrdersDetailsData> detailsData;
+    private String orderId;
 
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetails03Activity.class);
@@ -120,7 +123,7 @@ public class OrderDetails03Activity extends BaseActivity {
 
     @Override
     protected void initPageData() {
-        String orderId = getIntent().getStringExtra("orderId");
+        orderId = getIntent().getStringExtra("orderId");
         orderDetail(orderId);
     }
 
@@ -128,6 +131,12 @@ public class OrderDetails03Activity extends BaseActivity {
     protected void initViews() {
         StatusBarUtil.setColor(OrderDetails03Activity.this, cl_e51C23, 1);
         initRecyclerView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        orderDetail(orderId);
     }
 
     private void initRecyclerView() {
@@ -171,13 +180,13 @@ public class OrderDetails03Activity extends BaseActivity {
                                 ExchangeDetailsActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
                                 break;
                             case "换货中":
-                                ExchangeDetails02Activity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
+                                onRefundDetails(mOrderDetailsData.get(position).getOrderDetail().getId(),"换货中");
                                 break;
                             case "商家拒绝换货请求":
 
                                 break;
                             case "换货完成":
-                                ReplacementCompletedActivity.openActivity(OrderDetails03Activity.this);
+                                ReplacementCompletedActivity.openActivity(OrderDetails03Activity.this,mOrderDetailsData.get(position).getOrderDetail().getId());
                                 break;
                             case "商家发起仅退款":
                                 onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
@@ -192,15 +201,15 @@ public class OrderDetails03Activity extends BaseActivity {
                                 onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
                                 break;
                             case "退款中":
-                                onFreightCalculation(mOrderDetailsData.get(position).getCommodity().getSupplierId(), mOrderDetailsData.get(position).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(position).getOrderDetail().getNumber(), position);
+                                onRefundDetails(mOrderDetailsData.get(position).getOrderDetail().getId(),"退款中");
                                 break;
                             case "商家拒绝退款":
                                 break;
                             case "退款成功":
-                                RefundDetailsActivity.openActivity(OrderDetails03Activity.this);
+                                RefundDetailsActivity.openActivity(OrderDetails03Activity.this,mOrderDetailsData.get(position).getOrderDetail().getId());
                                 break;
                             case "买家取消":
-                                OrderDetails02RefundDetails02Activity.openActivity(OrderDetails03Activity.this,mOrderDetailsData.get(position));
+                                OrderDetails02RefundDetails02Activity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position));
                                 break;
                             case "":
                                 SelectServiceTypeActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position), detailsData);
@@ -275,7 +284,7 @@ public class OrderDetails03Activity extends BaseActivity {
         // 下单时间
         mTvOrderTime.setText(order.getCreateTime());
         // 订单号
-        mTvPayNumber.setText(order.getPayNumber());
+        mTvPayNumber.setText(order.getOrderNumber());
         // 物流编号
         mTvTrackNumber.setText(detailsData.get(0).getFreight().getFreightNumber());
         // 支付时间
@@ -315,7 +324,33 @@ public class OrderDetails03Activity extends BaseActivity {
                     public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             String freightPrice = simpleResponseAppResponse.getData().getVcode();
-                            OrderDetails02RefundDetailsActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position), detailsData, freightPrice,"OrderDetails03Activity");
+                            OrderDetails02RefundDetailsActivity.openActivity(OrderDetails03Activity.this, mOrderDetailsData.get(position), detailsData, freightPrice, "OrderDetails03Activity");
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * 查询退货订单详情
+     */
+    private void onRefundDetails(String orderDetailsId,String jumpKey) {
+        OkGo.<AppResponse<DoqueryreturnorderdetailsData>>get(Api.ORDERS_DOQUERYRETURNORDERDETAILS)//
+                .params("orderDetailsId", orderDetailsId) //订单详情
+                .execute(new DialogCallBack<AppResponse<DoqueryreturnorderdetailsData>>(this, "") {
+                    @Override
+                    public void onSuccess(AppResponse<DoqueryreturnorderdetailsData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            DoqueryreturnorderdetailsData appResponseData = simpleResponseAppResponse.getData();
+                            if ("1".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails02Activity.openActivity(OrderDetails03Activity.this, orderDetailsId, jumpKey);
+                            } else if ("2".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails03Activity.openActivity(OrderDetails03Activity.this, orderDetailsId, jumpKey);
+                            }else if ("3".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())){
+                                ExchangeDetails04Activity.openActivity(OrderDetails03Activity.this, orderDetailsId);
+                            }else if ("4".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())){
+                                ExchangeDetails05Activity.openActivity(OrderDetails03Activity.this, orderDetailsId);
+                            }
                         }
                     }
                 });

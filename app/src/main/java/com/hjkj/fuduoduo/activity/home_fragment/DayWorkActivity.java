@@ -79,17 +79,17 @@ public class DayWorkActivity extends BaseActivity implements ObservableScrollVie
     }
 
     private void initRecyclerView() {
-        mData = new ArrayList<>();
-        mAdapter = new NationalDayAdapter(R.layout.item_national_day, mData);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(DayWorkActivity.this, 2, GridLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 10, true));
-        mRecyclerView.setAdapter(mAdapter);
+//        mData = new ArrayList<>();
+//        mAdapter = new NationalDayAdapter(R.layout.item_national_day, mData);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(DayWorkActivity.this, 2, GridLayoutManager.VERTICAL, false) {
+//            @Override
+//            public boolean canScrollVertically() {
+//                return false;
+//            }
+//        };
+//        mRecyclerView.setLayoutManager(gridLayoutManager);
+//        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 10, true));
+//        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initListener() {
