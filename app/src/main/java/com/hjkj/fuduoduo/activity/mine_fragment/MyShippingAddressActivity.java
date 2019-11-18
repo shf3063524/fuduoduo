@@ -39,20 +39,28 @@ public class MyShippingAddressActivity extends BaseActivity {
     TextView mAddAddress;
     private ArrayList<DoQueryData> mData;
     private MyShippingAddressAdapter mAdapter;
+    private String jumpKey;
 
-    public static void openActivity(Context context) {
+    public static void openActivity(Context context, String jumpKey) {
         Intent intent = new Intent(context, MyShippingAddressActivity.class);
+        intent.putExtra(jumpKey, jumpKey);
         context.startActivity(intent);
     }
 
-    public static void openActivityForResult(Activity activity, int requestCode) {
+    public static void openActivityForResult(Activity activity, int requestCode, String jumpKey) {
         Intent intent = new Intent(activity, MyShippingAddressActivity.class);
+        intent.putExtra("jumpKey", jumpKey);
         activity.startActivityForResult(intent, requestCode);
     }
 
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_my_shipping_address;
+    }
+
+    @Override
+    protected void initPageData() {
+        jumpKey = getIntent().getStringExtra("jumpKey");
     }
 
     @Override
@@ -84,10 +92,12 @@ public class MyShippingAddressActivity extends BaseActivity {
                         EditShippingAddressActivity.openActivity(MyShippingAddressActivity.this, mData.get(position));
                         break;
                     case R.id.m_layout_item://点击条目
-                        Intent intent = new Intent();
-                        intent.putExtra("address", mData.get(position));
-                        setResult(RESULT_OK, intent);
-                        finish();
+                        if ("ConfirmOrder02Activtiy".equals(jumpKey) || "ConfirmOrderActivtiy".equals(jumpKey)) {
+                            Intent intent = new Intent();
+                            intent.putExtra("address", mData.get(position));
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
                         break;
                 }
             }
@@ -103,7 +113,7 @@ public class MyShippingAddressActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_add_address:   // 添加收货地址
-                AddAddressActivity.openActivity(MyShippingAddressActivity.this);
+                AddAddressActivity.openActivity(MyShippingAddressActivity.this, "MyShippingAddressActivity");
                 break;
         }
     }

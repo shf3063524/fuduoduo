@@ -153,7 +153,7 @@ public class ConfirmOrderActivtiy extends BaseActivity {
                         }).show();
                 break;
             case R.id.m_layout_address: // 收货人地址
-                MyShippingAddressActivity.openActivityForResult(ConfirmOrderActivtiy.this, REQUEST_RECIPIENT_ADDRESS);
+                MyShippingAddressActivity.openActivityForResult(ConfirmOrderActivtiy.this, REQUEST_RECIPIENT_ADDRESS,"ConfirmOrderActivtiy");
                 break;
         }
     }

@@ -138,10 +138,6 @@ public class SlidingTabFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
-                        if (unbinder != null) {
-//                            mRefreshLayout.finishRefresh();
-//                            mRefreshLayout.finishLoadMore();
-                        }
                     }
                 });
     }

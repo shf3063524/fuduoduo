@@ -13,8 +13,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.activity.product.PayFailureActivity;
+import com.hjkj.fuduoduo.activity.product.ProductDetailsActivity;
 import com.hjkj.fuduoduo.activity.shop_fragment.ConfirmOrder02Activtiy;
 import com.hjkj.fuduoduo.adapter.ShopcartExpandableListViewAdapter;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
@@ -23,6 +26,7 @@ import com.hjkj.fuduoduo.dialog.GoodsStatusDialog;
 import com.hjkj.fuduoduo.dialog.ShoppingSortDialog;
 import com.hjkj.fuduoduo.entity.bean.CartBean;
 import com.hjkj.fuduoduo.entity.bean.CartDoQueryData;
+import com.hjkj.fuduoduo.entity.bean.DoFindMaybeYouLikeData;
 import com.hjkj.fuduoduo.entity.bean.GroupInfo;
 import com.hjkj.fuduoduo.entity.bean.OrdersDoConfirmOrdersData;
 import com.hjkj.fuduoduo.entity.bean.ProductInfo;
@@ -78,7 +82,7 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
     private Map<String, List<ProductInfo>> children = new HashMap<>();// 子元素数据列表
 
     private List<CartDoQueryData> mDatas = new ArrayList<>();
-    private ArrayList<TestBean> mData;
+    private ArrayList<DoFindMaybeYouLikeData> mData;
     private ShoppingFragmentAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private FrameLayout mLayoutEmpty;
@@ -102,6 +106,7 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
         initEvents();
         initRecyclerView();
         mTvEdit.setText("编辑");
+        onLove();
     }
 
     @Override
@@ -156,14 +161,32 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
 
     @Override
     protected void actionView() {
-        if (unbinder != null) {
-
-            mData.clear();
-            for (int i = 0; i < 10; i++) {
-                mData.add(new TestBean("item" + i));
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ProductDetailsActivity.openActivity(mContext, mData.get(position).getCommodity().getId());
             }
-            mAdapter.notifyDataSetChanged();
-        }
+        });
+    }
+
+    /**
+     * 猜你喜欢接口
+     */
+    private void onLove() {
+        OkGo.<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>get(Api.COMMODITY_DOFINDMAYBEYOULIKE)//
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoFindMaybeYouLikeData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            mData.clear();
+                            ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
+                            if (unbinder != null) {
+                                mData.addAll(data);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
@@ -316,12 +339,12 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
 //                            }
 //                        })
 //                        .show(getChildFragmentManager());
-                new ShoppingSortDialog(mContext,mDatas)
+                new ShoppingSortDialog(mContext, mDatas)
                         .setListener(new ShoppingSortDialog.OnClickListener() {
                             @Override
                             public void onClick(String type) {
-                                if (type == null || type.isEmpty()){
-                                    Toasty.info(mContext,"您没有可以进行结算的商品").show();
+                                if (type == null || type.isEmpty()) {
+                                    Toasty.info(mContext, "您没有可以进行结算的商品").show();
                                     return;
                                 }
                                 onOrders(type);
@@ -522,6 +545,7 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
 
     /**
      * 购物车多规格确认订单接口上传参数
+     *
      * @param type
      */
     private void onOrders(String type) {
@@ -529,13 +553,13 @@ public class ShoppingFragment extends BaseFragment implements ShopcartExpandable
         OkGo.<AppResponse<OrdersDoConfirmOrdersData>>post(Api.ORDERS_DOCONFIRMORDERS)//
                 .params("consumerId", userId)
                 .params("orderDetails", type)
-                .execute(new DialogCallBack<AppResponse<OrdersDoConfirmOrdersData>>(mContext,"") {
+                .execute(new DialogCallBack<AppResponse<OrdersDoConfirmOrdersData>>(mContext, "") {
 
                     @Override
                     public void onSuccess(AppResponse<OrdersDoConfirmOrdersData> simpleResponseAppResponse) {
-                        if (simpleResponseAppResponse.isSucess()){
+                        if (simpleResponseAppResponse.isSucess()) {
                             OrdersDoConfirmOrdersData responseData = simpleResponseAppResponse.getData();
-                            ConfirmOrder02Activtiy.openActivity(mContext,responseData);
+                            ConfirmOrder02Activtiy.openActivity(mContext, responseData);
                         }
                     }
 

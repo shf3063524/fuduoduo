@@ -167,6 +167,10 @@
         <activity android:name=".activity.mine_fragment.ExchangeDetails05Activity"/>
         <activity android:name=".kefu.LoginKeFuActivity"/>
         <activity android:name=".kefu.ChatActivity"/>
+        <activity android:name=".activity.AddAddress02Activity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
+        <activity android:name=".activity.PersonalCenter02Activity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden"/>
     </application>
 
 </manifest>

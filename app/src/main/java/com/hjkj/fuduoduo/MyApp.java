@@ -34,6 +34,9 @@ public class MyApp extends Application {
         }
         // Kefu EaseUI的初始化
         UIProvider.getInstance().init(this);
+        //打印日志，方便测试
+        ChatClient.getInstance().init(this, new ChatClient.Options().setConsoleLog(true));
+
         //后面可以设置其他属性
         //**********************客服云*************************
 

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hjkj.fuduoduo.LoginActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.bean.ConsumerBean;
@@ -18,9 +19,11 @@ import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.GlobalClickItem;
 import com.lzy.okgo.OkGo;
+import com.mylhyl.circledialog.CircleDialog;
 
 import java.io.Serializable;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
@@ -51,6 +54,8 @@ public class SetActivity extends BaseActivity {
     ImageView mIvSetLogo;
     @BindView(R.id.m_tv_job_number)
     TextView mTvJobNumber;
+    @BindColor(R.color.cl_333)
+    int cl_47;
     private ConsumerBean consumerBean;
     private UserDoQueryData responseData;
 
@@ -91,12 +96,31 @@ public class SetActivity extends BaseActivity {
                 PaymentPasswordActivity.openActivity(SetActivity.this);
                 break;
             case R.id.m_my_shipping_address:   // 我的收货地址
-                MyShippingAddressActivity.openActivity(SetActivity.this);
+                MyShippingAddressActivity.openActivity(SetActivity.this,"SetActivity");
                 break;
             case R.id.m_about_us:   // 关于我们
                 Toasty.info(this, "关于我们").show();
                 break;
             case R.id.m_tv_sign_out:   // 退出登录
+                new CircleDialog.Builder()
+                        .setCanceledOnTouchOutside(false)
+                        .setCancelable(false)
+                        .setText("是否确定退出登录？")
+                        .setTextColor(cl_47)
+                        .configText(params -> {
+                            // params.gravity = Gravity.LEFT | Gravity.TOP;
+                            params.padding = new int[]{100, 130, 100, 130};
+                        })
+                        .setNegative("取消", null)
+                        .setPositive("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                UserManager.setDataIsNull(SetActivity.this);
+                                LoginActivity.openActivity(SetActivity.this, "SetActivity");
+                                finish();
+                            }
+                        })
+                        .show(getSupportFragmentManager());
 
                 break;
             case R.id.m_layout_personal_center:   // 个人中心

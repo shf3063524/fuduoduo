@@ -12,11 +12,13 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.activity.product.ProductDetailsActivity;
 import com.hjkj.fuduoduo.adapter.OrderDetails02Adapter;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
+import com.hjkj.fuduoduo.entity.bean.DoFindMaybeYouLikeData;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
 import com.hjkj.fuduoduo.entity.bean.DoqueryreturnordersData;
 import com.hjkj.fuduoduo.entity.bean.OrderBean;
@@ -91,7 +93,7 @@ public class OrderDetails05Activity extends BaseActivity {
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
 
-    private ArrayList<TestBean> mData;
+    private ArrayList<DoFindMaybeYouLikeData> mData;
     private ShoppingFragmentAdapter mAdapter;
     private ArrayList<DoqueryreturnordersData> responseData;
 
@@ -116,8 +118,13 @@ public class OrderDetails05Activity extends BaseActivity {
     protected void initViews() {
         StatusBarUtil.setColor(OrderDetails05Activity.this, cl_e51C23, 1);
         initRecyclerView();
+        onLove();
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onLove();
+    }
     private void initRecyclerView() {
 
         mData = new ArrayList<>();
@@ -131,12 +138,12 @@ public class OrderDetails05Activity extends BaseActivity {
 
     @Override
     protected void actionView() {
-        mData.clear();
-        for (int i = 0; i < 10; i++) {
-            mData.add(new TestBean("item" + i));
-        }
-        myScrollView.smoothScrollTo(0, 20);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ProductDetailsActivity.openActivity(OrderDetails05Activity.this, mData.get(position).getCommodity().getId());
+            }
+        });
     }
 
     @OnClick({R.id.m_iv_arrow, R.id.m_tv_one, R.id.m_tv_two, R.id.m_tv_refund})
@@ -237,5 +244,23 @@ public class OrderDetails05Activity extends BaseActivity {
         mTvPayNumber.setText(orderBean.getOrderNumber());
 //        // 支付时间
         mTvPayTime.setText(orderBean.getPayTime());
+    }
+    /**
+     * 猜你喜欢接口
+     */
+    private void onLove() {
+        OkGo.<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>get(Api.COMMODITY_DOFINDMAYBEYOULIKE)//
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoFindMaybeYouLikeData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            mData.clear();
+                            ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
+                            mData.addAll(data);
+                            myScrollView.smoothScrollTo(0, 20);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
 }

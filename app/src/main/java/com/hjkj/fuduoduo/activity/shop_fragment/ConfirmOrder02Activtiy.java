@@ -116,7 +116,7 @@ public class ConfirmOrder02Activtiy extends BaseActivity {
                 }
                 break;
             case R.id.m_layout_address: // 收货人地址
-                MyShippingAddressActivity.openActivityForResult(ConfirmOrder02Activtiy.this, REQUEST_RECIPIENT_ADDRESS);
+                MyShippingAddressActivity.openActivityForResult(ConfirmOrder02Activtiy.this, REQUEST_RECIPIENT_ADDRESS,"ConfirmOrder02Activtiy");
                 break;
             case R.id.m_tv_pay: //提交订单
                 new ConfirmPaymentDialog(ConfirmOrder02Activtiy.this, getTextString(mTvTotalPrice))

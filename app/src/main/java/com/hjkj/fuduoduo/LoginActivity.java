@@ -10,14 +10,17 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.hjkj.fuduoduo.activity.PersonalCenter02Activity;
 import com.hjkj.fuduoduo.activity.login.ForgetPasswordActivity;
 import com.hjkj.fuduoduo.activity.login.UserActivationActivity;
 import com.hjkj.fuduoduo.activity.mine_fragment.PersonalCenterActivity;
@@ -33,6 +36,8 @@ import com.hjkj.fuduoduo.tool.OneMinutesDownUtil;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.ClearEditText;
+import com.hyphenate.chat.ChatClient;
+import com.hyphenate.helpdesk.callback.Callback;
 import com.lzy.okgo.OkGo;
 
 
@@ -102,6 +107,30 @@ public class LoginActivity extends BaseActivity {
         }
 
         mTvLoginVcode.setText("验证码登录");
+
+//        //测试，预先注册一个账号
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ChatClient.getInstance().register("xiaoming", "cs12345678", new Callback(){
+//                    @Override
+//                    public void onSuccess() {
+//                        Log.d("IM注册成功", "onSuccess: ");
+//                    }
+//
+//                    @Override
+//                    public void onError(int code, String error) {
+//                        Log.d("IM注册失败", "onSuccess: "+error);
+//                    }
+//
+//                    @Override
+//                    public void onProgress(int progress, String status) {
+//
+//                    }
+//                });
+//            }
+//        }).start();
+
     }
 
     @Override
@@ -199,6 +228,28 @@ public class LoginActivity extends BaseActivity {
                     }
 
                 }
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ChatClient.getInstance().login("xiaoming", "cs12345678", new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d("IM登录成功", "onSuccess: ");
+                            }
+
+                            @Override
+                            public void onError(int code, String error) {
+                                Log.d("IM登录失败", "onSuccess: " + error);
+                            }
+
+                            @Override
+                            public void onProgress(int progress, String status) {
+
+                            }
+                        });
+                    }
+                }).start();
                 break;
             case R.id.m_tv_user_activation: // 用户激活
                 UserActivationActivity.openActivity(LoginActivity.this);
@@ -243,7 +294,7 @@ public class LoginActivity extends BaseActivity {
                             UserManager.setPhoneNumber(LoginActivity.this, consumer.getPhoneNumber());
                             UserManager.setUserId(LoginActivity.this, consumer.getId());
                             if ("0".equals(message)) {
-                                PersonalCenterActivity.openActivity(LoginActivity.this, "LoginActivity");
+                                PersonalCenter02Activity.openActivity(LoginActivity.this, message, "LoginActivity");
                             } else {
                                 MainActivity.openActivity(LoginActivity.this, message, "LoginActivity");
                             }

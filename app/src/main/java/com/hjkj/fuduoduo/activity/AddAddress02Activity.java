@@ -1,4 +1,4 @@
-package com.hjkj.fuduoduo.activity.mine_fragment;
+package com.hjkj.fuduoduo.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,9 +16,9 @@ import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
+import com.hjkj.fuduoduo.MainActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.base.BaseActivity;
-import com.hjkj.fuduoduo.entity.bean.DoQueryData;
 import com.hjkj.fuduoduo.entity.bean.JsonBean;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
@@ -28,11 +28,9 @@ import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.ClearEditText;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lzy.okgo.OkGo;
-import com.mylhyl.circledialog.CircleDialog;
 
 import org.json.JSONArray;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindColor;
@@ -40,22 +38,15 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
-/**
- * 编辑收货地址页面
- */
-public class EditShippingAddressActivity extends BaseActivity {
+public class AddAddress02Activity extends BaseActivity {
     @BindView(R.id.m_layout_area)
     RelativeLayout mLayoutArea;
-    @BindView(R.id.m_rl_default_address)
-    RelativeLayout mRlDefaultAddress;
     @BindView(R.id.m_iv_return)
     ImageView mIvReturn;
     @BindView(R.id.m_tv_save)
     TextView mTvSave;
     @BindView(R.id.m_tv_write_area)
     TextView mTvWriteArea;
-    @BindView(R.id.m_tv_delete)
-    TextView mTvDelete;
     @BindView(R.id.m_cet_name)
     ClearEditText mCetName;
     @BindView(R.id.m_cet_phone)
@@ -66,6 +57,7 @@ public class EditShippingAddressActivity extends BaseActivity {
     SwitchButton mSbShowOnCouponMap;
     @BindColor(R.color.cl_333)
     int cl_333;
+
     private ArrayList<JsonBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
@@ -78,7 +70,32 @@ public class EditShippingAddressActivity extends BaseActivity {
      */
     private int isShowOnCouponMap = 0;
     private static boolean isLoaded = false;
-    private DoQueryData doQueryData;
+    private String jumpKey;
+    private String message;
+
+    public static void openActivity(Context context, String message, String jumpKey) {
+        Intent intent = new Intent(context, AddAddress02Activity.class);
+        intent.putExtra("message", message);
+        intent.putExtra("jumpKey", jumpKey);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected int attachLayoutRes() {
+        return R.layout.activity_add_address02;
+    }
+
+    @Override
+    protected void initPageData() {
+        message = getIntent().getStringExtra("message");
+        jumpKey = getIntent().getStringExtra("jumpKey");
+    }
+
+    @Override
+    protected void initViews() {
+        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+    }
+
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -107,61 +124,7 @@ public class EditShippingAddressActivity extends BaseActivity {
         }
     };
 
-    /**
-     * @param context
-     * @param doQueryData 地址数据
-     */
-    public static void openActivity(Context context, DoQueryData doQueryData) {
-        Intent intent = new Intent(context, EditShippingAddressActivity.class);
-        intent.putExtra("DoQueryData", doQueryData);
-        context.startActivity(intent);
-    }
-
-    @Override
-    protected int attachLayoutRes() {
-        return R.layout.activity_edit_shipping_address;
-    }
-
-    @Override
-    protected void initPageData() {
-        super.initPageData();
-        doQueryData = (DoQueryData) getIntent().getSerializableExtra("DoQueryData");
-    }
-
-    @Override
-    protected void initViews() {
-        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
-
-        initAddress(doQueryData);
-    }
-
-    /**
-     * 点击编辑按钮跳转后页面数据展示
-     *
-     * @param doQueryData
-     */
-    private void initAddress(DoQueryData doQueryData) {
-        // 姓名
-        mCetName.setText(doQueryData.getName());
-        // 手机号
-        mCetPhone.setText(doQueryData.getMobilephoneNumber());
-        // 所在地区
-        mTvWriteArea.setText(doQueryData.getProvince() + " " + doQueryData.getCity() + " " + doQueryData.getArea());
-        // 详细地址
-        mCetAddress.setText(doQueryData.getStreet());
-        // 默认地址
-        if (doQueryData.getDefaultAddress().equals("1")) {
-            mRlDefaultAddress.setVisibility(View.GONE);
-            mSbShowOnCouponMap.setChecked(true);
-            isShowOnCouponMap = 1;
-        } else {
-            mRlDefaultAddress.setVisibility(View.VISIBLE);
-            mSbShowOnCouponMap.setChecked(false);
-            isShowOnCouponMap = 0;
-        }
-    }
-
-    @OnClick({R.id.m_iv_return, R.id.m_tv_save, R.id.m_layout_area, R.id.m_tv_delete})
+    @OnClick({R.id.m_iv_return, R.id.m_tv_save, R.id.m_layout_area})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_return:   // 返回
@@ -171,19 +134,19 @@ public class EditShippingAddressActivity extends BaseActivity {
                 break;
             case R.id.m_tv_save:   // 保存
                 if (textIsEmpty(mCetName)) {
-                    Toasty.info(EditShippingAddressActivity.this, "请填写收货人姓名").show();
+                    Toasty.info(AddAddress02Activity.this, "请填写收货人姓名").show();
                     return;
                 }
                 if (textIsEmpty(mCetPhone)) {
-                    Toasty.info(EditShippingAddressActivity.this, "请填写收货人手机号").show();
+                    Toasty.info(AddAddress02Activity.this, "请填写收货人手机号").show();
                     return;
                 }
                 if (textIsEmpty(mTvWriteArea)) {
-                    Toasty.info(EditShippingAddressActivity.this, "请选择所在地区").show();
+                    Toasty.info(AddAddress02Activity.this, "请选择所在地区").show();
                     return;
                 }
                 if (textIsEmpty(mCetAddress)) {
-                    Toasty.info(EditShippingAddressActivity.this, "请填写详细地址").show();
+                    Toasty.info(AddAddress02Activity.this, "请填写详细地址").show();
                     return;
                 }
                 requestData();
@@ -192,25 +155,6 @@ public class EditShippingAddressActivity extends BaseActivity {
                 if (isLoaded) {
                     showPickerView();
                 }
-                break;
-            case R.id.m_tv_delete://删除
-                new CircleDialog.Builder()
-                        .setCanceledOnTouchOutside(false)
-                        .setCancelable(false)
-                        .setText("是否要删除此条收货地址")
-                        .setTextColor(cl_333)
-                        .configText(params -> {
-                            // params.gravity = Gravity.LEFT | Gravity.TOP;
-                            params.padding = new int[]{100, 50, 100, 50};
-                        })
-                        .setNegative("取消", null)
-                        .setPositive("确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                delete();
-                            }
-                        })
-                        .show(getSupportFragmentManager());
                 break;
         }
     }
@@ -324,6 +268,7 @@ public class EditShippingAddressActivity extends BaseActivity {
 
     }
 
+
     public ArrayList<JsonBean> parseData(String result) {//Gson 解析
         ArrayList<JsonBean> detail = new ArrayList<>();
         try {
@@ -350,40 +295,26 @@ public class EditShippingAddressActivity extends BaseActivity {
 
     @Override
     protected void requestData() {
-        String userId = UserManager.getUserId(EditShippingAddressActivity.this);
+        String userId = UserManager.getUserId(AddAddress02Activity.this);
         String name = getTextString(mCetName);
         String mobilephoneNumber = getTextString(mCetPhone);
         String area = getTextString(mTvWriteArea);
         String street = getTextString(mCetAddress);
         OkGo.<AppResponse>get(Api.FREIGHTADDRESS_DOSAVE)//
-                .params("id", doQueryData.getId())
+                .params("id", null)
                 .params("userId", userId)
                 .params("name", name)
                 .params("mobilephoneNumber", mobilephoneNumber)
                 .params("area", area)
                 .params("street", street)
-                .params("defaultAddress", isShowOnCouponMap)
+                .params("defaultAddress", "1")
                 .params("type", "0")
-                .params("state", "1")
+                .params("state", "0")
                 .execute(new JsonCallBack<AppResponse>() {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        Toasty.normal(EditShippingAddressActivity.this, "保存成功").show();
-                        finish();
-                    }
-                });
-    }
-
-    /**
-     *
-     */
-    private void delete() {
-        OkGo.<AppResponse>get(Api.FREIGHTADDRESS_DODELETE)//
-                .params("id", doQueryData.getId())
-                .execute(new JsonCallBack<AppResponse>() {
-                    @Override
-                    public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        Toasty.normal(EditShippingAddressActivity.this, "删除成功").show();
+                        MainActivity.openActivity(AddAddress02Activity.this, message, jumpKey);
+                        Toasty.normal(AddAddress02Activity.this, "保存成功").show();
                         finish();
                     }
                 });

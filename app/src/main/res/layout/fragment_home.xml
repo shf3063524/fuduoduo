@@ -355,11 +355,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
                         android:background="@drawable/shape_frame3_3_cl_fff"
                         android:descendantFocusability="blocksDescendants"
+                        android:paddingStart="12dp"
                         android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
                         android:paddingBottom="16dp">
 
                         <android.support.v7.widget.RecyclerView
@@ -588,9 +588,10 @@
 
             <com.flyco.tablayout.SlidingTabLayout
                 android:id="@+id/m_slid_tab"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:background="@color/cl_f6"
+                android:baselineAligned="false"
                 app:tl_divider_color="@color/cl_ddd"
                 app:tl_divider_padding="13dp"
                 app:tl_divider_width="1dp"

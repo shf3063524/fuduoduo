@@ -30,6 +30,7 @@ import com.hjkj.fuduoduo.adapter.PageSortsAdapter;
 import com.hjkj.fuduoduo.entity.bean.BestSellingData;
 import com.hjkj.fuduoduo.entity.bean.DoFindCategoryData;
 import com.hjkj.fuduoduo.entity.bean.DoFindHomePageSortsData;
+import com.hjkj.fuduoduo.entity.bean.DoquerycarouselData;
 import com.hjkj.fuduoduo.entity.bean.DoqueryhotsaleData;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
@@ -151,6 +152,7 @@ public class HomeFragment extends BaseFragment {
     private PageSortsAdapter mPageSortsAdapter;
     private MyFragmentPagerAdapter mTabAdapter;
     private ArrayList<DoqueryhotsaleData> responseData;
+    private ArrayList<DoquerycarouselData> responseAppResponseData;
 
     public static HomeFragment newInstance(String message) {
         HomeFragment fragment = new HomeFragment();
@@ -182,6 +184,7 @@ public class HomeFragment extends BaseFragment {
     protected void initViews() {
         initNewUser(message);
         initCarousel();
+        onCarousel();
         bestSelling();
         initRecyclerView();
         classificationType();
@@ -234,25 +237,19 @@ public class HomeFragment extends BaseFragment {
     public void initCarousel() {
 
         // 图片资源id
-        urls = new String[4];
+        urls = new String[5];
 
         adViewpagerUtil = new AdViewpagerUtil(mContext, mViewPager, mPointGroup, 8, 4, urls);
         adViewpagerUtil.setOnAdItemClickListener(new AdViewpagerUtil.OnAdItemClickListener() {
             @Override
             public void onItemClick(View v, int flag) {
-                ProductDetailsActivity.openActivity(mContext);
+                ProductDetailsActivity.openActivity(mContext,responseAppResponseData.get(flag).getCommodityId());
             }
         });
 
         for (int i = 0; i < 4; i++) {
-            Carousel("Carousel", i);
-        }
-        for (int i = 0; i < 4; i++) {
             Carousel("newConsumer", i);
         }
-//        for (int i = 0; i < 5; i++) {
-//            Carousel("Recommend", i);
-//        }
     }
 
     @Override
@@ -516,12 +513,6 @@ public class HomeFragment extends BaseFragment {
                             refreshUi(responseData);
                         }
                     }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-
-                    }
                 });
     }
 
@@ -531,9 +522,30 @@ public class HomeFragment extends BaseFragment {
     private void refreshUi(ArrayList<DoqueryhotsaleData> responseData) {
         // 欢度国庆
         GlideUtils.loadImage(mContext, responseData.get(0).getSortImage(), R.drawable.ic_all_background, mIvNational);
-        GlideUtils.loadImage(mContext,  responseData.get(1).getSortImage(), R.drawable.ic_all_background, mIvOvrseas);
-        GlideUtils.loadImage(mContext,  responseData.get(2).getSortImage(), R.drawable.ic_all_background, mIvOutdoorSports);
-        GlideUtils.loadImage(mContext,  responseData.get(3).getSortImage(), R.drawable.ic_all_background, mIvBeauty);
-        GlideUtils.loadImage(mContext,  responseData.get(4).getSortImage(), R.drawable.ic_all_background, mIvDayWork);
+        GlideUtils.loadImage(mContext, responseData.get(1).getSortImage(), R.drawable.ic_all_background, mIvOvrseas);
+        GlideUtils.loadImage(mContext, responseData.get(2).getSortImage(), R.drawable.ic_all_background, mIvOutdoorSports);
+        GlideUtils.loadImage(mContext, responseData.get(3).getSortImage(), R.drawable.ic_all_background, mIvBeauty);
+        GlideUtils.loadImage(mContext, responseData.get(4).getSortImage(), R.drawable.ic_all_background, mIvDayWork);
+    }
+
+    /**
+     * 轮播图接口
+     */
+    private void onCarousel(){
+        OkGo.<AppResponse<ArrayList<DoquerycarouselData>>>get(Api.HOMEPAGESORT_DOQUERYCAROUSEL)//
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoquerycarouselData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoquerycarouselData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            responseAppResponseData = simpleResponseAppResponse.getData();
+
+                            for (int i = 0; i < responseAppResponseData.size(); i++) {
+                            urls[i] = responseAppResponseData.get(i).getImage();
+                            }
+                            adViewpagerUtil.setUrls(urls);
+                            adViewpagerUtil.initVps();
+                        }
+                    }
+                });
     }
 }

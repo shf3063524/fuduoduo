@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.hjkj.fuduoduo.LoginActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.kefu.LoginKeFuActivity;
 import com.hjkj.fuduoduo.adapter.ProductPagerAdapter;
@@ -45,6 +46,7 @@ import com.hjkj.fuduoduo.tool.SharedPrefUtil;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.ObservableScrollView;
+import com.hyphenate.chat.ChatClient;
 import com.hyphenate.helpdesk.easeui.util.IntentBuilder;
 import com.hyphenate.helpdesk.model.ContentFactory;
 import com.lzy.okgo.OkGo;
@@ -145,6 +147,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
     private String shopId;
     private String collection;
     private String supplierId;
+    private int index = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
 
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, ProductDetailsActivity.class);
@@ -172,6 +175,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
         initViewPager();
         initListener();
         initWebView();
+        index = getIntent().getIntExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, Constant.INTENT_CODE_IMG_SELECTED_DEFAULT);
     }
 
     /**
@@ -345,9 +349,26 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
             case R.id.iv_shopping_cart: // 跳转购物车Frgment
 //                MainActivity.openActivity(ProductDetailsActivity.this, "", "ProductDetailsActivity");
                 break;
-            case R.id.m_rl_service:
-                ProductDetailsActivity.this.startActivity(new Intent(ProductDetailsActivity.this, LoginKeFuActivity.class).putExtra(Constant.MESSAGE_TO_INTENT_EXTRA,
-                        Constant.MESSAGE_TO_PRE_SALES));
+            case R.id.m_rl_service: // 跳转客服
+//                Intent intent = new Intent();
+//                intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
+//                intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
+//                intent.setClass(ProductDetailsActivity.this, LoginKeFuActivity.class);
+//                startActivity(intent);
+
+                if(ChatClient.getInstance().isLoggedInBefore()){
+                    //已经登录，可以直接进入会话界面
+                    Intent intent = new IntentBuilder(ProductDetailsActivity.this)
+    .setServiceIMNumber("kefuchannelimid_723686") //获取地址：kefu.easemob.com，“管理员模式 > 渠道管理 > 手机APP”页面的关联的“IM服务号”
+                            .build();
+                    startActivity(intent);
+                }else{
+                   startActivity(new Intent(ProductDetailsActivity.this,LoginActivity.class));
+                }
+
+
+//                ProductDetailsActivity.this.startActivity(new Intent(ProductDetailsActivity.this, LoginKeFuActivity.class).putExtra(Constant.MESSAGE_TO_INTENT_EXTRA,
+//                        Constant.MESSAGE_TO_PRE_SALES));
 
 //                Intent intent = new IntentBuilder(this)
 //                        .setServiceIMNumber("Lh20150930")

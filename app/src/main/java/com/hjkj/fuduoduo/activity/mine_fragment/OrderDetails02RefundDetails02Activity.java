@@ -9,16 +9,20 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.activity.product.ProductDetailsActivity;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.dialog.ApplicationCanceledDialog;
 import com.hjkj.fuduoduo.entity.TestBean;
+import com.hjkj.fuduoduo.entity.bean.DoFindMaybeYouLikeData;
 import com.hjkj.fuduoduo.entity.bean.DoqueryreturnorderdetailsData;
 import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.DialogCallBack;
+import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
@@ -59,12 +63,12 @@ public class OrderDetails02RefundDetails02Activity extends BaseActivity {
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
 
-    private ArrayList<TestBean> mData;
+    private ArrayList<DoFindMaybeYouLikeData> mData;
     private ShoppingFragmentAdapter mAdapter;
 
     public static void openActivity(Context context, OrderDetailsBean orderDetailsBean) {
         Intent intent = new Intent(context, OrderDetails02RefundDetails02Activity.class);
-        intent.putExtra("OrderDetailsBean",orderDetailsBean);
+        intent.putExtra("OrderDetailsBean", orderDetailsBean);
         context.startActivity(intent);
     }
 
@@ -81,6 +85,7 @@ public class OrderDetails02RefundDetails02Activity extends BaseActivity {
 
     /**
      * 数据处理
+     *
      * @param orderDetailsBean
      */
     private void onProcessingData(OrderDetailsBean orderDetailsBean) {
@@ -96,6 +101,13 @@ public class OrderDetails02RefundDetails02Activity extends BaseActivity {
     protected void initViews() {
         StatusBarUtil.setColor(OrderDetails02RefundDetails02Activity.this, cl_e51C23, 1);
         initRecyclerView();
+        onLove();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onLove();
     }
 
     private void initRecyclerView() {
@@ -112,13 +124,14 @@ public class OrderDetails02RefundDetails02Activity extends BaseActivity {
     @Override
     protected void actionView() {
 
-        mData.clear();
-        for (int i = 0; i < 10; i++) {
-            mData.add(new TestBean("item" + i));
-        }
-        myScrollView.smoothScrollTo(0, 20);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ProductDetailsActivity.openActivity(OrderDetails02RefundDetails02Activity.this, mData.get(position).getCommodity().getId());
+            }
+        });
     }
+
 
     @OnClick({R.id.m_iv_arrow})
     public void onViewClicked(View view) {
@@ -164,5 +177,24 @@ public class OrderDetails02RefundDetails02Activity extends BaseActivity {
         mTvRefundAmount.setText("退款编号：" + responseData.getReturnOrder().getReturnOrderNumber());
         // 还剩余多长时间
         mTvRemainingTime.setText(TimeLeftUtil2.doCalculate(responseData.getReturnOrder().getCreateTime()));
+    }
+
+    /**
+     * 猜你喜欢接口
+     */
+    private void onLove() {
+        OkGo.<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>get(Api.COMMODITY_DOFINDMAYBEYOULIKE)//
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoFindMaybeYouLikeData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            mData.clear();
+                            ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
+                            mData.addAll(data);
+                            myScrollView.smoothScrollTo(0, 20);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
 }

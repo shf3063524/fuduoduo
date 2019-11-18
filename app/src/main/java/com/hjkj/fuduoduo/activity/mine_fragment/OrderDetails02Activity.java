@@ -13,11 +13,14 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.activity.product.PayFailureActivity;
+import com.hjkj.fuduoduo.activity.product.ProductDetailsActivity;
 import com.hjkj.fuduoduo.adapter.OrderDetails02Adapter;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DefaultAddressBean;
+import com.hjkj.fuduoduo.entity.bean.DoFindMaybeYouLikeData;
 import com.hjkj.fuduoduo.entity.bean.DoQueryData;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
 import com.hjkj.fuduoduo.entity.bean.OrderBean;
@@ -82,7 +85,7 @@ public class OrderDetails02Activity extends BaseActivity {
     private ArrayList<OrderDetailsBean> mOrderDetailsData;
     private OrderDetails02Adapter mOrderDetails02Adapter;
 
-    private ArrayList<TestBean> mData;
+    private ArrayList<DoFindMaybeYouLikeData> mData;
     private ShoppingFragmentAdapter mAdapter;
     private ArrayList<DoQueryOrdersDetailsData> doQueryOrdersDetailsData;
     private String orderId;
@@ -108,12 +111,14 @@ public class OrderDetails02Activity extends BaseActivity {
     protected void initViews() {
         StatusBarUtil.setColor(OrderDetails02Activity.this, cl_e51C23, 1);
         initRecyclerView();
+        onLove();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         orderDetails(orderId);
+        onLove();
     }
 
     private void initRecyclerView() {
@@ -135,12 +140,12 @@ public class OrderDetails02Activity extends BaseActivity {
 
     @Override
     protected void actionView() {
-        mData.clear();
-        for (int i = 0; i < 10; i++) {
-            mData.add(new TestBean("item" + i));
-        }
-        myScrollView.smoothScrollTo(0, 20);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ProductDetailsActivity.openActivity(OrderDetails02Activity.this, mData.get(position).getCommodity().getId());
+            }
+        });
 
         mOrderDetails02Adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -174,7 +179,7 @@ public class OrderDetails02Activity extends BaseActivity {
     private void orderDetails(String orderId) {
         String id = UserManager.getUserId(OrderDetails02Activity.this);
         OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
-                .params("id",id)
+                .params("id", id)
                 .params("orderId", orderId)
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
                     @Override
@@ -248,12 +253,31 @@ public class OrderDetails02Activity extends BaseActivity {
                         if (simpleResponseAppResponse.isSucess()) {
                             String freightPrice = simpleResponseAppResponse.getData().getVcode();
                             if ("仅退款处理中".equals(mOrderDetailsData.get(position).getRefunding())) {
-                                OrderDetails02RefundDetailsActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice,"OrderDetails02Activity");
+                                OrderDetails02RefundDetailsActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice, "OrderDetails02Activity");
                             } else if ("退款成功".equals(mOrderDetailsData.get(position).getRefunding())) {
-                                RefundDetailsActivity.openActivity(OrderDetails02Activity.this,mOrderDetailsData.get(position).getOrderDetail().getId());
+                                RefundDetailsActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position).getOrderDetail().getId());
                             } else {
-                                ApplyForAfterSaleActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice,"OrderDetails02Activity");
+                                ApplyForAfterSaleActivity.openActivity(OrderDetails02Activity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice, "OrderDetails02Activity");
                             }
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 猜你喜欢接口
+     */
+    private void onLove() {
+        OkGo.<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>get(Api.COMMODITY_DOFINDMAYBEYOULIKE)//
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoFindMaybeYouLikeData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            mData.clear();
+                            ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
+                            mData.addAll(data);
+                            myScrollView.smoothScrollTo(0, 20);
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
                 });

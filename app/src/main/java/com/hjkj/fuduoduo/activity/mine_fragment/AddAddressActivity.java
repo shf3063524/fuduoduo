@@ -17,6 +17,7 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
 import com.hjkj.fuduoduo.LoginActivity;
+import com.hjkj.fuduoduo.MainActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.bean.DoFindHomePageSortsData;
@@ -76,15 +77,22 @@ public class AddAddressActivity extends BaseActivity {
      */
     private int isShowOnCouponMap = 0;
     private static boolean isLoaded = false;
+    private String jumpKey;
 
-    public static void openActivity(Context context) {
+    public static void openActivity(Context context, String jumpKey) {
         Intent intent = new Intent(context, AddAddressActivity.class);
+        intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
 
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_add_address;
+    }
+
+    @Override
+    protected void initPageData() {
+        jumpKey = getIntent().getStringExtra("jumpKey");
     }
 
     @Override
@@ -309,8 +317,8 @@ public class AddAddressActivity extends BaseActivity {
                 .execute(new JsonCallBack<AppResponse>() {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
-                            Toasty.normal(AddAddressActivity.this,"保存成功").show();
-                            finish();
+                        Toasty.normal(AddAddressActivity.this, "保存成功").show();
+                        finish();
                     }
                 });
     }

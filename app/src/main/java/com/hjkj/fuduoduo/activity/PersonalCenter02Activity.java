@@ -1,4 +1,4 @@
-package com.hjkj.fuduoduo.activity.mine_fragment;
+package com.hjkj.fuduoduo.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,9 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.hjkj.fuduoduo.LoginActivity;
-import com.hjkj.fuduoduo.MainActivity;
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.activity.mine_fragment.AddAddressActivity;
+import com.hjkj.fuduoduo.activity.mine_fragment.PersonalCenterActivity;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.bean.ConsumerBean;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
@@ -35,7 +35,6 @@ import com.lzy.okgo.OkGo;
 import com.mylhyl.circledialog.CircleDialog;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,10 +44,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
-/**
- * 个人资料-页面
- */
-public class PersonalCenterActivity extends BaseActivity {
+public class PersonalCenter02Activity extends BaseActivity {
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
     @BindView(R.id.m_iv_head)
@@ -82,31 +78,24 @@ public class PersonalCenterActivity extends BaseActivity {
     private String gender;
     private String logoHead = null;
     private String jumpKey;
+    private String message;
 
-    public static void openActivity(Context context,String jumpKey) {
-        Intent intent = new Intent(context, PersonalCenterActivity.class);
-        intent.putExtra("jumpKey", jumpKey);
-        context.startActivity(intent);
-    }
-    public static void openActivity(Context context, ConsumerBean consumerBean, String jumpKey) {
-        Intent intent = new Intent(context, PersonalCenterActivity.class);
-        intent.putExtra("ConsumerBean", consumerBean);
+    public static void openActivity(Context context, String message, String jumpKey) {
+        Intent intent = new Intent(context, PersonalCenter02Activity.class);
+        intent.putExtra("message", message);
         intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
 
     @Override
     protected int attachLayoutRes() {
-        return R.layout.activity_personal_center;
+        return R.layout.activity_personal_center02;
     }
 
     @Override
     protected void initPageData() {
-        ConsumerBean consumerBean = (ConsumerBean) getIntent().getSerializableExtra("ConsumerBean");
+        message = getIntent().getStringExtra("message");
         jumpKey = getIntent().getStringExtra("jumpKey");
-        if ("SetActivity".equals(jumpKey)) {
-            uploadedProfileDisplay(consumerBean);
-        }
     }
 
     @Override
@@ -124,28 +113,28 @@ public class PersonalCenterActivity extends BaseActivity {
                 break;
             case R.id.m_tv_finish: //完成
                 if (textIsEmpty(mEtUsername)) {
-                    Toasty.info(PersonalCenterActivity.this, "请填写用户名").show();
+                    Toasty.info(PersonalCenter02Activity.this, "请填写用户名").show();
                     return;
                 }
                 if (textIsEmpty(mEtNickname)) {
-                    Toasty.info(PersonalCenterActivity.this, "请填写昵称").show();
+                    Toasty.info(PersonalCenter02Activity.this, "请填写昵称").show();
                     return;
                 }
                 if (textIsEmpty(mEtPhone)) {
-                    Toasty.info(PersonalCenterActivity.this, "请填写手机号").show();
+                    Toasty.info(PersonalCenter02Activity.this, "请填写手机号").show();
                     return;
                 }
                 if (textIsEmpty(mTvWriteGender)) {
-                    Toasty.info(PersonalCenterActivity.this, "请选择性别").show();
+                    Toasty.info(PersonalCenter02Activity.this, "请选择性别").show();
                     return;
                 }
                 if (textIsEmpty(mTvWriteBirth)) {
-                    Toasty.info(PersonalCenterActivity.this, "请选择出生日期").show();
+                    Toasty.info(PersonalCenter02Activity.this, "请选择出生日期").show();
                     return;
                 }
                 //开始上传
                 if (logoHead == null || logoHead.isEmpty()) {
-                    Toasty.info(PersonalCenterActivity.this, "请选择头像").show();
+                    Toasty.info(PersonalCenter02Activity.this, "请选择头像").show();
                     return;
                 }
                 UploadAvatar(new File(logoHead));
@@ -171,7 +160,7 @@ public class PersonalCenterActivity extends BaseActivity {
                                         selectPhoto();
                                         break;
                                     case "拍照":
-                                        PictureSelector.create(PersonalCenterActivity.this)
+                                        PictureSelector.create(PersonalCenter02Activity.this)
                                                 .openCamera(PictureMimeType.ofImage())
                                                 .enableCrop(true)// 是否裁剪
                                                 .compress(true)// 是否压缩
@@ -256,7 +245,7 @@ public class PersonalCenterActivity extends BaseActivity {
     private void selectPhoto() {
         // currentPosition = 0;
         // 进入相册 以下是例子：不需要的api可以不写
-        PictureSelector.create(PersonalCenterActivity.this)
+        PictureSelector.create(PersonalCenter02Activity.this)
                 .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                 .theme(R.style.picture_QQ_style)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style
                 .maxSelectNum(maxSelectNum)// 最大图片选择数量
@@ -304,7 +293,7 @@ public class PersonalCenterActivity extends BaseActivity {
      * Dialog 模式下，在底部弹出
      */
     private void initPickerView() {
-        pvTime = new TimePickerBuilder(PersonalCenterActivity.this, new OnTimeSelectListener() {
+        pvTime = new TimePickerBuilder(PersonalCenter02Activity.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
                 String parseTime = AppDateMgr.parseDate(AppDateMgr.YYYYMMDD_CHINESE, String.valueOf(date.getTime()));
@@ -365,7 +354,7 @@ public class PersonalCenterActivity extends BaseActivity {
      * @param logo
      */
     private void finishWrite(String logo) {
-        String userId = UserManager.getUserId(PersonalCenterActivity.this);
+        String userId = UserManager.getUserId(PersonalCenter02Activity.this);
         String username = getTextString(mEtUsername);
         String name = getTextString(mEtNickname);
         String phoneNumber = getTextString(mEtPhone);
@@ -381,8 +370,8 @@ public class PersonalCenterActivity extends BaseActivity {
                 .execute(new JsonCallBack<AppResponse>() {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        Toasty.normal(PersonalCenterActivity.this, "保存成功").show();
-                        AddAddressActivity.openActivity(PersonalCenterActivity.this,jumpKey);
+                        AddAddress02Activity.openActivity(PersonalCenter02Activity.this,message,jumpKey);
+                        Toasty.normal(PersonalCenter02Activity.this, "保存成功").show();
                         finish();
                     }
                 });
@@ -405,35 +394,4 @@ public class PersonalCenterActivity extends BaseActivity {
                     }
                 });
     }
-
-    /**
-     * 已经上传的个人资料展示
-     *
-     * @param consumerBean
-     */
-    private void uploadedProfileDisplay(ConsumerBean consumerBean) {
-        // 头像
-        GlideUtils.loadCircleHeadImage(PersonalCenterActivity.this, consumerBean.getLogo(), R.drawable.ic_all_background, mIvHead);
-        // 用户名
-        mEtUsername.setText(consumerBean.getUsername());
-        // 昵称
-        mEtNickname.setText(consumerBean.getName());
-        // 手机号
-        mEtPhone.setText(consumerBean.getPhoneNumber());
-        // 性别
-        switch (consumerBean.getGender()) {
-            case "1":
-                mTvWriteGender.setText("男");
-                break;
-            case "2":
-                mTvWriteGender.setText("女");
-                break;
-            case "3":
-                mTvWriteGender.setText("保密");
-                break;
-        }
-        // 生日
-        mTvWriteBirth.setText(consumerBean.getBirthday());
-    }
-
 }
