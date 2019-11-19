@@ -110,14 +110,12 @@
 
     <TextView
         android:id="@+id/m_tv_sign_out"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:layout_marginTop="21dp"
         android:background="@drawable/shape_frame_cl_e51c23_all"
-        android:paddingStart="149dp"
         android:paddingTop="10dp"
-        android:paddingEnd="149dp"
         android:paddingBottom="10dp"
         android:text="退出登录"
         android:textColor="@color/cl_fff"
