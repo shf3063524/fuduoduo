@@ -13,6 +13,13 @@ public class OrderDetailsBean implements Serializable {
     private SpecificationsBean specification;
     private boolean clickable;
 
+    public OrderDetailsBean(CommodityBean commodity, OrderDetailBean orderDetail, String refunding, SpecificationsBean specification) {
+        this.commodity = commodity;
+        this.orderDetail = orderDetail;
+        this.refunding = refunding;
+        this.specification = specification;
+    }
+
     public OrderDetailsBean(boolean clickable) {
         this.clickable = clickable;
     }

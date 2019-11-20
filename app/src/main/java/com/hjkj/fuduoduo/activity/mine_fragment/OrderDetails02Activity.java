@@ -224,7 +224,7 @@ public class OrderDetails02Activity extends BaseActivity {
         // 下单时间
         mTvOrderTime.setText(order.getCreateTime());
         // 订单号
-        mTvPayNumber.setText(order.getPayNumber());
+        mTvPayNumber.setText(order.getOrderNumber());
         // 支付时间
         mTvPayTime.setText(order.getPayTime());
 

@@ -120,11 +120,13 @@ public class OrderDetails05Activity extends BaseActivity {
         initRecyclerView();
         onLove();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         onLove();
     }
+
     private void initRecyclerView() {
 
         mData = new ArrayList<>();
@@ -245,6 +247,7 @@ public class OrderDetails05Activity extends BaseActivity {
 //        // 支付时间
         mTvPayTime.setText(orderBean.getPayTime());
     }
+
     /**
      * 猜你喜欢接口
      */

@@ -15,6 +15,7 @@ import com.hjkj.fuduoduo.entity.TestBean;
 import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
 import com.hjkj.fuduoduo.entity.bean.DoqueryreturnorderdetailsData;
 import com.hjkj.fuduoduo.entity.bean.DoqueryreturnordersData;
+import com.hjkj.fuduoduo.entity.bean.OrderDetailsBean;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
@@ -109,10 +110,10 @@ public class AfterSaleActivity extends BaseActivity {
                                 ExchangeDetailsActivity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId());
                                 break;
                             case "等待商家处理换货申请":
-                                ExchangeDetailsActivity.openActivity(AfterSaleActivity.this,mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId());
+                                ExchangeDetailsActivity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId());
                                 break;
                             case "换货中":
-                                    onRefundDetails(mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId(), "换货中");
+                                onRefundDetails(mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId(), "换货中");
                                 break;
                             case "商家拒绝换货请求":
                                 OrderDetails05Activity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnOrder().getId());
@@ -121,12 +122,16 @@ public class AfterSaleActivity extends BaseActivity {
                                 ReplacementCompletedActivity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId());
                                 break;
                             case "商家发起仅退款":
+                                orderDetail(mData.get(position).getOrder().getId(), mData.get(position).getReturnOrder().getOrderDetailsId());
                                 break;
                             case "商家发起退货退款":
+                                orderDetail(mData.get(position).getOrder().getId(), mData.get(position).getReturnOrder().getOrderDetailsId());
                                 break;
                             case "退货退款处理中":
+                                orderDetail(mData.get(position).getOrder().getId(), mData.get(position).getReturnOrder().getOrderDetailsId());
                                 break;
                             case "退款中":
+                                onRefundDetails(mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId(), "退款中");
                                 break;
                             case "商家拒绝退款":
                                 OrderDetails05Activity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnOrder().getId());
@@ -153,47 +158,55 @@ public class AfterSaleActivity extends BaseActivity {
         }
     }
 
-//    private void orderDetail(String orderId) {
-//        OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
-//                .params("orderId", orderId)
-//                .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
-//                    @Override
-//                    public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
-//                        if (simpleResponseAppResponse.isSucess()) {
-//                            doQueryOrdersDetailsData = simpleResponseAppResponse.getData();
-//                            refreshUi(doQueryOrdersDetailsData);
-//                        }
-//                    }
-//                });
-//    }
-//
-//    private void refreshUi(ArrayList<DoQueryOrdersDetailsData> doQueryOrdersDetailsData) {
-//
-//    }
-//
-//    /**
-//     * 单个商品订单详情运费计算
-//     *
-//     * @param supplierId 商户id
-//     * @param name       运费模板名称
-//     * @param number     商品数量
-//     * @param position
-//     */
-//    private void onFreightCalculation(String supplierId, String name, String number, int position) {
-//        OkGo.<AppResponse<VcodeLoginData>>get(Api.ORDERS_DOCOUNTFREIGHTPRICE)//
-//                .params("supplierId", supplierId)
-//                .params("name", name)
-//                .params("number", number)
-//                .execute(new JsonCallBack<AppResponse<VcodeLoginData>>() {
-//                    @Override
-//                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
-//                        if (simpleResponseAppResponse.isSucess()) {
-//                            String freightPrice = simpleResponseAppResponse.getData().getVcode();
-//                            OrderDetails02RefundDetailsActivity.openActivity(AfterSaleActivity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice, "OrderDetails03Activity");
-//                        }
-//                    }
-//                });
-//    }
+    private void orderDetail(String orderId, String orderDetailsId) {
+        OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
+                .params("orderId", orderId)
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            doQueryOrdersDetailsData = simpleResponseAppResponse.getData();
+                            refreshUi(doQueryOrdersDetailsData, orderDetailsId);
+                        }
+                    }
+                });
+    }
+
+    private void refreshUi(ArrayList<DoQueryOrdersDetailsData> doQueryOrdersDetailsData, String orderDetailsId) {
+        ArrayList<OrderDetailsBean> orderDetails = doQueryOrdersDetailsData.get(0).getOrderDetails();
+        ArrayList<OrderDetailsBean> mOrderDetailsData = new ArrayList<>();
+        for (OrderDetailsBean orderDetail : orderDetails) {
+            if (orderDetailsId.equals(orderDetail.getOrderDetail().getId())) {
+                mOrderDetailsData.add(new OrderDetailsBean(orderDetail.getCommodity(), orderDetail.getOrderDetail(), orderDetail.getRefunding(), orderDetail.getSpecification()));
+            }
+        }
+        onFreightCalculation(mOrderDetailsData.get(0).getCommodity().getSupplierId(), mOrderDetailsData.get(0).getCommodity().getFreightTemplateName(), mOrderDetailsData.get(0).getOrderDetail().getNumber(), mOrderDetailsData.get(0));
+    }
+
+    /**
+     * 单个商品订单详情运费计算
+     *
+     * @param supplierId       商户id
+     * @param name             运费模板名称
+     * @param number           商品数量
+     * @param orderDetailsBean
+     */
+    private void onFreightCalculation(String supplierId, String name, String number, OrderDetailsBean orderDetailsBean) {
+        OkGo.<AppResponse<VcodeLoginData>>get(Api.ORDERS_DOCOUNTFREIGHTPRICE)//
+                .params("supplierId", supplierId)
+                .params("name", name)
+                .params("number", number)
+                .execute(new JsonCallBack<AppResponse<VcodeLoginData>>() {
+                    @Override
+                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            String freightPrice = simpleResponseAppResponse.getData().getVcode();
+                            OrderDetails02RefundDetailsActivity.openActivity(AfterSaleActivity.this, orderDetailsBean, doQueryOrdersDetailsData, freightPrice, "OrderDetails03Activity");
+                        }
+                    }
+                });
+    }
+
     @Override
     protected void requestData() {
         String userId = UserManager.getUserId(AfterSaleActivity.this);
@@ -238,6 +251,7 @@ public class AfterSaleActivity extends BaseActivity {
                     }
                 });
     }
+
     /**
      * 查询退货订单详情
      */
