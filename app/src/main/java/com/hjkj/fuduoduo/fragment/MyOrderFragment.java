@@ -145,7 +145,7 @@ public class MyOrderFragment extends BaseFragment {
                         Toasty.info(mContext, "立即付款").show();
                         break;
                     case R.id.m_tv_four: // 提醒发货
-                        Toasty.info(mContext, "提醒发货").show();
+                        remindDhipment(mData.get(position).getOrder().getId());
                         break;
                     case R.id.m_tv_five: // 查看物流
                         ViewLogisticsActivity.openActivity(mContext);
@@ -223,6 +223,22 @@ public class MyOrderFragment extends BaseFragment {
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             Toasty.info(mContext, "取消订单成功").show();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 提醒发货
+     */
+    private void remindDhipment(String orderId) {
+        OkGo.<AppResponse>get(Api.ORDERS_DOREMINDSEND)//
+                .params("orderId", orderId)
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.info(mContext, "提醒发货成功啦！").show();
                         }
                     }
                 });
