@@ -162,8 +162,8 @@ public class SortFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryCategoryDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryCategoryDetailsData> tempList = simpleResponseAppResponse.getData();
                             mProductData.clear();
+                            ArrayList<DoQueryCategoryDetailsData> tempList = simpleResponseAppResponse.getData();
                             mProductData.addAll(tempList);
                         }
                     }

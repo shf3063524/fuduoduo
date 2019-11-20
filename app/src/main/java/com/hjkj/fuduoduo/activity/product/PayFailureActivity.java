@@ -10,6 +10,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.hjkj.fuduoduo.MainActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.adapter.ShoppingFragmentAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
@@ -29,11 +30,16 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
+/**
+ * 支付失败-页面
+ */
 public class PayFailureActivity extends BaseActivity {
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
     @BindView(R.id.m_tv_look_appraise)
     TextView mTvLookAppraise;
+    @BindView(R.id.m_tv_back_home)
+    TextView mTvBackHome;
     @BindView(R.id.m_scrollview)
     ScrollView myScrollView;
     @BindView(R.id.m_love_recycler_view)
@@ -79,15 +85,15 @@ public class PayFailureActivity extends BaseActivity {
     @Override
     protected void actionView() {
 
-      mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-          @Override
-          public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-              ProductDetailsActivity.openActivity(PayFailureActivity.this,mData.get(position).getCommodity().getId());
-          }
-      });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ProductDetailsActivity.openActivity(PayFailureActivity.this, mData.get(position).getCommodity().getId());
+            }
+        });
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_tv_look_appraise})
+    @OnClick({R.id.m_iv_arrow, R.id.m_tv_look_appraise,R.id.m_tv_back_home})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -99,6 +105,10 @@ public class PayFailureActivity extends BaseActivity {
                 if (!clickBack()) {
                     finish();
                 }
+                break;
+            case R.id.m_tv_back_home: // 返回首页
+                MainActivity.openActivity(PayFailureActivity.this,"PayFailureActivity");
+                finish();
                 break;
         }
     }

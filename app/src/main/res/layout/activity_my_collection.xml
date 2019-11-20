@@ -18,19 +18,6 @@
             android:layout_centerVertical="true"
             android:padding="12dp"
             android:src="@mipmap/ic_arrows_left" />
-
-        <!--<com.flyco.tablayout.SlidingTabLayout-->
-        <!--android:id="@+id/m_slidingtablayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_toStartOf="@+id/m_iv_inquire"-->
-        <!--android:layout_toEndOf="@+id/m_iv_return"-->
-        <!--app:tl_indicator_color="@color/cl_e51C23"-->
-        <!--app:tl_tab_padding="20dp"-->
-        <!--app:tl_tab_width="100dp"-->
-        <!--app:tl_textSelectColor="@color/cl_e51C23"-->
-        <!--app:tl_textUnselectColor="@color/cl_333"-->
-        <!--app:tl_textsize="16sp" />-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

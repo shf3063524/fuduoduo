@@ -94,6 +94,10 @@ public class PaymentPassword02Activity extends BaseActivity {
                     Toasty.info(PaymentPassword02Activity.this,"请输入支付密码").show();
                     return;
                 }
+                if (mPassword.length() != 6){
+                    Toasty.info(PaymentPassword02Activity.this,"请输入6位数字支付密码").show();
+                    return;
+                }
                 doActivate();
                 break;
         }
@@ -111,7 +115,7 @@ public class PaymentPassword02Activity extends BaseActivity {
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             mLayourbackground.setVisibility(View.VISIBLE);
-                            SetActivity.openActivity(PaymentPassword02Activity.this);
+//                            SetActivity.openActivity(PaymentPassword02Activity.this);
                             finish();
                         }
                     }

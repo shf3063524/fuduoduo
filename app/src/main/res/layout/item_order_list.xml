@@ -22,7 +22,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/m_iv_shopping"
-            android:text="大股东发鬼地方"
+            android:text=""
+            android:ellipsize="end"
+            android:lines="2"
+            android:maxEms="22"
             android:textColor="@color/cl_333"
             android:textSize="12sp" />
 
@@ -43,8 +46,11 @@
                 android:paddingStart="6dp"
                 android:paddingTop="1dp"
                 android:paddingEnd="6dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxEms="10"
                 android:paddingBottom="1dp"
-                android:text="是的发送到发送到"
+                android:text=""
                 android:textColor="@color/cl_999"
                 android:textSize="11sp" />
 

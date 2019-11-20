@@ -144,6 +144,7 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        mTvPhone.setText(UserManager.getPhoneNumber(ApplyForAReplacement02Activity.this));
     }
 
     private void initRecyclerView() {
@@ -422,7 +423,7 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ExchangeDetails03Activity.openActivity(ApplyForAReplacement02Activity.this, doqueryreturnorderdetailsData.getOrderDetails().getId(),jumpKey);
+                            ExchangeDetails03Activity.openActivity(ApplyForAReplacement02Activity.this, doqueryreturnorderdetailsData.getOrderDetails().getId(), jumpKey);
                             finish();
                         }
                     }

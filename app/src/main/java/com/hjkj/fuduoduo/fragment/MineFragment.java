@@ -1,5 +1,7 @@
 package com.hjkj.fuduoduo.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -7,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.hjkj.fuduoduo.LoginActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.activity.mine_fragment.AfterSaleActivity;
 import com.hjkj.fuduoduo.activity.mine_fragment.CommonProblemActivity;
@@ -19,6 +22,7 @@ import com.hjkj.fuduoduo.activity.mine_fragment.MyOrderActivity;
 import com.hjkj.fuduoduo.activity.mine_fragment.SetActivity;
 import com.hjkj.fuduoduo.activity.mine_fragment.FudouBanlanceActivity;
 import com.hjkj.fuduoduo.activity.mine_fragment.FudouRechargeActivity;
+import com.hjkj.fuduoduo.activity.product.ProductDetailsActivity;
 import com.hjkj.fuduoduo.base.BaseFragment;
 import com.hjkj.fuduoduo.entity.bean.ConsumerBean;
 import com.hjkj.fuduoduo.entity.bean.DoQueryCollectionsShopData;
@@ -31,6 +35,8 @@ import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.UserManager;
+import com.hyphenate.chat.ChatClient;
+import com.hyphenate.helpdesk.easeui.util.IntentBuilder;
 import com.lzy.okgo.OkGo;
 
 import java.text.DecimalFormat;
@@ -129,7 +135,7 @@ public class MineFragment extends BaseFragment {
 
     @OnClick({R.id.m_iv_set, R.id.m_layout_fudou_banlance, R.id.m_layout_fudou_recharge, R.id.m_layout_transfer_fudou, R.id.m_layout_my_order, R.id.m_layout_pending_payment,
             R.id.m_layout_delivered, R.id.m_layout_pending_receipt, R.id.m_layout_comment, R.id.m_layout_after_sale,
-            R.id.m_layout_my_collection, R.id.m_layout_footprint, R.id.m_layout_feedback, R.id.m_layout_common_problem, R.id.m_layout_member_center})
+            R.id.m_layout_my_collection, R.id.m_layout_footprint, R.id.m_layout_feedback, R.id.m_layout_common_problem,R.id.m_layout_customer_service_secret, R.id.m_layout_member_center})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_set:   // 设置
@@ -175,7 +181,15 @@ public class MineFragment extends BaseFragment {
                 CommonProblemActivity.openActivity(mContext);
                 break;
             case R.id.m_layout_customer_service_secret:   // 客服小秘
-                Toasty.info(mContext, "客服小秘").show();
+                if(ChatClient.getInstance().isLoggedInBefore()){
+                    //已经登录，可以直接进入会话界面
+                    Intent intent = new IntentBuilder(mContext)
+                            .setServiceIMNumber("kefuchannelimid_723686") //获取地址：kefu.easemob.com，“管理员模式 > 渠道管理 > 手机APP”页面的关联的“IM服务号”
+                            .build();
+                    startActivity(intent);
+                }else{
+                    startActivity(new Intent(mContext,LoginActivity.class));
+                }
                 break;
             case R.id.m_layout_member_center:   // 会员中心
                 MemberCenterActivity.openActivity(mContext);

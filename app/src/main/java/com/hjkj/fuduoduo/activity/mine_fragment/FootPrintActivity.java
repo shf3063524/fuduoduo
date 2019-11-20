@@ -20,12 +20,14 @@ import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 足迹页面
@@ -45,7 +47,10 @@ public class FootPrintActivity extends BaseActivity {
     RelativeLayout mRlBottom;
     @BindView(R.id.m_view_line)
     View mViewLine;
-
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
     private FootPrintAdapter mAdapter;
     private ArrayList<DoQueryFootprintData> mData;
 
@@ -62,9 +67,19 @@ public class FootPrintActivity extends BaseActivity {
     @Override
     protected void initViews() {
         mTvFinish.setText("管理");
+        initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
+    }
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+        mLoadingLayout.setEmptyImage(R.drawable.ic_no_foot);
     }
 
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(false);
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -121,8 +136,8 @@ public class FootPrintActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryFootprintData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryFootprintData> tempList = simpleResponseAppResponse.getData();
                             mData.clear();
+                            ArrayList<DoQueryFootprintData> tempList = simpleResponseAppResponse.getData();
                             mData.addAll(tempList);
                         }
                     }
@@ -131,6 +146,11 @@ public class FootPrintActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0) {
+                            mLoadingLayout.showContent();
+                        } else {
+                            mLoadingLayout.showEmpty();
+                        }
                     }
                 });
     }

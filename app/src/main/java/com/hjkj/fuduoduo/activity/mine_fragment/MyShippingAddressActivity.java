@@ -19,11 +19,13 @@ import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 我的收货地址页面
@@ -37,13 +39,17 @@ public class MyShippingAddressActivity extends BaseActivity {
     ImageView mIvReTurn;
     @BindView(R.id.m_add_address)
     TextView mAddAddress;
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
     private ArrayList<DoQueryData> mData;
     private MyShippingAddressAdapter mAdapter;
     private String jumpKey;
 
     public static void openActivity(Context context, String jumpKey) {
         Intent intent = new Intent(context, MyShippingAddressActivity.class);
-        intent.putExtra(jumpKey, jumpKey);
+        intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
 
@@ -65,9 +71,19 @@ public class MyShippingAddressActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
+    }
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+        mLoadingLayout.setEmptyImage(R.drawable.ic_no_address);
     }
 
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(false);
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -128,8 +144,8 @@ public class MyShippingAddressActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryData> tempList = simpleResponseAppResponse.getData();
                             mData.clear();
+                            ArrayList<DoQueryData> tempList = simpleResponseAppResponse.getData();
                             mData.addAll(tempList);
                         }
                     }
@@ -138,6 +154,11 @@ public class MyShippingAddressActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0) {
+                            mLoadingLayout.showContent();
+                        } else {
+                            mLoadingLayout.showEmpty();
+                        }
                     }
                 });
     }

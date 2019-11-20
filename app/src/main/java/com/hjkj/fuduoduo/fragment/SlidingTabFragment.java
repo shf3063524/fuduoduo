@@ -3,6 +3,7 @@ package com.hjkj.fuduoduo.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -24,23 +25,27 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 首页下的导航下页面对应的Fragmnet
  */
 public class SlidingTabFragment extends BaseFragment {
-
+    // 一次请求多少数据
+    private static final int REQUEST_COUNT = 20;
     @BindView(R.id.m_refresh_layout)
     SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
-
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
     private ArrayList<DoFindMaybeYouLikeData> mData;
     private SlidingTabAdapter mAdapter;
     /**
      * 点击条目传的id
      */
     private String categoryId;
+    private int startPage = 1;
 
     public static SlidingTabFragment newInstance(String categoryId) {
         SlidingTabFragment fragment = new SlidingTabFragment();
@@ -67,19 +72,30 @@ public class SlidingTabFragment extends BaseFragment {
     protected void initViews() {
         initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
     }
+
     @Override
     public void onResume() {
         super.onResume();
+        mData.clear();
+        startPage = 1;
         if (categoryId == null) {
             requestData();
         } else {
             doRecommendCategory(categoryId);
         }
     }
+
     private void initRefreshLayout() {
-//        mRefreshLayout.setEnableRefresh(false);
-//        mRefreshLayout.setEnableLoadMore(true);
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(true);
+    }
+
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+//        mLoadingLayout.setEmptyImage(R.drawable.ic_no_address);
+        mLoadingLayout.setEmptyText("暂无数据");
     }
 
     private void initRecyclerView() {
@@ -95,16 +111,25 @@ public class SlidingTabFragment extends BaseFragment {
             mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    ProductDetailsActivity.openActivity(mContext,mData.get(position).getCommodity().getId());
+                    ProductDetailsActivity.openActivity(mContext, mData.get(position).getCommodity().getId());
                 }
             });
             mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
                 @Override
                 public void onLoadMore(RefreshLayout refreshLayout) {
+                    mAdapter.notifyDataSetChanged();
+                    startPage++;
+                    if (categoryId == null) {
+                        requestData();
+                    } else {
+                        doRecommendCategory(categoryId);
+                    }
                 }
 
                 @Override
                 public void onRefresh(RefreshLayout refreshLayout) {
+                    mData.clear();
+                    startPage = 1;
                     if (categoryId == null) {
                         requestData();
                     } else {
@@ -124,12 +149,14 @@ public class SlidingTabFragment extends BaseFragment {
     @Override
     protected void requestData() {
         OkGo.<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>get(Api.COMMODITY_DOFINDMAYBEYOULIKE)//
+                .params("page", startPage)//
+                .params("size", REQUEST_COUNT)//
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>() {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoFindMaybeYouLikeData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
                             mData.clear();
+                            ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
                             mData.addAll(data);
                         }
                     }
@@ -138,6 +165,13 @@ public class SlidingTabFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0 && unbinder != null) {
+                            mLoadingLayout.showContent();
+                        }
+                        if (unbinder != null) {
+                            mRefreshLayout.finishRefresh();
+                            mRefreshLayout.finishLoadMore();
+                        }
                     }
                 });
     }
@@ -148,12 +182,14 @@ public class SlidingTabFragment extends BaseFragment {
     private void doRecommendCategory(String categoryId) {
         OkGo.<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>get(Api.COMMODITY_DORECOMMENDCATEGORY)//
                 .params("categoryId", categoryId)
+                .params("page", startPage)//
+                .params("size", REQUEST_COUNT)//
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>() {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoFindMaybeYouLikeData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
                             mData.clear();
+                            ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
                             mData.addAll(data);
                         }
                     }
@@ -162,9 +198,12 @@ public class SlidingTabFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0 && unbinder != null) {
+                            mLoadingLayout.showContent();
+                        }
                         if (unbinder != null) {
-//                            mRefreshLayout.finishRefresh();
-//                            mRefreshLayout.finishLoadMore();
+                            mRefreshLayout.finishRefresh();
+                            mRefreshLayout.finishLoadMore();
                         }
                     }
                 });

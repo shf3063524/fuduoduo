@@ -150,6 +150,10 @@ public class UserActivationActivity extends BaseActivity {
                     Toasty.info(UserActivationActivity.this, "请阅读福多多平台服务协议").show();
                     return;
                 }
+                if (mEtPayPassword.length() != 6){
+                    Toasty.info(UserActivationActivity.this, "请设置6位数字支付密码").show();
+                    return;
+                }
                 if (getTextString(mEtVcode).equals(vcode) && !vcode.isEmpty() && vcode != null) {
                     doActivate();
                 } else {

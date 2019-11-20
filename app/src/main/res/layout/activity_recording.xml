@@ -37,10 +37,10 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="9dp"
             android:layout_marginBottom="10dp"
-            android:textCursorDrawable="@drawable/color_cursor"
             android:background="@mipmap/ic_time_background"
             android:gravity="center"
-            android:text="2019.8.5" />
+            android:text="2019.8.5"
+            android:textCursorDrawable="@drawable/color_cursor" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,21 +52,23 @@
             android:textColor="@color/cl_666"
             android:textSize="14sp" />
     </RelativeLayout>
-    <!--<com.scwang.smartrefresh.layout.SmartRefreshLayout-->
-    <!--android:id="@+id/m_refresh_layout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_toEndOf="@+id/m_product_type_recycler">-->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/m_recycler_view"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/m_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbarSize="4dp"
-        android:scrollbarStyle="outsideInset"
-        android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
-        android:scrollbars="none"
-        android:visibility="visible" />
+        android:layout_height="match_parent">
 
-    <!--</com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+
+        <ezy.ui.layout.LoadingLayout
+            android:id="@+id/m_loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/m_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none" />
+        </ezy.ui.layout.LoadingLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>

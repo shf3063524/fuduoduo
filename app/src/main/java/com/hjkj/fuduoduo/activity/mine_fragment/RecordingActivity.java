@@ -18,11 +18,13 @@ import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 交易记录页面
@@ -34,7 +36,10 @@ public class RecordingActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.m_iv_back)
     ImageView mIvBack;
-
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
     private ArrayList<DoQueryTransactionRecordData> mData;
     private RecordingAdapter mAdapter;
 
@@ -50,9 +55,19 @@ public class RecordingActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
+    }
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+        mLoadingLayout.setEmptyImage(R.drawable.ic_no_recording);
     }
 
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(false);
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -92,8 +107,8 @@ public class RecordingActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryTransactionRecordData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryTransactionRecordData> tempList = simpleResponseAppResponse.getData();
                             mData.clear();
+                            ArrayList<DoQueryTransactionRecordData> tempList = simpleResponseAppResponse.getData();
                             mData.addAll(tempList);
                         }
                     }
@@ -102,6 +117,11 @@ public class RecordingActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0) {
+                            mLoadingLayout.showContent();
+                        } else {
+                            mLoadingLayout.showEmpty();
+                        }
                     }
                 });
     }

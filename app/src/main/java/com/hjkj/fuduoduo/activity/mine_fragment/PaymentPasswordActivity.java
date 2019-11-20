@@ -106,6 +106,7 @@ public class PaymentPasswordActivity extends BaseActivity {
                 }
                 if (getTextString(mCetSmsCode).equals(vcode) && !vcode.isEmpty() && vcode != null) {
                     PaymentPassword02Activity.openActivity(PaymentPasswordActivity.this);
+                    finish();
                 } else {
                     Toasty.info(PaymentPasswordActivity.this, "您输入的验证码有误").show();
                     return;

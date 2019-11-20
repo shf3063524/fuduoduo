@@ -161,10 +161,10 @@ public class LoginActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //如果选中，显示密码
-                    mEtPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    mEtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 } else {
                     //否则隐藏密码
-                    mEtPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    mEtPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }
             }
         });

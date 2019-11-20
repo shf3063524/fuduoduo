@@ -39,8 +39,9 @@
         app:cardUseCompatPadding="false">
 
         <com.hjkj.fuduoduo.view.ClearEditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
             android:background="@color/transparent"
             android:ellipsize="end"
             android:hint="请输入标题"

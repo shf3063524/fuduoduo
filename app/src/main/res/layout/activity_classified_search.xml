@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="80dp"
+                android:layout_marginEnd="20dp"
                 android:background="@color/transparent"
                 android:hint="查询商品"
                 android:textColor="@color/cl_333"

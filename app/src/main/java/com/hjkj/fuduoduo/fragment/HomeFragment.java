@@ -131,8 +131,6 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.m_layout_expert_system)
     LinearLayout mLayoutExpertSystem;
     private AdViewpagerUtil adViewpagerUtil;
-    private ArrayList<String> mTabList;
-    private ArrayList<Fragment> mFragments;
     private String[] urls;
 
     private String message;
@@ -473,22 +471,29 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoFindCategoryData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            mFragments = new ArrayList<>();
-                            mTabList = new ArrayList<>();
-                            ArrayList<String> mTabId = new ArrayList<>();
+                            ArrayList<String>  mTabList = new ArrayList<>();
+                            ArrayList<Fragment> mFragments = new ArrayList<>();
                             ArrayList<DoFindCategoryData> tempList = simpleResponseAppResponse.getData();
                             for (DoFindCategoryData doFindCategoryData : tempList) {
                                 String name = doFindCategoryData.getNickName();
-                                String categoryId = doFindCategoryData.getCategoryId();
                                 mTabList.add(name);
-                                mTabId.add(categoryId);
-                            }
-                            for (String categoryId : mTabId) {
+                                String categoryId = doFindCategoryData.getCategoryId();
                                 mFragments.add(SlidingTabFragment.newInstance(categoryId));
                             }
                             mTabAdapter = new MyFragmentPagerAdapter(getChildFragmentManager(), mFragments, mTabList);
                             mViewPagerTab.setAdapter(mTabAdapter);
                             mSlidTab.setViewPager(mViewPagerTab);
+//                            mSlidTab.setOnTabSelectListener(new OnTabSelectListener() {
+//                                @Override
+//                                public void onTabSelect(int position) {
+//                                    SlidingTabFragment.newInstance(tempList.get(position).getCategoryId());
+//                                }
+//
+//                                @Override
+//                                public void onTabReselect(int position) {
+//
+//                                }
+//                            });
                         }
                     }
 

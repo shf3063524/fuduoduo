@@ -284,6 +284,11 @@ public class MyCollectionActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mShopAdapter.notifyDataSetChanged();
+                        if (mShopData.size() > 0){
+                            mLayoutEmpty.setVisibility(View.GONE);
+                        }else {
+                            mLayoutEmpty.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
     }
@@ -310,6 +315,11 @@ public class MyCollectionActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mStoreAdapter.notifyDataSetChanged();
+                        if (mStoreData.size() > 0){
+                            mLayoutEmpty.setVisibility(View.GONE);
+                        }else {
+                            mLayoutEmpty.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
     }

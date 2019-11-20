@@ -71,7 +71,7 @@ public class SetActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
-            requestData();
+        requestData();
     }
 
     @Override
@@ -96,10 +96,10 @@ public class SetActivity extends BaseActivity {
                 PaymentPasswordActivity.openActivity(SetActivity.this);
                 break;
             case R.id.m_my_shipping_address:   // 我的收货地址
-                MyShippingAddressActivity.openActivity(SetActivity.this,"SetActivity");
+                MyShippingAddressActivity.openActivity(SetActivity.this, "SetActivity");
                 break;
             case R.id.m_about_us:   // 关于我们
-                Toasty.info(this, "关于我们").show();
+                AboutUsActivity.openActivity(SetActivity.this);
                 break;
             case R.id.m_tv_sign_out:   // 退出登录
                 new CircleDialog.Builder()
@@ -124,7 +124,7 @@ public class SetActivity extends BaseActivity {
 
                 break;
             case R.id.m_layout_personal_center:   // 个人中心
-                PersonalCenterActivity.openActivity(SetActivity.this,responseData.getConsumer(),"SetActivity");
+                PersonalCenterActivity.openActivity(SetActivity.this, responseData.getConsumer(), "SetActivity");
                 break;
         }
     }

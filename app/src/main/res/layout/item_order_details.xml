@@ -46,6 +46,9 @@
                 android:paddingEnd="6dp"
                 android:paddingBottom="1dp"
                 android:text="750ml"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxEms="10"
                 android:textColor="@color/cl_999"
                 android:textSize="11sp" />
 

@@ -442,7 +442,7 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
                 .params("description", description) //申请描述
                 .params("returnReason", returnReason) //退货原因
                 .params("freightState", "0") //货物状态
-                .params("exchange", "1") //是否换货
+                .params("exchange", "2") //是否换货
                 .params("images", uploadImages) //	图片
                 .execute(new DialogCallBack<AppResponse<VcodeLoginData>>(this, "正在提交...") {
                     @Override

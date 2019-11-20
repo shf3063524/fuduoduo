@@ -12,6 +12,8 @@ import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.adapter.AfterSaleAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
+import com.hjkj.fuduoduo.entity.bean.DoQueryOrdersDetailsData;
+import com.hjkj.fuduoduo.entity.bean.DoqueryreturnorderdetailsData;
 import com.hjkj.fuduoduo.entity.bean.DoqueryreturnordersData;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
@@ -29,7 +31,7 @@ import butterknife.OnClick;
 import ezy.ui.layout.LoadingLayout;
 
 /**
- * 售后页面
+ * 售后-页面
  * Author：Created by shihongfei on 2019/10/8 20:30
  * Email：1511808259@qq.com
  */
@@ -44,6 +46,7 @@ public class AfterSaleActivity extends BaseActivity {
     SmartRefreshLayout mRefreshLayout;
     private ArrayList<DoqueryreturnordersData> mData;
     private AfterSaleAdapter mAdapter;
+    private ArrayList<DoQueryOrdersDetailsData> doQueryOrdersDetailsData;
 
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, AfterSaleActivity.class);
@@ -59,12 +62,12 @@ public class AfterSaleActivity extends BaseActivity {
     protected void initViews() {
         initRefreshLayout();
         initRecyclerView();
-        requestData();
+        initLoadingLayout();
     }
 
     private void initLoadingLayout() {
         mLoadingLayout.showEmpty();
-        mLoadingLayout.setEmptyImage(R.drawable.ic_backgroud_shop);
+//        mLoadingLayout.setEmptyImage(R.drawable.ic_backgroud_shop);
         mLoadingLayout.setEmptyText("暂无售后");
     }
 
@@ -76,7 +79,7 @@ public class AfterSaleActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAdapter.notifyDataSetChanged();
+        requestData();
     }
 
     private void initRecyclerView() {
@@ -102,6 +105,35 @@ public class AfterSaleActivity extends BaseActivity {
                             case "仅退款处理中":
                                 orderDetails(mData.get(position).getReturnOrder().getId());
                                 break;
+                            case "卖家申请换货":
+                                ExchangeDetailsActivity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId());
+                                break;
+                            case "等待商家处理换货申请":
+                                ExchangeDetailsActivity.openActivity(AfterSaleActivity.this,mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId());
+                                break;
+                            case "换货中":
+                                    onRefundDetails(mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId(), "换货中");
+                                break;
+                            case "商家拒绝换货请求":
+                                OrderDetails05Activity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnOrder().getId());
+                                break;
+                            case "换货完成":
+                                ReplacementCompletedActivity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId());
+                                break;
+                            case "商家发起仅退款":
+                                break;
+                            case "商家发起退货退款":
+                                break;
+                            case "退货退款处理中":
+                                break;
+                            case "退款中":
+                                break;
+                            case "商家拒绝退款":
+                                OrderDetails05Activity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnOrder().getId());
+                                break;
+                            case "退款成功":
+                                RefundDetailsActivity.openActivity(AfterSaleActivity.this, mData.get(position).getReturnDetailsList().getReturnOrderDetails().getOrderDetailsId());
+                                break;
                         }
 
                         break;
@@ -121,6 +153,47 @@ public class AfterSaleActivity extends BaseActivity {
         }
     }
 
+//    private void orderDetail(String orderId) {
+//        OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
+//                .params("orderId", orderId)
+//                .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
+//                    @Override
+//                    public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
+//                        if (simpleResponseAppResponse.isSucess()) {
+//                            doQueryOrdersDetailsData = simpleResponseAppResponse.getData();
+//                            refreshUi(doQueryOrdersDetailsData);
+//                        }
+//                    }
+//                });
+//    }
+//
+//    private void refreshUi(ArrayList<DoQueryOrdersDetailsData> doQueryOrdersDetailsData) {
+//
+//    }
+//
+//    /**
+//     * 单个商品订单详情运费计算
+//     *
+//     * @param supplierId 商户id
+//     * @param name       运费模板名称
+//     * @param number     商品数量
+//     * @param position
+//     */
+//    private void onFreightCalculation(String supplierId, String name, String number, int position) {
+//        OkGo.<AppResponse<VcodeLoginData>>get(Api.ORDERS_DOCOUNTFREIGHTPRICE)//
+//                .params("supplierId", supplierId)
+//                .params("name", name)
+//                .params("number", number)
+//                .execute(new JsonCallBack<AppResponse<VcodeLoginData>>() {
+//                    @Override
+//                    public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
+//                        if (simpleResponseAppResponse.isSucess()) {
+//                            String freightPrice = simpleResponseAppResponse.getData().getVcode();
+//                            OrderDetails02RefundDetailsActivity.openActivity(AfterSaleActivity.this, mOrderDetailsData.get(position), doQueryOrdersDetailsData, freightPrice, "OrderDetails03Activity");
+//                        }
+//                    }
+//                });
+//    }
     @Override
     protected void requestData() {
         String userId = UserManager.getUserId(AfterSaleActivity.this);
@@ -165,4 +238,29 @@ public class AfterSaleActivity extends BaseActivity {
                     }
                 });
     }
+    /**
+     * 查询退货订单详情
+     */
+    private void onRefundDetails(String orderDetailsId, String jumpKey) {
+        OkGo.<AppResponse<DoqueryreturnorderdetailsData>>get(Api.ORDERS_DOQUERYRETURNORDERDETAILS)//
+                .params("orderDetailsId", orderDetailsId) //订单详情
+                .execute(new DialogCallBack<AppResponse<DoqueryreturnorderdetailsData>>(this, "") {
+                    @Override
+                    public void onSuccess(AppResponse<DoqueryreturnorderdetailsData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            DoqueryreturnorderdetailsData appResponseData = simpleResponseAppResponse.getData();
+                            if ("1".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails02Activity.openActivity(AfterSaleActivity.this, orderDetailsId, jumpKey);
+                            } else if ("2".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails03Activity.openActivity(AfterSaleActivity.this, orderDetailsId, jumpKey);
+                            } else if ("3".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails04Activity.openActivity(AfterSaleActivity.this, orderDetailsId);
+                            } else if ("4".equals(appResponseData.getReturnOrderDetails().getReturnFreightType())) {
+                                ExchangeDetails05Activity.openActivity(AfterSaleActivity.this, orderDetailsId);
+                            }
+                        }
+                    }
+                });
+    }
+
 }

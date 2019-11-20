@@ -96,14 +96,14 @@ public abstract class BaseFragment extends BaseStatusFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try {
-            if (unbinder != null) {
-                unbinder.unbind();
-                unbinder = null;
-            }
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            if (unbinder != null) {
+//                unbinder.unbind();
+//                unbinder = null;
+//            }
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
