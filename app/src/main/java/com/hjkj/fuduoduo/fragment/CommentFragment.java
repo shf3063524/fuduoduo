@@ -20,10 +20,12 @@ import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 待评价-Fragmentnt
@@ -31,10 +33,12 @@ import butterknife.BindView;
  * Email：1511808259@qq.com
  */
 public class CommentFragment extends BaseFragment {
-    // @BindView(R.id.m_refresh_layout)
-    // SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
     private ArrayList<DoQueryOrdersDetailsData> mData;
     private CommentAdapter mAdapter;
     private String saleState;
@@ -54,7 +58,19 @@ public class CommentFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
+        initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
+    }
+
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(true);
+    }
+
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+        mLoadingLayout.setEmptyImage(R.drawable.ic_no_orders);
     }
 
     @Override
@@ -117,9 +133,9 @@ public class CommentFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                             if (unbinder != null) {
                                 mData.clear();
+                                ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                                 mData.addAll(tempList);
                             }
                         }
@@ -129,6 +145,13 @@ public class CommentFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0 && unbinder != null) {
+                            mLoadingLayout.showContent();
+                        }
+                        if (unbinder != null) {
+                            mRefreshLayout.finishRefresh();
+                            mRefreshLayout.finishLoadMore();
+                        }
                     }
                 });
     }

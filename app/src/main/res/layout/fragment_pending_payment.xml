@@ -5,12 +5,6 @@
     android:background="@color/cl_f6"
     android:fitsSystemWindows="false">
 
-    <!--<com.scwang.smartrefresh.layout.SmartRefreshLayout-->
-    <!--android:id="@+id/m_refresh_layout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--</com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
     <RelativeLayout
         android:id="@+id/m_rl_bottom"
         android:layout_width="match_parent"
@@ -72,13 +66,22 @@
         style="@style/view_line_e8"
         android:layout_above="@id/m_rl_bottom" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/m_recycler_view"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/m_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/m_view_line"
-        android:scrollbarSize="4dp"
-        android:scrollbarStyle="outsideInset"
-        android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
-        android:scrollbars="vertical" />
+        android:layout_above="@+id/m_view_line">
+
+        <ezy.ui.layout.LoadingLayout
+            android:id="@+id/m_loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/m_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none" />
+        </ezy.ui.layout.LoadingLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </RelativeLayout>

@@ -19,11 +19,13 @@ import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 待收货-Fragment
@@ -31,10 +33,12 @@ import es.dmoral.toasty.Toasty;
  * Email：1511808259@qq.com
  */
 public class PendingReceiptFragment extends BaseFragment {
-    // @BindView(R.id.m_refresh_layout)
-    // SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
     private ArrayList<DoQueryOrdersDetailsData> mData;
     private PendingReceiptAdapter mAdapter;
     private String saleState;
@@ -63,7 +67,19 @@ public class PendingReceiptFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
+        initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
+    }
+
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(true);
+    }
+
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+        mLoadingLayout.setEmptyImage(R.drawable.ic_no_orders);
     }
 
     @Override
@@ -75,8 +91,6 @@ public class PendingReceiptFragment extends BaseFragment {
     private void initRecyclerView() {
         mData = new ArrayList<>();
         mAdapter = new PendingReceiptAdapter(R.layout.item_pending_receipt, mData);
-        // mAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
-        // mAdapter.isFirstOnly(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -119,9 +133,9 @@ public class PendingReceiptFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                             if (unbinder != null) {
                                 mData.clear();
+                                ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                                 mData.addAll(tempList);
                             }
                         }
@@ -131,6 +145,13 @@ public class PendingReceiptFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0 && unbinder != null) {
+                            mLoadingLayout.showContent();
+                        }
+                        if (unbinder != null) {
+                            mRefreshLayout.finishRefresh();
+                            mRefreshLayout.finishLoadMore();
+                        }
                     }
                 });
     }
@@ -146,7 +167,7 @@ public class PendingReceiptFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            Toasty.info(mContext,"确认收货成功").show();
+                            Toasty.info(mContext, "确认收货成功").show();
                             mData.clear();
                             mAdapter.notifyDataSetChanged();
                         }

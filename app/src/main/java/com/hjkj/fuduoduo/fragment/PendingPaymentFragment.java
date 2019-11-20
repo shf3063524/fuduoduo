@@ -20,12 +20,14 @@ import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 待付款-Fragment
@@ -33,14 +35,16 @@ import es.dmoral.toasty.Toasty;
  * Email：1511808259@qq.com
  */
 public class PendingPaymentFragment extends BaseFragment {
-    // @BindView(R.id.m_refresh_layout)
-    // SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.all_chekbox)
     CheckBox mAllChekbox;
     @BindView(R.id.m_tv_go_to_pay)
     TextView mToGoToPay;
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
     private ArrayList<DoQueryOrdersDetailsData> mData;
     private PendingPaymentAdapter mAdapter;
     /**
@@ -73,7 +77,19 @@ public class PendingPaymentFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
+        initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
+    }
+
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(true);
+    }
+
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+        mLoadingLayout.setEmptyImage(R.drawable.ic_no_orders);
     }
 
     @Override
@@ -107,7 +123,7 @@ public class PendingPaymentFragment extends BaseFragment {
                                 .setListener(new CancelOrderDialog.OnCancleOrderClickListener() {
                                     @Override
                                     public void onancleOrderClick(String cancleOrderType) {
-                                        onCancelOrder(mData.get(position).getOrder().getId(), mData.get(position).getOrder().getSupplierId(),cancleOrderType);
+                                        onCancelOrder(mData.get(position).getOrder().getId(), mData.get(position).getOrder().getSupplierId(), cancleOrderType);
                                     }
                                 }).show();
 
@@ -155,9 +171,9 @@ public class PendingPaymentFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                             if (unbinder != null) {
                                 mData.clear();
+                                ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                                 mData.addAll(tempList);
                             }
                         }
@@ -167,17 +183,25 @@ public class PendingPaymentFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0 && unbinder != null) {
+                            mLoadingLayout.showContent();
+                        }
+                        if (unbinder != null) {
+                            mRefreshLayout.finishRefresh();
+                            mRefreshLayout.finishLoadMore();
+                        }
                     }
                 });
     }
 
     /**
      * 取消订单
-     * @param ordersId 订单id
-     * @param supplierId 商户id
+     *
+     * @param ordersId     订单id
+     * @param supplierId   商户id
      * @param cancelReason 取消原因
      */
-    private void onCancelOrder(String ordersId, String supplierId,String cancelReason) {
+    private void onCancelOrder(String ordersId, String supplierId, String cancelReason) {
         String consumerId = UserManager.getUserId(mContext);
         OkGo.<AppResponse>get(Api.ORDERS_DOCANCELORDER)//
                 .params("ordersId", ordersId)
@@ -189,7 +213,7 @@ public class PendingPaymentFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            Toasty.info(mContext,"取消订单成功").show();
+                            Toasty.info(mContext, "取消订单成功").show();
                         }
                     }
                 });

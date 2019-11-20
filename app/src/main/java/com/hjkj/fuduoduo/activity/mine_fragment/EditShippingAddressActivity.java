@@ -152,10 +152,12 @@ public class EditShippingAddressActivity extends BaseActivity {
         // 默认地址
         if (doQueryData.getDefaultAddress().equals("1")) {
             mRlDefaultAddress.setVisibility(View.GONE);
+            mTvDelete.setVisibility(View.GONE);
             mSbShowOnCouponMap.setChecked(true);
             isShowOnCouponMap = 1;
         } else {
             mRlDefaultAddress.setVisibility(View.VISIBLE);
+            mTvDelete.setVisibility(View.VISIBLE);
             mSbShowOnCouponMap.setChecked(false);
             isShowOnCouponMap = 0;
         }

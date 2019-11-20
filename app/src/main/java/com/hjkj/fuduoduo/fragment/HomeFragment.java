@@ -483,17 +483,6 @@ public class HomeFragment extends BaseFragment {
                             mTabAdapter = new MyFragmentPagerAdapter(getChildFragmentManager(), mFragments, mTabList);
                             mViewPagerTab.setAdapter(mTabAdapter);
                             mSlidTab.setViewPager(mViewPagerTab);
-//                            mSlidTab.setOnTabSelectListener(new OnTabSelectListener() {
-//                                @Override
-//                                public void onTabSelect(int position) {
-//                                    SlidingTabFragment.newInstance(tempList.get(position).getCategoryId());
-//                                }
-//
-//                                @Override
-//                                public void onTabReselect(int position) {
-//
-//                                }
-//                            });
                         }
                     }
 

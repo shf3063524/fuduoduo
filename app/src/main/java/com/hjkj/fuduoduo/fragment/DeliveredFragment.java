@@ -18,11 +18,13 @@ import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 待发货-Fragment
@@ -30,8 +32,10 @@ import es.dmoral.toasty.Toasty;
  * Email：1511808259@qq.com
  */
 public class DeliveredFragment extends BaseFragment {
-    // @BindView(R.id.m_refresh_layout)
-    // SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
     private ArrayList<DoQueryOrdersDetailsData> mData;
@@ -62,7 +66,19 @@ public class DeliveredFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
+        initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
+    }
+
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(true);
+    }
+
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+        mLoadingLayout.setEmptyImage(R.drawable.ic_no_orders);
     }
 
     @Override
@@ -113,9 +129,9 @@ public class DeliveredFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                             if (unbinder != null) {
                                 mData.clear();
+                                ArrayList<DoQueryOrdersDetailsData> tempList = simpleResponseAppResponse.getData();
                                 mData.addAll(tempList);
                             }
                         }
@@ -125,6 +141,13 @@ public class DeliveredFragment extends BaseFragment {
                     public void onFinish() {
                         super.onFinish();
                         mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0 && unbinder != null) {
+                            mLoadingLayout.showContent();
+                        }
+                        if (unbinder != null) {
+                            mRefreshLayout.finishRefresh();
+                            mRefreshLayout.finishLoadMore();
+                        }
                     }
                 });
     }
@@ -139,7 +162,7 @@ public class DeliveredFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            Toasty.info(mContext,"提醒发货成功啦！").show();
+                            Toasty.info(mContext, "提醒发货成功啦！").show();
                         }
                     }
                 });
