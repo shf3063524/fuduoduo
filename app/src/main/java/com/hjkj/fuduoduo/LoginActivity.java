@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.hjkj.fuduoduo.activity.AddAddress02Activity;
 import com.hjkj.fuduoduo.activity.PersonalCenter02Activity;
 import com.hjkj.fuduoduo.activity.login.ForgetPasswordActivity;
 import com.hjkj.fuduoduo.activity.login.UserActivationActivity;
@@ -259,6 +260,10 @@ public class LoginActivity extends BaseActivity {
                     Toasty.info(LoginActivity.this, "请先输入手机号").show();
                     return;
                 }
+                if (mEtPhone.length() != 11) {
+                    Toasty.info(LoginActivity.this, "您输入的手机号不正确").show();
+                    return;
+                }
                 try {
                     getVcode();
                 } catch (Exception e) {
@@ -285,18 +290,41 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<PasswordLoginData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            String message = simpleResponseAppResponse.getMessage(); //判断是否是0：新用户还是1：老用户
-                            PasswordLoginData data = simpleResponseAppResponse.getData();
-
-
+                            //判断是否是0：新用户还是1：老用户
+                            String message = simpleResponseAppResponse.getMessage();
+                            PasswordLoginData passwordLoginData = simpleResponseAppResponse.getData();
+                            // 消费者地址个数
+                            String dataAddress = passwordLoginData.getAddress();
                             //消费者信息
-                            ConsumerBean consumer = data.getConsumer();
+                            ConsumerBean consumer = passwordLoginData.getConsumer();
+                            if ("密码错误".equals(message)) {
+                                if ("".equals(passwordLoginData.getConsumer().getUsername()) || passwordLoginData.getConsumer().getUsername().isEmpty()) {
+                                    Toasty.info(LoginActivity.this, "您还未激活").show();
+                                    return;
+                                } else {
+                                    Toasty.info(LoginActivity.this, "密码错误").show();
+                                    return;
+                                }
+                            }
+
                             UserManager.setPhoneNumber(LoginActivity.this, consumer.getPhoneNumber());
                             UserManager.setUserId(LoginActivity.this, consumer.getId());
+                            // 消费者名称
+                            String username = consumer.getUsername();
                             if ("0".equals(message)) {
-                                PersonalCenter02Activity.openActivity(LoginActivity.this, message, "LoginActivity");
+                                if ("".equals(username) || username.isEmpty()) {
+                                    PersonalCenter02Activity.openActivity(LoginActivity.this, message, "LoginActivity");
+                                   finish();
+                                }else if ("0".equals(dataAddress)) {
+                                    AddAddress02Activity.openActivity(LoginActivity.this, message, "LoginActivity");
+                                    finish();
+                                } else {
+                                    MainActivity.openActivity(LoginActivity.this, message, "LoginActivity");
+                                    finish();
+                                }
                             } else {
                                 MainActivity.openActivity(LoginActivity.this, message, "LoginActivity");
+                                finish();
                             }
                         }
                     }

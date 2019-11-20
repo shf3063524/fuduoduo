@@ -83,11 +83,12 @@ public class PersonalCenterActivity extends BaseActivity {
     private String logoHead = null;
     private String jumpKey;
 
-    public static void openActivity(Context context,String jumpKey) {
+    public static void openActivity(Context context, String jumpKey) {
         Intent intent = new Intent(context, PersonalCenterActivity.class);
         intent.putExtra("jumpKey", jumpKey);
         context.startActivity(intent);
     }
+
     public static void openActivity(Context context, ConsumerBean consumerBean, String jumpKey) {
         Intent intent = new Intent(context, PersonalCenterActivity.class);
         intent.putExtra("ConsumerBean", consumerBean);
@@ -129,10 +130,6 @@ public class PersonalCenterActivity extends BaseActivity {
                 }
                 if (textIsEmpty(mEtNickname)) {
                     Toasty.info(PersonalCenterActivity.this, "请填写昵称").show();
-                    return;
-                }
-                if (textIsEmpty(mEtPhone)) {
-                    Toasty.info(PersonalCenterActivity.this, "请填写手机号").show();
                     return;
                 }
                 if (textIsEmpty(mTvWriteGender)) {
@@ -368,22 +365,22 @@ public class PersonalCenterActivity extends BaseActivity {
         String userId = UserManager.getUserId(PersonalCenterActivity.this);
         String username = getTextString(mEtUsername);
         String name = getTextString(mEtNickname);
-        String phoneNumber = getTextString(mEtPhone);
         String birthday = getTextString(mTvWriteBirth);
         OkGo.<AppResponse>get(Api.USER_DOUPDATE)//
                 .params("id", userId)
                 .params("username", username)
                 .params("name", name)
-                .params("phoneNumber", phoneNumber)
                 .params("logo", logo)
                 .params("birthday", birthday)
                 .params("gender", gender)
                 .execute(new JsonCallBack<AppResponse>() {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        Toasty.normal(PersonalCenterActivity.this, "保存成功").show();
-                        AddAddressActivity.openActivity(PersonalCenterActivity.this,jumpKey);
-                        finish();
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.normal(PersonalCenterActivity.this, "保存成功").show();
+                            AddAddressActivity.openActivity(PersonalCenterActivity.this, jumpKey);
+                            finish();
+                        }
                     }
                 });
     }

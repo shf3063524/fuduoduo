@@ -12,7 +12,16 @@ public class PasswordLoginData implements Serializable {
     private String page3;
     private String page2;
     private String page1;
+    private String address;
     private ConsumerBean consumer;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getPage4() {
         return page4;

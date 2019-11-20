@@ -74,6 +74,11 @@ public class Api {
      */
     public static final String CART_DODELETE = BASE_URL + "/user-service/cart/doDelete";
 
+    /**
+     *  激活验证接口
+     */
+    public static final String USER_DOCHECKACTIVE = BASE_URL + "/user-service/user/doCheckActive";
+
 //************************************************    订单有关    **************************************************************
 
     // 服务器地址--和订单有关

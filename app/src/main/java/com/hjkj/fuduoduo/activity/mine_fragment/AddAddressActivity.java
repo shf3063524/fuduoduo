@@ -317,8 +317,10 @@ public class AddAddressActivity extends BaseActivity {
                 .execute(new JsonCallBack<AppResponse>() {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        Toasty.normal(AddAddressActivity.this, "保存成功").show();
-                        finish();
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.normal(AddAddressActivity.this, "保存成功").show();
+                            finish();
+                        }
                     }
                 });
     }

@@ -120,10 +120,6 @@ public class PersonalCenter02Activity extends BaseActivity {
                     Toasty.info(PersonalCenter02Activity.this, "请填写昵称").show();
                     return;
                 }
-                if (textIsEmpty(mEtPhone)) {
-                    Toasty.info(PersonalCenter02Activity.this, "请填写手机号").show();
-                    return;
-                }
                 if (textIsEmpty(mTvWriteGender)) {
                     Toasty.info(PersonalCenter02Activity.this, "请选择性别").show();
                     return;
@@ -357,22 +353,22 @@ public class PersonalCenter02Activity extends BaseActivity {
         String userId = UserManager.getUserId(PersonalCenter02Activity.this);
         String username = getTextString(mEtUsername);
         String name = getTextString(mEtNickname);
-        String phoneNumber = getTextString(mEtPhone);
         String birthday = getTextString(mTvWriteBirth);
         OkGo.<AppResponse>get(Api.USER_DOUPDATE)//
                 .params("id", userId)
                 .params("username", username)
                 .params("name", name)
-                .params("phoneNumber", phoneNumber)
                 .params("logo", logo)
                 .params("birthday", birthday)
                 .params("gender", gender)
                 .execute(new JsonCallBack<AppResponse>() {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        AddAddress02Activity.openActivity(PersonalCenter02Activity.this,message,jumpKey);
-                        Toasty.normal(PersonalCenter02Activity.this, "保存成功").show();
-                        finish();
+                        if (simpleResponseAppResponse.isSucess()) {
+                            AddAddress02Activity.openActivity(PersonalCenter02Activity.this, message, jumpKey);
+                            Toasty.normal(PersonalCenter02Activity.this, "保存成功").show();
+                            finish();
+                        }
                     }
                 });
     }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.hjkj.fuduoduo.LoginActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.base.BaseActivity;
+import com.hjkj.fuduoduo.entity.bean.DocheckactiveData;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
@@ -113,6 +114,10 @@ public class UserActivationActivity extends BaseActivity {
                     Toasty.info(UserActivationActivity.this, "请先输入手机号").show();
                     return;
                 }
+                if (mEtPhone.length() != 11) {
+                    Toasty.info(UserActivationActivity.this, "您输入的手机号不正确").show();
+                    return;
+                }
                 try {
                     getVcode();
                 } catch (Exception e) {
@@ -150,12 +155,12 @@ public class UserActivationActivity extends BaseActivity {
                     Toasty.info(UserActivationActivity.this, "请阅读福多多平台服务协议").show();
                     return;
                 }
-                if (mEtPayPassword.length() != 6){
+                if (mEtPayPassword.length() != 6) {
                     Toasty.info(UserActivationActivity.this, "请设置6位数字支付密码").show();
                     return;
                 }
                 if (getTextString(mEtVcode).equals(vcode) && !vcode.isEmpty() && vcode != null) {
-                    doActivate();
+                    onActivation();
                 } else {
                     Toasty.info(UserActivationActivity.this, "您输入的验证码有误").show();
                     return;
@@ -207,6 +212,30 @@ public class UserActivationActivity extends BaseActivity {
                         if (simpleResponseAppResponse.isSucess()) {
                             Toasty.normal(UserActivationActivity.this, "激活成功").show();
                             finish();
+                        }
+                    }
+                });
+
+    }
+
+    /**
+     * 激活验证接口
+     */
+    private void onActivation() {
+        String phoneNumber = getTextString(mEtPhone);
+        OkGo.<AppResponse<DocheckactiveData>>get(Api.USER_DOCHECKACTIVE)//
+                .params("phoneNumber", phoneNumber)//
+                .execute(new DialogCallBack<AppResponse<DocheckactiveData>>(this, "正在激活...") {
+                    @Override
+                    public void onSuccess(AppResponse<DocheckactiveData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            DocheckactiveData appResponseData = simpleResponseAppResponse.getData();
+                           if ("".equals(appResponseData.getConsumer().getUsername())){
+                               Toasty.info(UserActivationActivity.this, "您手机号已经激活过了").show();
+                               return;
+                           }else {
+                               doActivate();
+                           }
                         }
                     }
                 });

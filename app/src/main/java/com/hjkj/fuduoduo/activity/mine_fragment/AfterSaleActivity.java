@@ -68,8 +68,7 @@ public class AfterSaleActivity extends BaseActivity {
 
     private void initLoadingLayout() {
         mLoadingLayout.showEmpty();
-//        mLoadingLayout.setEmptyImage(R.drawable.ic_backgroud_shop);
-        mLoadingLayout.setEmptyText("暂无售后");
+        mLoadingLayout.setEmptyImage(R.drawable.ic_no_orders);
     }
 
     private void initRefreshLayout() {
