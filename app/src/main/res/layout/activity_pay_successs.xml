@@ -27,155 +27,167 @@
             android:src="@mipmap/ic_more_transparent" />
     </RelativeLayout>
 
-    <ScrollView
-        android:id="@+id/m_scrollview"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/m_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/m_layout_head"
-        android:scrollbars="none">
+        android:layout_below="@+id/m_layout_head">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/m_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="163dp"
-                    android:background="@mipmap/ic_order_details_backgroud" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal"
-                        android:paddingTop="12dp">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@mipmap/ic_appraise_successful" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:text="支付成功"
-                            android:textColor="@color/cl_fff"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="感谢您选择福多网，我们会将货品"
-                        android:textColor="@color/cl_fff"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="尽快送到您手中！"
-                        android:textColor="@color/cl_fff"
-                        android:textSize="12sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/shape_frame_cl_e5ef_all"
-                            android:paddingStart="16dp"
-                            android:paddingTop="5dp"
-                            android:paddingEnd="16dp"
-                            android:paddingBottom="5dp"
-                            android:text="返回首页"
-                            android:textColor="@color/cl_fff"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/m_tv_look_appraise"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:background="@drawable/shape_frame_cl_e5ef_all"
-                            android:paddingStart="16dp"
-                            android:paddingTop="5dp"
-                            android:paddingEnd="16dp"
-                            android:paddingBottom="5dp"
-                            android:text="查看订单"
-                            android:textColor="@color/cl_fff"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </FrameLayout>
-
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <View
-                    android:layout_width="40dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/cl_cdcdcd" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="163dp"
+                        android:background="@mipmap/ic_order_details_backgroud" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingTop="12dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:src="@mipmap/ic_appraise_successful" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:text="支付成功"
+                                android:textColor="@color/cl_fff"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="感谢您选择福多网，我们会将货品"
+                            android:textColor="@color/cl_fff"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="尽快送到您手中！"
+                            android:textColor="@color/cl_fff"
+                            android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/shape_frame_cl_e5ef_all"
+                                android:paddingStart="16dp"
+                                android:paddingTop="5dp"
+                                android:paddingEnd="16dp"
+                                android:paddingBottom="5dp"
+                                android:text="返回首页"
+                                android:textColor="@color/cl_fff"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/m_tv_look_appraise"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:background="@drawable/shape_frame_cl_e5ef_all"
+                                android:paddingStart="16dp"
+                                android:paddingTop="5dp"
+                                android:paddingEnd="16dp"
+                                android:paddingBottom="5dp"
+                                android:text="查看订单"
+                                android:textColor="@color/cl_fff"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@mipmap/ic_love_picture" />
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="猜你喜欢"
-                    android:textColor="@color/cl_333"
-                    android:textSize="14sp" />
+                    <View
+                        android:layout_width="40dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/cl_cdcdcd" />
 
-                <View
-                    android:layout_width="40dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/cl_cdcdcd" />
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@mipmap/ic_love_picture" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:descendantFocusability="blocksDescendants">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="猜你喜欢"
+                        android:textColor="@color/cl_333"
+                        android:textSize="14sp" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/m_love_recycler_view"
+                    <View
+                        android:layout_width="40dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/cl_cdcdcd" />
+                </LinearLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="16dp"
-                    android:scrollbars="none" />
-            </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
+                    android:descendantFocusability="blocksDescendants">
+
+                    <ezy.ui.layout.LoadingLayout
+                        android:id="@+id/m_loading_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/m_love_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginTop="16dp"
+                            android:scrollbars="none" />
+                    </ezy.ui.layout.LoadingLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>

@@ -31,12 +31,10 @@ import ezy.ui.layout.LoadingLayout;
  * 首页下的导航下页面对应的Fragmnet
  */
 public class SlidingTabFragment extends BaseFragment {
-    // 一次请求多少数据
-    private static final int REQUEST_COUNT = 20;
-    @BindView(R.id.m_refresh_layout)
-    SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_loading_layout)
     LoadingLayout mLoadingLayout;
     private ArrayList<DoFindMaybeYouLikeData> mData;
@@ -46,6 +44,8 @@ public class SlidingTabFragment extends BaseFragment {
      */
     private String categoryId;
     private int startPage = 1;
+    // 一次请求多少数据
+    private static final int REQUEST_COUNT = 20;
 
     public static SlidingTabFragment newInstance(String categoryId) {
         SlidingTabFragment fragment = new SlidingTabFragment();

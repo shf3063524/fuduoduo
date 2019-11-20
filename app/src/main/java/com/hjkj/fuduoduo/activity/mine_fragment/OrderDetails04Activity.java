@@ -35,6 +35,9 @@ import com.hjkj.fuduoduo.tool.StatusBarUtil;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.SpaceItemDecoration;
 import com.lzy.okgo.OkGo;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.ArrayList;
 
@@ -42,6 +45,7 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 订单详情-待评价页面
@@ -91,6 +95,10 @@ public class OrderDetails04Activity extends BaseActivity {
     ScrollView myScrollView;
     @BindView(R.id.m_love_recycler_view)
     RecyclerView mLoveRecyclerView;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
     private ArrayList<OrderDetailsBean> mOrderDetailsData;
@@ -100,6 +108,10 @@ public class OrderDetails04Activity extends BaseActivity {
     private ShoppingFragmentAdapter mAdapter;
     private ArrayList<DoQueryOrdersDetailsData> responseData;
     private ArrayList<ExpressBean> express;
+
+    private int startPage = 1;
+    // 一次请求多少数据
+    private static final int REQUEST_COUNT = 20;
 
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetails04Activity.class);
@@ -121,8 +133,20 @@ public class OrderDetails04Activity extends BaseActivity {
     @Override
     protected void initViews() {
         StatusBarUtil.setColor(OrderDetails04Activity.this, cl_e51C23, 1);
+        initRefreshLayout();
         initRecyclerView();
-        onLove();
+        initLoadingLayout();
+    }
+
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(false);
+        mRefreshLayout.setEnableLoadMore(true);
+    }
+
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+//        mLoadingLayout.setEmptyImage(R.drawable.ic_no_address);
+        mLoadingLayout.setEmptyText("暂无数据");
     }
 
     @Override
@@ -158,7 +182,21 @@ public class OrderDetails04Activity extends BaseActivity {
                 ProductDetailsActivity.openActivity(OrderDetails04Activity.this, mData.get(position).getCommodity().getId());
             }
         });
+        mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+                mAdapter.notifyDataSetChanged();
+                startPage++;
+                onLove();
+            }
 
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                mData.clear();
+                startPage = 1;
+                onLove();
+            }
+        });
         mOrderDetailsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -309,6 +347,8 @@ public class OrderDetails04Activity extends BaseActivity {
      */
     private void onLove() {
         OkGo.<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>get(Api.COMMODITY_DOFINDMAYBEYOULIKE)//
+                .params("page", startPage)//
+                .params("size", REQUEST_COUNT)//
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoFindMaybeYouLikeData>>>() {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoFindMaybeYouLikeData>> simpleResponseAppResponse) {
@@ -316,9 +356,19 @@ public class OrderDetails04Activity extends BaseActivity {
                             mData.clear();
                             ArrayList<DoFindMaybeYouLikeData> data = simpleResponseAppResponse.getData();
                             mData.addAll(data);
-                            myScrollView.smoothScrollTo(0, 20);
-                            mAdapter.notifyDataSetChanged();
                         }
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+//                        myScrollView.smoothScrollTo(0, 20);
+                        mAdapter.notifyDataSetChanged();
+                        if (mData.size() > 0) {
+                            mLoadingLayout.showContent();
+                        }
+                        mRefreshLayout.finishRefresh();
+                        mRefreshLayout.finishLoadMore();
                     }
                 });
     }

@@ -67,376 +67,389 @@
         android:layout_above="@id/m_rl_bottom"
         android:visibility="visible" />
 
-    <ScrollView
-        android:id="@+id/m_scrollview"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/m_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/m_view_line"
-        android:layout_below="@+id/m_layout_head"
-        android:scrollbars="none">
+        android:layout_below="@+id/m_layout_head">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/m_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:scrollbars="none">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="163dp"
-                    android:background="@mipmap/ic_order_details_backgroud" />
+                    android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:paddingTop="34dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="请等待商家处理"
-                            android:textColor="@color/cl_fff"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/m_tv_remaining_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="7dp"
-                            android:text="还剩1天17小时43分钟"
-                            android:textColor="@color/cl_fff"
-                            android:textSize="13sp" />
-                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="163dp"
+                        android:background="@mipmap/ic_order_details_backgroud" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="13dp"
-                        android:layout_marginEnd="12dp"
-                        android:background="@drawable/shape_frame3_cl_fff"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical"
+                            android:paddingTop="34dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="请等待商家处理"
+                                android:textColor="@color/cl_fff"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/m_tv_remaining_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="7dp"
+                                android:text="还剩1天17小时43分钟"
+                                android:textColor="@color/cl_fff"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginEnd="12dp"
+                            android:background="@drawable/shape_frame3_cl_fff"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="9dp"
+                                android:text="你已成功发起退款申请，请耐心等待商家处理。"
+                                android:textColor="@color/cl_333"
+                                android:textSize="14sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginBottom="16dp"
+                                android:background="@color/cl_eee" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginEnd="11dp"
+                                    android:src="@mipmap/ic_smaller" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="商家同意或者超时未处理，系统将退款给您。"
+                                    android:textColor="@color/cl_666"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_marginEnd="11dp"
+                                    android:src="@mipmap/ic_smaller" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="若商家拒绝：换货申请将关闭，您可以联系商家协商处理。"
+                                    android:textColor="@color/cl_666"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_marginEnd="11dp"
+                                    android:src="@mipmap/ic_smaller" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="如果商家拒绝，您可以修改退款申请后再次发起，商家会重新处理。"
+                                    android:textColor="@color/cl_666"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp">
+
+                                <TextView
+                                    android:id="@+id/m_tv_application_canceled"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_toStartOf="@+id/m_tv_modify_application"
+                                    android:background="@drawable/shape_frame_cl_999_all"
+                                    android:paddingStart="18dp"
+                                    android:paddingTop="8dp"
+                                    android:paddingEnd="18dp"
+                                    android:paddingBottom="8dp"
+                                    android:text="撤销申请"
+                                    android:textColor="@color/cl_666"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/m_tv_modify_application"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:background="@drawable/shape_frame_cl_fff_e51c23_all"
+                                    android:paddingStart="18dp"
+                                    android:paddingTop="8dp"
+                                    android:paddingEnd="18dp"
+                                    android:paddingBottom="8dp"
+                                    android:text="修改申请"
+                                    android:textColor="#ffe51c23"
+                                    android:textSize="12sp" />
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/m_cv_negotiation_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="12dp"
+                    app:cardBackgroundColor="@color/cl_fff"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    app:cardUseCompatPadding="false">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="协商历史"
+                            android:textColor="@color/cl_333"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:src="@mipmap/ic_right_arrow" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="12dp"
+                    app:cardBackgroundColor="@color/cl_fff"
+                    app:cardCornerRadius="3dp"
+                    app:cardElevation="0dp"
+                    app:cardUseCompatPadding="false">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="9dp"
-                            android:text="你已成功发起退款申请，请耐心等待商家处理。"
+                            android:layout_marginBottom="17dp"
+                            android:text="退款信息"
                             android:textColor="@color/cl_333"
                             android:textSize="14sp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/m_iv_shopping"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:background="@color/cl_f8" />
+
+                            <TextView
+                                android:id="@+id/m_tv_content"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_toEndOf="@+id/m_iv_shopping"
+                                android:ellipsize="end"
+                                android:lines="2"
+                                android:maxEms="18"
+                                android:text="的房价来看的房价高了开发的进口量发达国家地方"
+                                android:textColor="@color/cl_333"
+                                android:textSize="12sp" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/m_tv_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_toEndOf="@+id/m_iv_shopping">
+
+                                <TextView
+                                    android:id="@+id/m_tv_specification"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="原有：N°1正宫色"
+                                    android:textColor="@color/cl_999"
+                                    android:textSize="11sp" />
+                            </RelativeLayout>
+                        </RelativeLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
                             android:layout_marginBottom="16dp"
                             android:background="@color/cl_eee" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/m_tv_reason_for_return"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:orientation="horizontal">
+                            android:text="退款原因：其他"
+                            android:textColor="@color/cl_666"
+                            android:textSize="12sp" />
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginEnd="11dp"
-                                android:src="@mipmap/ic_smaller" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="商家同意或者超时未处理，系统将退款给您。"
-                                android:textColor="@color/cl_666"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/m_tv_refund_amount"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:orientation="horizontal"
-                            android:visibility="gone">
+                            android:layout_marginTop="8dp"
+                            android:text="退款金额：320.00 积分"
+                            android:textColor="@color/cl_666"
+                            android:textSize="12sp" />
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:layout_marginEnd="11dp"
-                                android:src="@mipmap/ic_smaller" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="若商家拒绝：换货申请将关闭，您可以联系商家协商处理。"
-                                android:textColor="@color/cl_666"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/m_tv_application_time"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_marginTop="8dp"
+                            android:text="申请时间：2019-9-11"
+                            android:textColor="@color/cl_666"
+                            android:textSize="12sp" />
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:layout_marginEnd="11dp"
-                                android:src="@mipmap/ic_smaller" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="如果商家拒绝，您可以修改退款申请后再次发起，商家会重新处理。"
-                                android:textColor="@color/cl_666"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/m_tv_refund_number"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp">
+                            android:layout_marginTop="8dp"
+                            android:text="退款编号：3669832083208099"
+                            android:textColor="@color/cl_666"
+                            android:textSize="12sp" />
 
-                            <TextView
-                                android:id="@+id/m_tv_application_canceled"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
-                                android:layout_toStartOf="@+id/m_tv_modify_application"
-                                android:background="@drawable/shape_frame_cl_999_all"
-                                android:paddingStart="18dp"
-                                android:paddingTop="8dp"
-                                android:paddingEnd="18dp"
-                                android:paddingBottom="8dp"
-                                android:text="撤销申请"
-                                android:textColor="@color/cl_666"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/m_tv_modify_application"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:background="@drawable/shape_frame_cl_fff_e51c23_all"
-                                android:paddingStart="18dp"
-                                android:paddingTop="8dp"
-                                android:paddingEnd="18dp"
-                                android:paddingBottom="8dp"
-                                android:text="修改申请"
-                                android:textColor="#ffe51c23"
-                                android:textSize="12sp" />
-                        </RelativeLayout>
                     </LinearLayout>
-                </LinearLayout>
-            </FrameLayout>
+                </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/m_cv_negotiation_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="12dp"
-                app:cardBackgroundColor="@color/cl_fff"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:cardUseCompatPadding="false">
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="16dp">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="协商历史"
-                        android:textColor="@color/cl_333"
-                        android:textSize="14sp" />
+                    <View
+                        android:layout_width="40dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/cl_cdcdcd" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:src="@mipmap/ic_right_arrow" />
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="12dp"
-                app:cardBackgroundColor="@color/cl_fff"
-                app:cardCornerRadius="3dp"
-                app:cardElevation="0dp"
-                app:cardUseCompatPadding="false">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@mipmap/ic_love_picture" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="17dp"
-                        android:text="退款信息"
+                        android:layout_marginEnd="16dp"
+                        android:text="猜你喜欢"
                         android:textColor="@color/cl_333"
                         android:textSize="14sp" />
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/m_iv_shopping"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:background="@color/cl_f8" />
-
-                        <TextView
-                            android:id="@+id/m_tv_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_toEndOf="@+id/m_iv_shopping"
-                            android:ellipsize="end"
-                            android:lines="2"
-                            android:maxEms="18"
-                            android:text="的房价来看的房价高了开发的进口量发达国家地方"
-                            android:textColor="@color/cl_333"
-                            android:textSize="12sp" />
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/m_tv_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_toEndOf="@+id/m_iv_shopping">
-                            <TextView
-                                android:id="@+id/m_tv_specification"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="原有：N°1正宫色"
-                                android:textColor="@color/cl_999"
-                                android:textSize="11sp" />
-                        </RelativeLayout>
-                    </RelativeLayout>
-
                     <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="@color/cl_eee" />
-
-                    <TextView
-                        android:id="@+id/m_tv_reason_for_return"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="退款原因：其他"
-                        android:textColor="@color/cl_666"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/m_tv_refund_amount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="退款金额：320.00 积分"
-                        android:textColor="@color/cl_666"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/m_tv_application_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="申请时间：2019-9-11"
-                        android:textColor="@color/cl_666"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/m_tv_refund_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="退款编号：3669832083208099"
-                        android:textColor="@color/cl_666"
-                        android:textSize="12sp" />
-
+                        android:layout_width="40dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/cl_cdcdcd" />
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="40dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/cl_cdcdcd" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@mipmap/ic_love_picture" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="猜你喜欢"
-                    android:textColor="@color/cl_333"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="40dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/cl_cdcdcd" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:descendantFocusability="blocksDescendants">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/m_love_recycler_view"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="16dp"
-                    android:scrollbars="none" />
-            </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
+                    android:descendantFocusability="blocksDescendants">
+
+                    <ezy.ui.layout.LoadingLayout
+                        android:id="@+id/m_loading_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/m_love_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginTop="16dp"
+                            android:scrollbars="none" />
+                    </ezy.ui.layout.LoadingLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </RelativeLayout>
