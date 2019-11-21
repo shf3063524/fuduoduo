@@ -271,4 +271,8 @@ public class Api {
      *  轮播图接口
      */
     public static final String HOMEPAGESORT_DOQUERYCAROUSEL = BASE_URL + "/commodity-service/homePageSort/doQueryCarousel";
+    /**
+     *  联想搜索
+     */
+    public static final String CATEGORY_DOQUERYASSOCIATION = BASE_URL + "/commodity-service/category/doQueryAssociation";
 }

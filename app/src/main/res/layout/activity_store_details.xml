@@ -16,7 +16,7 @@
             android:id="@+id/m_tv_store_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="圣罗兰官方旗舰店透明"
+            android:text=""
             android:textColor="@color/cl_fff"
             android:textSize="18sp" />
 
@@ -37,6 +37,7 @@
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/m_iv_search"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_width="wrap_content"

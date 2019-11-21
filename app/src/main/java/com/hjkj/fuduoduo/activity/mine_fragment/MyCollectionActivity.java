@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -16,6 +20,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.activity.product.ProductDetailsActivity;
 import com.hjkj.fuduoduo.activity.product.StoreDetailsActivity;
+import com.hjkj.fuduoduo.activity.product.StoreDetailsNoBackgroundActivity;
+import com.hjkj.fuduoduo.activity.sort_fragment.ClassifiedSearchActivity;
 import com.hjkj.fuduoduo.adapter.MyCollectionShoppingAdapter;
 import com.hjkj.fuduoduo.adapter.MyCollectionStoreAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
@@ -26,8 +32,12 @@ import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
+import com.hjkj.fuduoduo.view.ClearEditText;
 import com.lzy.okgo.OkGo;
 import com.mylhyl.circledialog.CircleDialog;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.ArrayList;
 
@@ -35,6 +45,7 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import ezy.ui.layout.LoadingLayout;
 
 /**
  * 我的收藏页面
@@ -46,10 +57,18 @@ public class MyCollectionActivity extends BaseActivity {
     ImageView mIvArrow;
     @BindView(R.id.m_iv_all_check)
     ImageView mIvAllCheck;
-    @BindView(R.id.m_layout_empty)
-    FrameLayout mLayoutEmpty;
+    //    @BindView(R.id.m_layout_empty)
+//    FrameLayout mLayoutEmpty;
     @BindView(R.id.m_layout_all_check)
     LinearLayout mLayoutAllCheck;
+    @BindView(R.id.m_layout_one)
+    LinearLayout mLayoutOne;
+    @BindView(R.id.m_layout_two)
+    LinearLayout mLayoutTwo;
+    @BindView(R.id.m_tv_return)
+    TextView mTvReturn;
+    @BindView(R.id.m_iv_inquire)
+    ImageView mIvInquire;
     @BindView(R.id.m_tv_shopping)
     TextView mTvShopping;
     @BindView(R.id.m_tv_store)
@@ -62,10 +81,20 @@ public class MyCollectionActivity extends BaseActivity {
     RelativeLayout mRlBottom;
     @BindView(R.id.m_view_line)
     View mViewLine;
+    @BindView(R.id.m_et_shop)
+    ClearEditText mEtShop;
     @BindView(R.id.m_recycler_view_shop)
     RecyclerView mRecuclerViewShop;
     @BindView(R.id.m_recycler_view_store)
     RecyclerView mRecuclerViewStore;
+    @BindView(R.id.m_refresh_layout)
+    SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.m_loading_layout)
+    LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_refresh_layout02)
+    SmartRefreshLayout mRefreshLayout02;
+    @BindView(R.id.m_loading_layout02)
+    LoadingLayout mLoadingLayout02;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
     @BindColor(R.color.cl_333)
@@ -95,6 +124,9 @@ public class MyCollectionActivity extends BaseActivity {
      * 是否全选 默认未全选
      */
     private boolean isAllCheck = false;
+    private String backtitle = "取消", searchtitle = "搜索";
+    private String positionState = "1";
+
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, MyCollectionActivity.class);
         context.startActivity(intent);
@@ -107,7 +139,26 @@ public class MyCollectionActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        initRefreshLayout();
         initRecyclerView();
+        initLoadingLayout();
+    }
+
+    private void initRefreshLayout() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadMore(false);
+        mRefreshLayout02.setEnableRefresh(true);
+        mRefreshLayout02.setEnableLoadMore(false);
+    }
+
+    private void initLoadingLayout() {
+        mLoadingLayout.showEmpty();
+//        mLoadingLayout.setEmptyImage(R.drawable.ic_no_address);
+        mLoadingLayout.setEmptyText("暂无数据");
+
+        mLoadingLayout02.showEmpty();
+//        mLoadingLayout.setEmptyImage(R.drawable.ic_no_address);
+        mLoadingLayout02.setEmptyText("暂无数据");
     }
 
     @Override
@@ -138,7 +189,7 @@ public class MyCollectionActivity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_cv_shop:
-                        ProductDetailsActivity.openActivity(MyCollectionActivity.this,mShopData.get(position).getCollections().getId());
+                        ProductDetailsActivity.openActivity(MyCollectionActivity.this, mShopAdapter.getData().get(position).getCollections().getId());
                         break;
                 }
             }
@@ -148,7 +199,8 @@ public class MyCollectionActivity extends BaseActivity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 switch (view.getId()) {
                     case R.id.m_cv_store:
-                        StoreDetailsActivity.openActivity(MyCollectionActivity.this);
+                        StoreDetailsNoBackgroundActivity.openActivity(MyCollectionActivity.this, mStoreData.get(position).getSupplierId());
+//                        StoreDetailsActivity.openActivity(MyCollectionActivity.this);
                         break;
                     case R.id.m_iv_delete:
                         new CircleDialog.Builder()
@@ -171,9 +223,60 @@ public class MyCollectionActivity extends BaseActivity {
                 }
             }
         });
+
+        mEtShop.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                //如果编辑框中文本的长度大于0就显示删除按钮否则不显示
+                if (charSequence.length() > 0) {
+                    mTvReturn.setText(searchtitle);
+                    String newText = charSequence.toString().trim();
+                    if ("1".equals(positionState)) {
+                        mShopAdapter.getFilter().filter(newText); // 当数据改变时，调用过滤器；
+                    } else if ("2".equals(positionState)) {
+                        mStoreAdapter.getFilter().filter(newText); // 当数据改变时，调用过滤器；
+                    }
+
+                } else {
+                    mTvReturn.setText(backtitle);
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mRefreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+            }
+
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                collectionShop("0");
+            }
+        });
+        mRefreshLayout02.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+            }
+
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                collectionStore("1");
+            }
+        });
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_tv_shopping, R.id.m_tv_store, R.id.m_tv_finish, R.id.m_layout_all_check, R.id.m_tv_delete})
+    @OnClick({R.id.m_iv_arrow, R.id.m_tv_shopping, R.id.m_tv_store, R.id.m_tv_finish, R.id.m_layout_all_check, R.id.m_tv_delete, R.id.m_iv_inquire, R.id.m_tv_return})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -182,16 +285,20 @@ public class MyCollectionActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_tv_shopping:// 商品
+                positionState = "1";
                 collectionShop("0");
                 check = true;
                 mTvShopping.setTextColor(cl_e51C23);
                 mTvStore.setTextColor(cl_333);
                 mTvShopping.setBackground(getResources().getDrawable(R.drawable.shape_bottom_cl_e51c23));
                 mTvStore.setBackgroundColor(getResources().getColor(R.color.cl_fff));
-                mRecuclerViewShop.setVisibility(View.VISIBLE);
-                mRecuclerViewStore.setVisibility(View.GONE);
+//                mRecuclerViewShop.setVisibility(View.VISIBLE);
+//                mRecuclerViewStore.setVisibility(View.GONE);
+                mRefreshLayout.setVisibility(View.VISIBLE);
+                mRefreshLayout02.setVisibility(View.GONE);
                 break;
             case R.id.m_tv_store://店铺
+                positionState = "2";
                 collectionStore("1");
                 check = false;
                 mTvShopping.setTextColor(cl_333);
@@ -201,8 +308,10 @@ public class MyCollectionActivity extends BaseActivity {
                 mViewLine.setVisibility(View.GONE);
                 mTvStore.setBackground(getResources().getDrawable(R.drawable.shape_bottom_cl_e51c23));
                 mTvShopping.setBackgroundColor(getResources().getColor(R.color.cl_fff));
-                mRecuclerViewShop.setVisibility(View.GONE);
-                mRecuclerViewStore.setVisibility(View.VISIBLE);
+//                mRecuclerViewShop.setVisibility(View.GONE);
+//                mRecuclerViewStore.setVisibility(View.VISIBLE);
+                mRefreshLayout.setVisibility(View.GONE);
+                mRefreshLayout02.setVisibility(View.VISIBLE);
                 break;
             case R.id.m_tv_finish:// 管理
                 if (check) {
@@ -259,6 +368,21 @@ public class MyCollectionActivity extends BaseActivity {
                 String memberIds = ids.toString().trim();
                 delete(memberIds);
                 break;
+            case R.id.m_iv_inquire: // 搜索图标
+                mLayoutOne.setVisibility(View.GONE);
+                mIvInquire.setVisibility(View.GONE);
+                mTvFinish.setVisibility(View.GONE);
+                mLayoutTwo.setVisibility(View.VISIBLE);
+                mTvReturn.setVisibility(View.VISIBLE);
+                break;
+            case R.id.m_tv_return: // 取消
+                mLayoutOne.setVisibility(View.VISIBLE);
+                mIvInquire.setVisibility(View.VISIBLE);
+                mTvFinish.setVisibility(View.VISIBLE);
+                mLayoutTwo.setVisibility(View.GONE);
+                mTvReturn.setVisibility(View.GONE);
+                mRefreshLayout.autoRefresh();
+                break;
         }
     }
 
@@ -274,8 +398,8 @@ public class MyCollectionActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoQueryCollectionsShopData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<DoQueryCollectionsShopData> tempidList = simpleResponseAppResponse.getData();
                             mShopData.clear();
+                            ArrayList<DoQueryCollectionsShopData> tempidList = simpleResponseAppResponse.getData();
                             mShopData.addAll(tempidList);
                         }
                     }
@@ -284,11 +408,17 @@ public class MyCollectionActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mShopAdapter.notifyDataSetChanged();
-                        if (mShopData.size() > 0){
-                            mLayoutEmpty.setVisibility(View.GONE);
-                        }else {
-                            mLayoutEmpty.setVisibility(View.VISIBLE);
+//                        if (mShopData.size() > 0) {
+//                            mLayoutEmpty.setVisibility(View.GONE);
+//                        } else {
+//                            mLayoutEmpty.setVisibility(View.VISIBLE);
+//                        }
+
+                        if (mShopData.size() > 0) {
+                            mLoadingLayout.showContent();
                         }
+                        mRefreshLayout.finishRefresh();
+                        mRefreshLayout.finishLoadMore();
                     }
                 });
     }
@@ -315,11 +445,17 @@ public class MyCollectionActivity extends BaseActivity {
                     public void onFinish() {
                         super.onFinish();
                         mStoreAdapter.notifyDataSetChanged();
-                        if (mStoreData.size() > 0){
-                            mLayoutEmpty.setVisibility(View.GONE);
-                        }else {
-                            mLayoutEmpty.setVisibility(View.VISIBLE);
+//                        if (mStoreData.size() > 0) {
+//                            mLayoutEmpty.setVisibility(View.GONE);
+//                        } else {
+//                            mLayoutEmpty.setVisibility(View.VISIBLE);
+//                        }
+
+                        if (mStoreData.size() > 0) {
+                            mLoadingLayout02.showContent();
                         }
+                        mRefreshLayout02.finishRefresh();
+                        mRefreshLayout02.finishLoadMore();
                     }
                 });
     }
@@ -338,7 +474,7 @@ public class MyCollectionActivity extends BaseActivity {
                         Toasty.normal(MyCollectionActivity.this, "删除成功").show();
                         if ("0".equals(type)) {
                             collectionShop("0");
-                        }else {
+                        } else {
                             collectionStore("1");
                         }
                     }

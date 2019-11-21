@@ -241,7 +241,7 @@ public class HomeFragment extends BaseFragment {
         adViewpagerUtil.setOnAdItemClickListener(new AdViewpagerUtil.OnAdItemClickListener() {
             @Override
             public void onItemClick(View v, int flag) {
-                ProductDetailsActivity.openActivity(mContext,responseAppResponseData.get(flag).getCommodityId());
+                ProductDetailsActivity.openActivity(mContext, responseAppResponseData.get(flag).getCommodityId());
             }
         });
 
@@ -426,9 +426,11 @@ public class HomeFragment extends BaseFragment {
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoFindHomePageSortsData>>>() {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoFindHomePageSortsData>> simpleResponseAppResponse) {
-                        ArrayList<DoFindHomePageSortsData> tempList = simpleResponseAppResponse.getData();
-                        mPageSortsData.clear();
-                        mPageSortsData.addAll(tempList);
+                        if (simpleResponseAppResponse.isSucess()) {
+                            mPageSortsData.clear();
+                            ArrayList<DoFindHomePageSortsData> tempList = simpleResponseAppResponse.getData();
+                            mPageSortsData.addAll(tempList);
+                        }
                     }
 
                     @Override
@@ -471,7 +473,7 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void onSuccess(AppResponse<ArrayList<DoFindCategoryData>> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                            ArrayList<String>  mTabList = new ArrayList<>();
+                            ArrayList<String> mTabList = new ArrayList<>();
                             ArrayList<Fragment> mFragments = new ArrayList<>();
                             ArrayList<DoFindCategoryData> tempList = simpleResponseAppResponse.getData();
                             for (DoFindCategoryData doFindCategoryData : tempList) {
@@ -525,7 +527,7 @@ public class HomeFragment extends BaseFragment {
     /**
      * 轮播图接口
      */
-    private void onCarousel(){
+    private void onCarousel() {
         OkGo.<AppResponse<ArrayList<DoquerycarouselData>>>get(Api.HOMEPAGESORT_DOQUERYCAROUSEL)//
                 .execute(new JsonCallBack<AppResponse<ArrayList<DoquerycarouselData>>>() {
                     @Override
@@ -534,7 +536,7 @@ public class HomeFragment extends BaseFragment {
                             responseAppResponseData = simpleResponseAppResponse.getData();
 
                             for (int i = 0; i < responseAppResponseData.size(); i++) {
-                            urls[i] = responseAppResponseData.get(i).getImage();
+                                urls[i] = responseAppResponseData.get(i).getImage();
                             }
                             adViewpagerUtil.setUrls(urls);
                             adViewpagerUtil.initVps();

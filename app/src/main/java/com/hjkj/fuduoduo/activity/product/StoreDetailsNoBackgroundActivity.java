@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.activity.home_fragment.HomeSearchActivity;
 import com.hjkj.fuduoduo.adapter.StoreDetailsAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
@@ -52,6 +53,8 @@ public class StoreDetailsNoBackgroundActivity extends BaseActivity {
     TextView mTvPrice;
     @BindView(R.id.m_iv_price)
     ImageView mIvPrice;
+    @BindView(R.id.m_iv_search)
+    ImageView mIvSearch;
     @BindView(R.id.m_tv_store_name)
     TextView mTvStoreName;
     @BindView(R.id.m_layout_price)
@@ -129,7 +132,7 @@ public class StoreDetailsNoBackgroundActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_iv_collect, R.id.m_tv_complex, R.id.m_tv_volume, R.id.m_tv_price})
+    @OnClick({R.id.m_iv_arrow, R.id.m_iv_collect, R.id.m_tv_complex, R.id.m_tv_volume, R.id.m_tv_price, R.id.m_iv_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -140,7 +143,7 @@ public class StoreDetailsNoBackgroundActivity extends BaseActivity {
             case R.id.m_iv_collect: // 收藏
                 if (checkCollect) {
                     checkCollect = false;
-                    mIvCollect.setImageDrawable(getResources().getDrawable(R.drawable.ic_white_collection));
+                    mIvCollect.setImageDrawable(getResources().getDrawable(R.drawable.ic_collection_black));
                     delete();
                 } else {
                     checkCollect = true;
@@ -184,6 +187,9 @@ public class StoreDetailsNoBackgroundActivity extends BaseActivity {
                 mTvComplex.setBackgroundColor(getResources().getColor(R.color.transparent));
                 mTvVolume.setBackgroundColor(getResources().getColor(R.color.transparent));
                 mLayoutPrice.setBackground(getResources().getDrawable(R.drawable.ic_select_red));
+                break;
+            case R.id.m_iv_search: // 搜索
+                HomeSearchActivity.openActivity(StoreDetailsNoBackgroundActivity.this);
                 break;
         }
     }
@@ -330,7 +336,7 @@ public class StoreDetailsNoBackgroundActivity extends BaseActivity {
                 .execute(new JsonCallBack<AppResponse>() {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        Toasty.normal(StoreDetailsNoBackgroundActivity.this, "删除成功").show();
+                        Toasty.normal(StoreDetailsNoBackgroundActivity.this, "取消收藏").show();
                     }
                 });
     }

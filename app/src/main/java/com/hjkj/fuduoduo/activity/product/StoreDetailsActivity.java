@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.activity.home_fragment.HomeSearchActivity;
 import com.hjkj.fuduoduo.adapter.StoreDetailsAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.TestBean;
@@ -56,6 +57,8 @@ public class StoreDetailsActivity extends BaseActivity {
     TextView mTvPrice;
     @BindView(R.id.m_iv_price)
     ImageView mIvPrice;
+    @BindView(R.id.m_iv_search)
+    ImageView mIvSearch;
     @BindView(R.id.m_layout_price)
     LinearLayout mLayoutPrice;
     @BindColor(R.color.cl_e51C23)
@@ -131,7 +134,7 @@ public class StoreDetailsActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_iv_collect, R.id.m_tv_complex, R.id.m_tv_volume, R.id.m_layout_price})
+    @OnClick({R.id.m_iv_arrow, R.id.m_iv_collect, R.id.m_tv_complex, R.id.m_tv_volume, R.id.m_layout_price,R.id.m_iv_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -186,6 +189,9 @@ public class StoreDetailsActivity extends BaseActivity {
                 mTvComplex.setBackgroundColor(getResources().getColor(R.color.transparent));
                 mTvVolume.setBackgroundColor(getResources().getColor(R.color.transparent));
                 mLayoutPrice.setBackground(getResources().getDrawable(R.drawable.ic_select_white));
+                break;
+            case R.id.m_iv_search: // 搜索
+                HomeSearchActivity.openActivity(StoreDetailsActivity.this);
                 break;
         }
     }

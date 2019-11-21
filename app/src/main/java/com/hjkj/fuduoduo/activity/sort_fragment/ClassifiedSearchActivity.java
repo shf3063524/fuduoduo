@@ -65,9 +65,10 @@ public class ClassifiedSearchActivity extends BaseActivity {
     private String inputText;
     private String backtitle = "取消", searchtitle = "搜索";
 
-    public static void openActivity(Context context, String id) {
+    public static void openActivity(Context context, String id, String searchtext) {
         Intent intent = new Intent(context, ClassifiedSearchActivity.class);
         intent.putExtra("categoryId", id);
+        intent.putExtra("searchtext", searchtext);
         context.startActivity(intent);
     }
 
@@ -79,6 +80,9 @@ public class ClassifiedSearchActivity extends BaseActivity {
     @Override
     protected void initPageData() {
         categoryId = getIntent().getStringExtra("categoryId");
+        String searchtext = getIntent().getStringExtra("searchtext");
+        inputText = searchtext;
+        mEtShop.setText(searchtext);
     }
 
     @Override
@@ -89,7 +93,7 @@ public class ClassifiedSearchActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (inputText == null) {
+        if (inputText == null || "".equals(inputText)) {
             complexData();
         } else {
             integratedQuery(inputText);
@@ -111,7 +115,7 @@ public class ClassifiedSearchActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ProductDetailsActivity.openActivity(ClassifiedSearchActivity.this,mData.get(position).getCommodity().getId());
+                ProductDetailsActivity.openActivity(ClassifiedSearchActivity.this, mData.get(position).getCommodity().getId());
             }
         });
 
@@ -207,7 +211,7 @@ public class ClassifiedSearchActivity extends BaseActivity {
                 if (getTextString(mTvReturn).equals(searchtitle)) {
                     integratedQuery(searchtext);
                 } else {
-                   return;
+                    return;
                 }
                 break;
         }
@@ -215,13 +219,14 @@ public class ClassifiedSearchActivity extends BaseActivity {
 
     //只是关闭软键盘
     private void closeKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm.isActive()&&getCurrentFocus()!=null){
-            if (getCurrentFocus().getWindowToken()!=null) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive() && getCurrentFocus() != null) {
+            if (getCurrentFocus().getWindowToken() != null) {
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
     }
+
     /**
      * 综合数据
      */

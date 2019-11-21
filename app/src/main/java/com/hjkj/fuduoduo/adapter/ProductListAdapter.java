@@ -50,7 +50,7 @@ public class ProductListAdapter extends BaseQuickAdapter<DoQueryCategoryDetailsD
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 // 分类搜索
-                ClassifiedSearchActivity.openActivity(mContext,dataList.get(position).getId());
+                ClassifiedSearchActivity.openActivity(mContext,dataList.get(position).getId(),"");
             }
         });
         mAdapter.notifyDataSetChanged();

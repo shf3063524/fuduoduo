@@ -32,10 +32,10 @@
                 android:id="@+id/m_cet_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textCursorDrawable="@drawable/color_cursor"
                 android:background="@color/transparent"
                 android:hint="请输入您喜欢的商品"
                 android:textColor="@color/cl_333"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -50,6 +50,21 @@
             android:text="取消"
             android:textColor="@color/cl_666"
             android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/m_rl_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cl_fff"
+        android:descendantFocusability="blocksDescendants"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/m_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
     </RelativeLayout>
 
     <ScrollView
@@ -69,8 +84,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="24dp"
-                android:visibility="visible"
-                android:layout_marginEnd="20dp">
+                android:layout_marginEnd="20dp"
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -94,30 +109,34 @@
                 android:id="@+id/grid_view_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:gravity="center"
+                android:horizontalSpacing="10dp"
                 android:numColumns="4"
                 android:verticalSpacing="10dp"
-                android:horizontalSpacing="10dp"
-                android:layout_margin="10dp" />
+                android:visibility="visible" />
 
             <TextView
+                android:id="@+id/m_tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="热门搜索"
                 android:layout_marginStart="12dp"
+                android:text="热门搜索"
                 android:textColor="@color/cl_333"
                 android:textSize="13sp"
-                />
+                android:visibility="visible" />
 
-            <com.hjkj.fuduoduo.view.selfSearchGridView
-                android:id="@+id/grid_view_popular"
+            <RelativeLayout
+                android:descendantFocusability="blocksDescendants"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:numColumns="4"
-                android:verticalSpacing="10dp"
-                android:horizontalSpacing="10dp"
-                android:layout_margin="10dp" />
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/m_recycler_view_hot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none" />
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

@@ -109,7 +109,7 @@ public class LoginActivity extends BaseActivity {
 
         mTvLoginVcode.setText("验证码登录");
 
-//        //测试，预先注册一个账号
+////        //测试，预先注册一个账号
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -229,28 +229,6 @@ public class LoginActivity extends BaseActivity {
                     }
 
                 }
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ChatClient.getInstance().login("xiaoming", "cs12345678", new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                Log.d("IM登录成功", "onSuccess: ");
-                            }
-
-                            @Override
-                            public void onError(int code, String error) {
-                                Log.d("IM登录失败", "onSuccess: " + error);
-                            }
-
-                            @Override
-                            public void onProgress(int progress, String status) {
-
-                            }
-                        });
-                    }
-                }).start();
                 break;
             case R.id.m_tv_user_activation: // 用户激活
                 UserActivationActivity.openActivity(LoginActivity.this);
@@ -326,6 +304,28 @@ public class LoginActivity extends BaseActivity {
                                 MainActivity.openActivity(LoginActivity.this, message, "LoginActivity");
                                 finish();
                             }
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ChatClient.getInstance().login("fuduo13780326011", "fuduo13780326011fuduo", new Callback() {
+                                        @Override
+                                        public void onSuccess() {
+                                            Log.d("IM登录成功", "onSuccess: ");
+                                        }
+
+                                        @Override
+                                        public void onError(int code, String error) {
+                                            Log.d("IM登录失败", "onSuccess: " + error);
+                                        }
+
+                                        @Override
+                                        public void onProgress(int progress, String status) {
+
+                                        }
+                                    });
+                                }
+                            }).start();
                         }
                     }
                 });

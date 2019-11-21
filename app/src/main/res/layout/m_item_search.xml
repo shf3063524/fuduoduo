@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/m_tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cl_fff"
+        android:text="口红 香奈儿"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxEms="25"
+        android:textColor="@color/cl_999"
+        android:textSize="13sp" />
+
+    <View
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/cl_f6" />
+</LinearLayout>

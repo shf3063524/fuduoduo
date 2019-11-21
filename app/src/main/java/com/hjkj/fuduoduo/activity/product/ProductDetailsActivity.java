@@ -369,12 +369,6 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
 
 //                ProductDetailsActivity.this.startActivity(new Intent(ProductDetailsActivity.this, LoginKeFuActivity.class).putExtra(Constant.MESSAGE_TO_INTENT_EXTRA,
 //                        Constant.MESSAGE_TO_PRE_SALES));
-
-//                Intent intent = new IntentBuilder(this)
-//                        .setServiceIMNumber("Lh20150930")
-//                        .setScheduleAgent(ContentFactory.createAgentIdentityInfo("six_hao@163.com")) //需填写正确的客服的邮箱地址
-//                        .build();
-//                startActivity(intent);
                 break;
         }
     }
