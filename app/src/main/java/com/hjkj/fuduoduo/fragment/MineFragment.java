@@ -135,14 +135,14 @@ public class MineFragment extends BaseFragment {
 
     @OnClick({R.id.m_iv_set, R.id.m_layout_fudou_banlance, R.id.m_layout_fudou_recharge, R.id.m_layout_transfer_fudou, R.id.m_layout_my_order, R.id.m_layout_pending_payment,
             R.id.m_layout_delivered, R.id.m_layout_pending_receipt, R.id.m_layout_comment, R.id.m_layout_after_sale,
-            R.id.m_layout_my_collection, R.id.m_layout_footprint, R.id.m_layout_feedback, R.id.m_layout_common_problem,R.id.m_layout_customer_service_secret, R.id.m_layout_member_center})
+            R.id.m_layout_my_collection, R.id.m_layout_footprint, R.id.m_layout_feedback, R.id.m_layout_common_problem, R.id.m_layout_customer_service_secret, R.id.m_layout_member_center})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_set:   // 设置
                 SetActivity.openActivity(mContext);
                 break;
             case R.id.m_layout_fudou_banlance:   // 福豆余额
-                FudouBanlanceActivity.openActivity(mContext,fudouBalance);
+                FudouBanlanceActivity.openActivity(mContext, fudouBalance);
                 break;
             case R.id.m_layout_fudou_recharge:   // 福豆充值
                 FudouRechargeActivity.openActivity(mContext);
@@ -181,14 +181,14 @@ public class MineFragment extends BaseFragment {
                 CommonProblemActivity.openActivity(mContext);
                 break;
             case R.id.m_layout_customer_service_secret:   // 客服小秘
-                if(ChatClient.getInstance().isLoggedInBefore()){
+                if (ChatClient.getInstance().isLoggedInBefore()) {
                     //已经登录，可以直接进入会话界面
                     Intent intent = new IntentBuilder(mContext)
                             .setServiceIMNumber("kefuchannelimid_723686") //获取地址：kefu.easemob.com，“管理员模式 > 渠道管理 > 手机APP”页面的关联的“IM服务号”
                             .build();
                     startActivity(intent);
-                }else{
-                    startActivity(new Intent(mContext,LoginActivity.class));
+                } else {
+                    startActivity(new Intent(mContext, LoginActivity.class));
                 }
                 break;
             case R.id.m_layout_member_center:   // 会员中心
@@ -223,22 +223,27 @@ public class MineFragment extends BaseFragment {
         EnteerpriseBean enteerprise = data.getEnterprise();
         // 公司名称
         mTvCompany.setText(enteerprise.getName());
-        UserManager.setUserCompany(mContext,enteerprise.getName());
+        UserManager.setUserCompany(mContext, enteerprise.getName());
         // 用户数据
         ConsumerBean consumer = data.getConsumer();
         // 头像
         GlideUtils.loadCircleHeadImage(mContext, consumer.getLogo(), R.drawable.ic_all_background, mIvLogo);
         //用户昵称
         mTvName.setText(consumer.getName());
+        UserManager.setNickName(mContext, consumer.getName());
         // 用户姓名
         mTvUsername.setText(consumer.getUsername());
+        UserManager.setUsername(mContext, consumer.getUsername());
         //用户工号
         mTvJobNumber.setText("工号：" + consumer.getJobNumber());
+        UserManager.setJobNumber(mContext, consumer.getJobNumber());
         // 福气值
         mTvBlessing.setText("福气值" + consumer.getBlessing());
         // 福豆余额
         fudouBalance = consumer.getBalance();
-        mTvBalance.setText(DoubleUtil.double2Str(consumer.getBalance()));
+        if (!"".equals(consumer.getBalance()) || null != consumer.getBalance()) {
+            mTvBalance.setText(DoubleUtil.double2Str(consumer.getBalance()));
+        }
 
     }
 }

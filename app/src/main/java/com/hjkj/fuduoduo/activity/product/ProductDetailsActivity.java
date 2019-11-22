@@ -351,15 +351,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
                 break;
             case R.id.m_rl_service: // 跳转客服
 
-//                if(ChatClient.getInstance().isLoggedInBefore()){
-//                    //已经登录，可以直接进入会话界面
-//                    Intent intent = new IntentBuilder(ProductDetailsActivity.this)
-//    .setServiceIMNumber("kefuchannelimid_723686") //获取地址：kefu.easemob.com，“管理员模式 > 渠道管理 > 手机APP”页面的关联的“IM服务号”
-//                            .build();
-//                    startActivity(intent);
-//                }else{
-//                   startActivity(new Intent(ProductDetailsActivity.this,LoginActivity.class));
-//                }
+
 
                 String phoneNumber = UserManager.getPhoneNumber(ProductDetailsActivity.this);
                 Intent intent = new Intent();

@@ -378,7 +378,7 @@ public class PersonalCenterActivity extends BaseActivity {
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             Toasty.normal(PersonalCenterActivity.this, "保存成功").show();
-                            AddAddressActivity.openActivity(PersonalCenterActivity.this, jumpKey);
+//                            AddAddressActivity.openActivity(PersonalCenterActivity.this, jumpKey);
                             finish();
                         }
                     }

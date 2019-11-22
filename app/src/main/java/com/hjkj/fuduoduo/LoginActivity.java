@@ -103,35 +103,10 @@ public class LoginActivity extends BaseActivity {
     protected void initViews() {
         String accessToken = UserManager.getUserId(LoginActivity.this);
         if (!TextUtils.isEmpty(accessToken)) {
-            MainActivity.openActivity(this);
+            MainActivity.openActivity(this,"LoginActivity");
             finish();
         }
-
         mTvLoginVcode.setText("验证码登录");
-
-////        //测试，预先注册一个账号
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                ChatClient.getInstance().register("xiaoming", "cs12345678", new Callback(){
-//                    @Override
-//                    public void onSuccess() {
-//                        Log.d("IM注册成功", "onSuccess: ");
-//                    }
-//
-//                    @Override
-//                    public void onError(int code, String error) {
-//                        Log.d("IM注册失败", "onSuccess: "+error);
-//                    }
-//
-//                    @Override
-//                    public void onProgress(int progress, String status) {
-//
-//                    }
-//                });
-//            }
-//        }).start();
-
     }
 
     @Override
@@ -276,7 +251,7 @@ public class LoginActivity extends BaseActivity {
                             //消费者信息
                             ConsumerBean consumer = passwordLoginData.getConsumer();
                             if ("密码错误".equals(message)) {
-                                if ("".equals(passwordLoginData.getConsumer().getUsername()) || passwordLoginData.getConsumer().getUsername().isEmpty()) {
+                                if ("".equals(passwordLoginData.getConsumer().getPassword()) || null == passwordLoginData.getConsumer().getPassword()) {
                                     Toasty.info(LoginActivity.this, "您还未激活").show();
                                     return;
                                 } else {

@@ -8,6 +8,7 @@ import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.activity.product.ProductDetailsActivity;
 import com.hjkj.fuduoduo.entity.bean.DoQueryCommodityDetailsData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
+import com.hjkj.fuduoduo.fragment.CustomChatFragment;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
@@ -21,6 +22,7 @@ import com.hyphenate.helpdesk.easeui.ui.ChatFragment;
 import com.hyphenate.helpdesk.easeui.util.CommonUtils;
 import com.hyphenate.helpdesk.easeui.util.Config;
 import com.hyphenate.helpdesk.model.ContentFactory;
+import com.hyphenate.helpdesk.model.VisitorInfo;
 import com.hyphenate.helpdesk.model.VisitorTrack;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.lzy.okgo.OkGo;
@@ -35,12 +37,12 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
-        setContentView(R.layout.hd_activity_chat);
+        setContentView(R.layout.im_activity_chat);
         instance = this;
         //IM服务号
         toChatUsername = getIntent().getExtras().getString(Config.EXTRA_SERVICE_IM_NUMBER);
         //可以直接new ChatFragment使用
-//        chatFragment = new CustomChatFragment();
+        chatFragment = new CustomChatFragment();
 
         //传入参数
         chatFragment.setArguments(getIntent().getExtras());
@@ -164,15 +166,21 @@ public class ChatActivity extends BaseActivity {
         String productName = detailsData.getCommodity().getName();
         // 商品价格
         String productPrice = DoubleUtil.double2Str(detailsData.getCommodity().getPrice());
-        sendTrackMessage(productImage, productName, productPrice);
+        String nickName = UserManager.getNickName(ChatActivity.this);
+        String username = UserManager.getUsername(ChatActivity.this);
+        String phoneNumber = UserManager.getPhoneNumber(ChatActivity.this);
+        String companyName = UserManager.getUserCompany(ChatActivity.this);
+        String jobNumber = UserManager.getJobNumber(ChatActivity.this);
+        sendTrackMessage(productImage, productName, productPrice,nickName,username,phoneNumber,companyName,jobNumber);
     }
     /**
      * 发送轨迹消息
      *
      */
-    private void sendTrackMessage(String productImage, String productName, String productPrice) {
+    private void sendTrackMessage(String productImage, String productName, String productPrice,String nickName,String username,String phoneNumber,String companyName,String jobNumber) {
         Message message = Message.createTxtSendMessage("",toChatUsername);
         message.addContent(createVisitorTrack(productImage, productName, productPrice));
+        message.addContent(createVisitorInfo(nickName, username, phoneNumber,companyName,jobNumber));
         ChatClient.getInstance().chatManager().sendMessage(message);
     }
     public static VisitorTrack createVisitorTrack(String productImage, String productName, String productPrice) {
@@ -182,5 +190,23 @@ public class ChatActivity extends BaseActivity {
                 .desc(productName)
                 .imageUrl(productImage);
         return track;
+    }
+
+    /**
+     * 发送带访客属性的消息
+     * @param nickName
+     * @param username
+     * @param phoneNumber
+     * @param companyName
+     * @param jobNumber
+     */
+    public static VisitorInfo createVisitorInfo(String nickName, String username, String phoneNumber, String companyName, String jobNumber) {
+        VisitorInfo info = ContentFactory.createVisitorInfo(null);
+        info.nickName(nickName)
+                .name(username)
+                .phone(phoneNumber)
+                .companyName(companyName) // 公司名称
+                .description(jobNumber);// 工号
+        return info;
     }
 }

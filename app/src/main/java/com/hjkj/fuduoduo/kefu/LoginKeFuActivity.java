@@ -1,25 +1,31 @@
 package com.hjkj.fuduoduo.kefu;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.base.DemoBaseActivity;
+import com.hjkj.fuduoduo.entity.bean.ConsumerBean;
+import com.hjkj.fuduoduo.entity.bean.EnteerpriseBean;
+import com.hjkj.fuduoduo.entity.bean.UserDoQueryData;
+import com.hjkj.fuduoduo.entity.net.AppResponse;
+import com.hjkj.fuduoduo.okgo.Api;
+import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.tool.kefutool.Constant;
 import com.hjkj.fuduoduo.tool.kefutool.MessageHelper;
-import com.hjkj.fuduoduo.tool.kefutool.Preferences;
 import com.hyphenate.chat.ChatClient;
-import com.hyphenate.helpdesk.Error;
+import com.hyphenate.chat.Message;
 import com.hyphenate.helpdesk.callback.Callback;
+import com.hyphenate.helpdesk.easeui.util.Config;
 import com.hyphenate.helpdesk.easeui.util.IntentBuilder;
 import com.hyphenate.helpdesk.model.ContentFactory;
 import com.hyphenate.helpdesk.model.VisitorInfo;
-import com.hyphenate.helpdesk.model.VisitorTrack;
+import com.lzy.okgo.OkGo;
 
 /**
  * 客服-页面
@@ -30,7 +36,7 @@ public class LoginKeFuActivity extends DemoBaseActivity {
     private ProgressDialog progressDialog;
     private int selectedIndex = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
     private int messageToIndex = Constant.MESSAGE_TO_DEFAULT;
-
+    String toChatUsername;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -38,7 +44,8 @@ public class LoginKeFuActivity extends DemoBaseActivity {
         selectedIndex = intent.getIntExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY,
                 Constant.INTENT_CODE_IMG_SELECTED_DEFAULT);
         messageToIndex = intent.getIntExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_DEFAULT);
-
+        //IM服务号
+        toChatUsername = getIntent().getExtras().getString(Config.EXTRA_SERVICE_IM_NUMBER);
 //        ChatClient.getInstance().isLoggedInBefore();//可以检测是否已经登录过环信，如果登录过则环信SDK会自动登录，不需要再次调用登录操作
 //        if (ChatClient.getInstance().isLoggedInBefore()) {
 //            progressDialog = getProgressDialog();
@@ -135,22 +142,45 @@ public class LoginKeFuActivity extends DemoBaseActivity {
                     Bundle bundle = new Bundle();
                     bundle.putInt(Constant.INTENT_CODE_IMG_SELECTED_KEY, selectedIndex);
 
-                // 进入主页面
-                Intent intent = new IntentBuilder(LoginKeFuActivity.this)
-//                            .setTargetClass(ChatActivity.class)
-//                            .setVisitorInfo(MessageHelper.createVisitorInfo())
-                        .setServiceIMNumber("kefuchannelimid_432631")
+                    // 进入主页面
+                    Intent intent = new IntentBuilder(LoginKeFuActivity.this)
+                            .setTargetClass(ChatActivity.class)
+//                            .setVisitorInfo(createVisitorInfo())
+                            .setServiceIMNumber("kefuchannelimid_432631")
 //                            .setScheduleQueue(MessageHelper.createQueueIdentity(queueName))
-                        .setTitleName("高健小弟弟")
-                        .setShowUserNick(true)
+                            .setTitleName("高健小弟弟")
+                            .setShowUserNick(true)
                             .setBundle(bundle)
-                        .build();
-                startActivity(intent);
-                finish();
+                            .build();
+                    startActivity(intent);
+                    finish();
                 }
 
 
             }
         });
     }
+
+    /**
+     * 发送带访客属性的消息
+     */
+    private VisitorInfo createVisitorInfo() {
+        String nickName = UserManager.getNickName(LoginKeFuActivity.this);
+        String username = UserManager.getUsername(LoginKeFuActivity.this);
+        String phoneNumber = UserManager.getPhoneNumber(LoginKeFuActivity.this);
+        String companyName = UserManager.getUserCompany(LoginKeFuActivity.this);
+        String jobNumber = UserManager.getJobNumber(LoginKeFuActivity.this);
+        VisitorInfo info = ContentFactory.createVisitorInfo(null);
+        info.nickName(nickName)
+                .name(username)
+                .phone(phoneNumber)
+                .companyName(companyName) // 公司名称
+                .description(jobNumber);// 工号
+        Message message = Message.createTxtSendMessage("", toChatUsername);
+        message.addContent(info);
+        ChatClient.getInstance().chatManager().sendMessage(message);
+        return info;
+    }
+
+
 }

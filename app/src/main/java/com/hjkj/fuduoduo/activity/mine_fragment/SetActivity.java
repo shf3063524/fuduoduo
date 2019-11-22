@@ -117,6 +117,7 @@ public class SetActivity extends BaseActivity {
                             public void onClick(View v) {
                                 UserManager.setDataIsNull(SetActivity.this);
                                 LoginActivity.openActivity(SetActivity.this, "SetActivity");
+
                                 finish();
                             }
                         })
