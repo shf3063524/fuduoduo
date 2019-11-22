@@ -3,7 +3,7 @@ package com.hjkj.fuduoduo.okgo;
 public class Api {
     // 服务器地址--和个人有关
 //    private static final String BASE_URL = "http://192.168.1.11:1001";
-    private static final String BASE_URL = "http://user.fuduowang.com";
+    private static final String BASE_URL = "http://user.fuduowang.com:1001";
     /**
      * 登录发送密码
      */
@@ -78,6 +78,10 @@ public class Api {
      *  激活验证接口
      */
     public static final String USER_DOCHECKACTIVE = BASE_URL + "/user-service/user/doCheckActive";
+    /**
+     *   客服云接口
+     */
+    public static final String USER_DOCREATENEWIM = BASE_URL + "/user-service/user/doCreateNewIM";
 
 //************************************************    订单有关    **************************************************************
 

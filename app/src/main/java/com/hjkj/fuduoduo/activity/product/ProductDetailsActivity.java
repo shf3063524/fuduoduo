@@ -350,25 +350,24 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
 //                MainActivity.openActivity(ProductDetailsActivity.this, "", "ProductDetailsActivity");
                 break;
             case R.id.m_rl_service: // 跳转客服
-//                Intent intent = new Intent();
-//                intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
-//                intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
-//                intent.setClass(ProductDetailsActivity.this, LoginKeFuActivity.class);
-//                startActivity(intent);
 
-                if(ChatClient.getInstance().isLoggedInBefore()){
-                    //已经登录，可以直接进入会话界面
-                    Intent intent = new IntentBuilder(ProductDetailsActivity.this)
-    .setServiceIMNumber("kefuchannelimid_723686") //获取地址：kefu.easemob.com，“管理员模式 > 渠道管理 > 手机APP”页面的关联的“IM服务号”
-                            .build();
-                    startActivity(intent);
-                }else{
-                   startActivity(new Intent(ProductDetailsActivity.this,LoginActivity.class));
-                }
+//                if(ChatClient.getInstance().isLoggedInBefore()){
+//                    //已经登录，可以直接进入会话界面
+//                    Intent intent = new IntentBuilder(ProductDetailsActivity.this)
+//    .setServiceIMNumber("kefuchannelimid_723686") //获取地址：kefu.easemob.com，“管理员模式 > 渠道管理 > 手机APP”页面的关联的“IM服务号”
+//                            .build();
+//                    startActivity(intent);
+//                }else{
+//                   startActivity(new Intent(ProductDetailsActivity.this,LoginActivity.class));
+//                }
 
-
-//                ProductDetailsActivity.this.startActivity(new Intent(ProductDetailsActivity.this, LoginKeFuActivity.class).putExtra(Constant.MESSAGE_TO_INTENT_EXTRA,
-//                        Constant.MESSAGE_TO_PRE_SALES));
+                String phoneNumber = UserManager.getPhoneNumber(ProductDetailsActivity.this);
+                Intent intent = new Intent();
+                intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
+                intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
+                intent.putExtra("phone",phoneNumber);
+                intent.setClass(ProductDetailsActivity.this, LoginKeFuActivity.class);
+                startActivity(intent);
                 break;
         }
     }

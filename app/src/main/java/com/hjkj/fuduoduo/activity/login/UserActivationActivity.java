@@ -15,6 +15,7 @@ import com.hjkj.fuduoduo.LoginActivity;
 import com.hjkj.fuduoduo.R;
 import com.hjkj.fuduoduo.base.BaseActivity;
 import com.hjkj.fuduoduo.entity.bean.DocheckactiveData;
+import com.hjkj.fuduoduo.entity.bean.DocreatenewimData;
 import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
@@ -160,7 +161,7 @@ public class UserActivationActivity extends BaseActivity {
                     return;
                 }
                 if (getTextString(mEtVcode).equals(vcode) && !vcode.isEmpty() && vcode != null) {
-                    onActivation();
+                    onKefu();
                 } else {
                     Toasty.info(UserActivationActivity.this, "您输入的验证码有误").show();
                     return;
@@ -236,6 +237,22 @@ public class UserActivationActivity extends BaseActivity {
                            }else {
                                doActivate();
                            }
+                        }
+                    }
+                });
+    }
+    /**
+     * 客服云接口
+     */
+    private void onKefu(){
+        String phoneNumber = getTextString(mEtPhone);
+        OkGo.<AppResponse>get(Api.USER_DOCREATENEWIM)//
+                .params("phoneNumber", phoneNumber)//
+                .execute(new DialogCallBack<AppResponse>(this, "正在激活...") {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            onActivation();
                         }
                     }
                 });

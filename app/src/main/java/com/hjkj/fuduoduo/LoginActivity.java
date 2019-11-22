@@ -290,7 +290,7 @@ public class LoginActivity extends BaseActivity {
                             // 消费者名称
                             String username = consumer.getUsername();
                             if ("0".equals(message)) {
-                                if ("".equals(username) || username.isEmpty()) {
+                                if ("".equals(username) || null == username) {
                                     PersonalCenter02Activity.openActivity(LoginActivity.this, message, "LoginActivity");
                                    finish();
                                 }else if ("0".equals(dataAddress)) {
@@ -304,28 +304,6 @@ public class LoginActivity extends BaseActivity {
                                 MainActivity.openActivity(LoginActivity.this, message, "LoginActivity");
                                 finish();
                             }
-
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ChatClient.getInstance().login("fuduo13780326011", "fuduo13780326011fuduo", new Callback() {
-                                        @Override
-                                        public void onSuccess() {
-                                            Log.d("IM登录成功", "onSuccess: ");
-                                        }
-
-                                        @Override
-                                        public void onError(int code, String error) {
-                                            Log.d("IM登录失败", "onSuccess: " + error);
-                                        }
-
-                                        @Override
-                                        public void onProgress(int progress, String status) {
-
-                                        }
-                                    });
-                                }
-                            }).start();
                         }
                     }
                 });
@@ -347,7 +325,6 @@ public class LoginActivity extends BaseActivity {
                         if (simpleResponseAppResponse.isSucess()) {
                             String message = simpleResponseAppResponse.getMessage();
                             PasswordLoginData data = simpleResponseAppResponse.getData();
-
 
                             //消费者信息
                             ConsumerBean consumer = data.getConsumer();
