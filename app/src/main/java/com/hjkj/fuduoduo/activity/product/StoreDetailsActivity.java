@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.hjkj.fuduoduo.entity.bean.VcodeLoginData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
+import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
 import com.hjkj.fuduoduo.tool.UserManager;
 import com.hjkj.fuduoduo.view.SpaceItemDecoration;
@@ -59,10 +61,14 @@ public class StoreDetailsActivity extends BaseActivity {
     ImageView mIvPrice;
     @BindView(R.id.m_iv_search)
     ImageView mIvSearch;
+    @BindView(R.id.m_layout_background)
+    LinearLayout mLayoutBackground;
     @BindView(R.id.m_layout_price)
     LinearLayout mLayoutPrice;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
+    @BindColor(R.color.color_dark_transparent)
+    int color_dark_transparent;
     @BindColor(R.color.cl_fff)
     int cl_fff;
     /**
@@ -100,11 +106,6 @@ public class StoreDetailsActivity extends BaseActivity {
     }
 
     @Override
-    protected void setStatusBar() {
-        StatusBarUtil.setTranslucent(StoreDetailsActivity.this, 0);
-    }
-
-    @Override
     protected void initPageData() {
         supplierId = getIntent().getStringExtra("supplierId");
 
@@ -113,6 +114,7 @@ public class StoreDetailsActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        StatusBarUtil.setColor(StoreDetailsActivity.this, color_dark_transparent, 1);
         initRecyclerView();
     }
 
@@ -134,7 +136,7 @@ public class StoreDetailsActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_iv_collect, R.id.m_tv_complex, R.id.m_tv_volume, R.id.m_layout_price,R.id.m_iv_search})
+    @OnClick({R.id.m_iv_arrow, R.id.m_iv_collect, R.id.m_tv_complex, R.id.m_tv_volume, R.id.m_layout_price, R.id.m_iv_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -227,6 +229,8 @@ public class StoreDetailsActivity extends BaseActivity {
      * @param data
      */
     private void refreshUi(DoQueryShopDetailsData data) {
+        // 店铺背景
+        GlideUtils.loadBgForTheView(StoreDetailsActivity.this, data.getShop().getShopImage(), mLayoutBackground);
         // 商店地址
         ShopBean shop = data.getShop();
         String name = shop.getName();
@@ -240,7 +244,7 @@ public class StoreDetailsActivity extends BaseActivity {
         }
 
         // 收藏
-         collection = data.getCollection();
+        collection = data.getCollection();
         if ("0".equals(collection)) {
             mIvCollect.setImageDrawable(getResources().getDrawable(R.drawable.ic_white_collection));
             checkCollect = false;

@@ -177,6 +177,7 @@
             android:name=".activity.PersonalCenter02Activity"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
         <activity android:name=".activity.mine_fragment.AboutUsActivity" />
+        <activity android:name=".kefu.LoginKeFu02Activity"/>
     </application>
 
 </manifest>

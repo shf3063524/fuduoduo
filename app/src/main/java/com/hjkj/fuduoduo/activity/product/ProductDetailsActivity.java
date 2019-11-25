@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.hjkj.fuduoduo.LoginActivity;
 import com.hjkj.fuduoduo.R;
+import com.hjkj.fuduoduo.entity.bean.DoQueryShopDetailsData;
 import com.hjkj.fuduoduo.kefu.LoginKeFuActivity;
 import com.hjkj.fuduoduo.adapter.ProductPagerAdapter;
 import com.hjkj.fuduoduo.base.BaseActivity;
@@ -270,7 +271,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
     }
 
     @OnClick({R.id.iv_back, R.id.m_layout_service, R.id.m_layout_select, R.id.m_layout_parameter, R.id.m_layout_review, R.id.tv_shop_cart,
-            R.id.m_tv_buy, R.id.m_layout_store, R.id.m_layout_collect, R.id.iv_shopping_cart,R.id.m_rl_service})
+            R.id.m_tv_buy, R.id.m_layout_store, R.id.m_layout_collect, R.id.iv_shopping_cart, R.id.m_rl_service})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:   // 返回
@@ -331,8 +332,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
 
             case R.id.m_layout_store: // 店铺详情
                 // 到时这里需要对店铺详情做有无背景判断进行页面跳转
-                StoreDetailsNoBackgroundActivity.openActivity(ProductDetailsActivity.this, supplierId);
-//                StoreDetailsActivity.openActivity(ProductDetailsActivity.this, supplierId);
+                storeDetail();
                 break;
 
             case R.id.m_layout_collect: // 收藏
@@ -350,14 +350,11 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
 //                MainActivity.openActivity(ProductDetailsActivity.this, "", "ProductDetailsActivity");
                 break;
             case R.id.m_rl_service: // 跳转客服
-
-
-
                 String phoneNumber = UserManager.getPhoneNumber(ProductDetailsActivity.this);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
                 intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
-                intent.putExtra("phone",phoneNumber);
+                intent.putExtra("phone", phoneNumber);
                 intent.setClass(ProductDetailsActivity.this, LoginKeFuActivity.class);
                 startActivity(intent);
                 break;
@@ -424,7 +421,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
         // 商品详情
         String description = commodity.getDescription();
 
-        mWebView.loadDataWithBaseURL(null,GetJsonDataUtil.jsoup(ProductDetailsActivity.this,description),"text/html","utf-8",null);
+        mWebView.loadDataWithBaseURL(null, GetJsonDataUtil.jsoup(ProductDetailsActivity.this, description), "text/html", "utf-8", null);
 
         // 包邮的地址涵盖在这里
         FreightTemplateBean freightTemplate = data.getFreightTemplate();
@@ -549,4 +546,27 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
                 });
     }
 
+
+    /**
+     * 综合数据
+     */
+    protected void storeDetail() {
+        String userId = UserManager.getUserId(ProductDetailsActivity.this);
+        OkGo.<AppResponse<DoQueryShopDetailsData>>get(Api.COMMODITY_DOQUERYSHOPDETAILS)//
+                .params("supplierId", supplierId)
+                .params("userId", userId)
+                .execute(new JsonCallBack<AppResponse<DoQueryShopDetailsData>>() {
+                    @Override
+                    public void onSuccess(AppResponse<DoQueryShopDetailsData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            DoQueryShopDetailsData data = simpleResponseAppResponse.getData();
+                            if (null == data.getShop().getShopImage()) {
+                                StoreDetailsNoBackgroundActivity.openActivity(ProductDetailsActivity.this, supplierId);
+                            } else {
+                                StoreDetailsActivity.openActivity(ProductDetailsActivity.this, supplierId);
+                            }
+                        }
+                    }
+                });
+    }
 }

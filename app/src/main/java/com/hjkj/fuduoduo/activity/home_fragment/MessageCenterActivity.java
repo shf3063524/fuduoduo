@@ -51,12 +51,8 @@ public class MessageCenterActivity extends BaseActivity {
     }
 
     @Override
-    protected void setStatusBar() {
-        StatusBarUtil.setColor(MessageCenterActivity.this, cl_e51C23, 1);
-    }
-
-    @Override
     protected void initViews() {
+        StatusBarUtil.setColor(MessageCenterActivity.this, cl_e51C23, 1);
         initRecyclerView();
     }
 
@@ -83,7 +79,8 @@ public class MessageCenterActivity extends BaseActivity {
         }
         mAdapter.notifyDataSetChanged();
     }
-    @OnClick({R.id.m_iv_arrow,R.id.m_layout_window_notice,R.id.m_layout_trade,R.id.m_layout_special_offers})
+
+    @OnClick({R.id.m_iv_arrow, R.id.m_layout_window_notice, R.id.m_layout_trade, R.id.m_layout_special_offers})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -95,13 +92,15 @@ public class MessageCenterActivity extends BaseActivity {
                 WindowNoticeActivity.openActivity(MessageCenterActivity.this);
                 break;
             case R.id.m_layout_trade:   // 交易消息
-                Toasty.info(this,"交易消息").show();
+                Toasty.info(this, "交易消息").show();
                 break;
             case R.id.m_layout_special_offers:   // 优惠券活动
-                Toasty.info(this,"优惠券活动").show();
+                Toasty.info(this, "优惠券活动").show();
                 break;
         }
     }
+
+
 }
 
 

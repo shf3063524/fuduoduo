@@ -30,11 +30,14 @@ import com.hjkj.fuduoduo.entity.bean.DoQueryData;
 import com.hjkj.fuduoduo.entity.bean.EnteerpriseBean;
 import com.hjkj.fuduoduo.entity.bean.UserDoQueryData;
 import com.hjkj.fuduoduo.entity.net.AppResponse;
+import com.hjkj.fuduoduo.kefu.LoginKeFu02Activity;
+import com.hjkj.fuduoduo.kefu.LoginKeFuActivity;
 import com.hjkj.fuduoduo.okgo.Api;
 import com.hjkj.fuduoduo.okgo.JsonCallBack;
 import com.hjkj.fuduoduo.tool.DoubleUtil;
 import com.hjkj.fuduoduo.tool.GlideUtils;
 import com.hjkj.fuduoduo.tool.UserManager;
+import com.hjkj.fuduoduo.tool.kefutool.Constant;
 import com.hyphenate.chat.ChatClient;
 import com.hyphenate.helpdesk.easeui.util.IntentBuilder;
 import com.lzy.okgo.OkGo;
@@ -100,7 +103,7 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.m_layout_customer_service_secret)
     LinearLayout mLayoutCustomerServiceSecret;
     private String fudouBalance;
-
+    private int index = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
     public static MineFragment newInstance() {
         MineFragment fragment = new MineFragment();
         fragment.setArguments(null);
@@ -181,15 +184,13 @@ public class MineFragment extends BaseFragment {
                 CommonProblemActivity.openActivity(mContext);
                 break;
             case R.id.m_layout_customer_service_secret:   // 客服小秘
-                if (ChatClient.getInstance().isLoggedInBefore()) {
-                    //已经登录，可以直接进入会话界面
-                    Intent intent = new IntentBuilder(mContext)
-                            .setServiceIMNumber("kefuchannelimid_723686") //获取地址：kefu.easemob.com，“管理员模式 > 渠道管理 > 手机APP”页面的关联的“IM服务号”
-                            .build();
-                    startActivity(intent);
-                } else {
-                    startActivity(new Intent(mContext, LoginActivity.class));
-                }
+                String phoneNumber = UserManager.getPhoneNumber(mContext);
+                Intent intent = new Intent();
+                intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
+                intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
+                intent.putExtra("phone", phoneNumber);
+                intent.setClass(mContext, LoginKeFu02Activity.class);
+                startActivity(intent);
                 break;
             case R.id.m_layout_member_center:   // 会员中心
                 MemberCenterActivity.openActivity(mContext);
