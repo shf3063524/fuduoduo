@@ -6,11 +6,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fdw.fdd.R;
+import com.fdw.fdd.tool.UserManager;
 import com.fdw.fdd.view.SpaceItemDecoration;
 import com.fdw.fdd.adapter.FudouRechargeAdapter;
 import com.fdw.fdd.base.BaseActivity;
@@ -37,12 +39,18 @@ public class FudouRechargeActivity extends BaseActivity {
     ImageView mIvFodouArrow;
     @BindView(R.id.m_tv_money)
     TextView mTvMoney;
+    @BindView(R.id.m_tv_phone)
+    TextView mTvPhone;
     @BindView(R.id.m_layout_money)
     RelativeLayout mLayoutMoney;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
     @BindColor(R.color.cl_333)
     int cl_333;
+    @BindColor(R.color.cl_ff0481df)
+    int cl_ff0481df;
+    @BindColor(R.color.cl_e8f2ff)
+    int cl_e8f2ff;
 
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, FudouRechargeActivity.class);
@@ -57,6 +65,8 @@ public class FudouRechargeActivity extends BaseActivity {
     @Override
     protected void initViews() {
         StatusBarUtil.setColor(FudouRechargeActivity.this, cl_e51C23, 1);
+        String phoneNumber = UserManager.getPhoneNumber(FudouRechargeActivity.this);
+        mTvPhone.setText(phoneNumber);
         initRecyclerView();
     }
 
@@ -65,13 +75,6 @@ public class FudouRechargeActivity extends BaseActivity {
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         List<MoneyEntity> data = new ArrayList<MoneyEntity>();
-        // data.add(new MoneyEntity("30元", false));
-        // data.add(new MoneyEntity("50元", false));
-        // data.add(new MoneyEntity("100元", false));
-        // data.add(new MoneyEntity("200元", false));
-        // data.add(new MoneyEntity("500元", false));
-        // data.add(new MoneyEntity("1000元", false));
-
         data.add(new MoneyEntity("30元", "充值送3积分", true));
         data.add(new MoneyEntity("50元", "充值送5积分", false));
         data.add(new MoneyEntity("100元", "充值送10积分", false));
@@ -99,23 +102,32 @@ public class FudouRechargeActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_layout_money:   // 支付
+                final String[] items = {"支付宝支付", "微信支付"};
                 new CircleDialog.Builder()
-                        .setCanceledOnTouchOutside(false)
-                        .setCancelable(false)
-                        .setTitle("")
-                        .setTextColor(cl_333)
-                        .setText("是否允许打开微信")
-                        .configText(params -> {
-                            // params.gravity = Gravity.LEFT | Gravity.TOP;
-                            params.padding = new int[]{100, 50, 100, 50};
+                        .configDialog(params -> {
+                            params.backgroundColorPress = cl_e8f2ff;
+                            //增加弹出动画
+                            params.animStyle = R.style.dialogWindowAnim;
                         })
-                        .setNegative("取消", null)
-                        .setPositive("确定", new View.OnClickListener() {
+                        .setTitle("选择支付方式")
+                        .setTitleColor(cl_ff0481df)
+                        .configTitle(params -> {
+                            // params.backgroundColor = Color.RED;
+                        })
+                        .setItems(items, new AdapterView.OnItemClickListener() {
                             @Override
-                            public void onClick(View view) {
-                                return;
+                            public void onItemClick(AdapterView<?> adapterView, View view, int position1, long l) {
+                                switch (items[position1]) {
+                                    case "支付宝支付":
+
+                                        break;
+                                    case "微信支付":
+
+                                        break;
+                                }
                             }
                         })
+                        .setNegative("取消", null)
                         .show(getSupportFragmentManager());
                 break;
         }

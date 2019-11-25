@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import com.fdw.fdd.MainActivity;
 import com.fdw.fdd.R;
 import com.fdw.fdd.kefu.msg.ChatRowOrder;
+import com.fdw.fdd.kefu.msg.ChatRowTrack;
 import com.hyphenate.chat.ChatClient;
 import com.hyphenate.chat.Message;
 import com.hyphenate.exceptions.HyphenateException;

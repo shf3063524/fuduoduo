@@ -115,4 +115,10 @@ dependencies {
     implementation files('libs/jcore-android-1.2.6.jar')
     implementation files('libs/jpush-android-3.1.8.jar')
 
+    // https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419319167&token=&lang=zh_CN
+    // https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=8_5
+    implementation rootProject.ext.dependencies["wechatSDK"]
+
+    // https://github.com/orhanobut/logger
+    implementation rootProject.ext.dependencies["logger"]
 }

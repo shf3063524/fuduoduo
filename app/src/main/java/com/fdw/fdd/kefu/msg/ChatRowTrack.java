@@ -1,4 +1,4 @@
-package com.fdw.fdd.fragment;
+package com.fdw.fdd.kefu.msg;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.fdw.fdd.R;
+import com.fdw.fdd.fragment.CustomChatFragment;
 import com.fdw.fdd.kefu.ContextMenuActivity;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.Message;

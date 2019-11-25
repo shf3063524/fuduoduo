@@ -320,6 +320,13 @@
             android:name="JPUSH_APPKEY"
             android:value="0d28dbc3d312f40a1e397e58" /> <!--  </>值来自开发者平台取得的AppKey-->
         <!-- =============== 极光推送相关配置   Stop =============== -->
+
+        <!--微信支付回调Activity-->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
