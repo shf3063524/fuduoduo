@@ -65,6 +65,7 @@ public class RecordingActivity extends BaseActivity {
     private void initRefreshLayout() {
         mRefreshLayout.setEnableRefresh(true);
         mRefreshLayout.setEnableLoadMore(false);
+        mLoadingLayout.setEmptyText("");
     }
     @Override
     protected void onResume() {

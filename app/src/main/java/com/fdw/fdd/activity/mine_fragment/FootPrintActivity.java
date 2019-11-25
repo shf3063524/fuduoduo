@@ -28,7 +28,7 @@ import es.dmoral.toasty.Toasty;
 import ezy.ui.layout.LoadingLayout;
 
 /**
- * 足迹页面
+ * 足迹-页面
  * Author：Created by shihongfei on 2019/10/6 15:43
  * Email：1511808259@qq.com
  */
@@ -72,6 +72,7 @@ public class FootPrintActivity extends BaseActivity {
     private void initLoadingLayout() {
         mLoadingLayout.showEmpty();
         mLoadingLayout.setEmptyImage(R.drawable.ic_no_foot);
+        mLoadingLayout.setEmptyText("");
     }
 
     private void initRefreshLayout() {

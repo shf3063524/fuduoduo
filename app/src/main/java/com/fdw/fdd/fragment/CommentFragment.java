@@ -70,6 +70,7 @@ public class CommentFragment extends BaseFragment {
     private void initLoadingLayout() {
         mLoadingLayout.showEmpty();
         mLoadingLayout.setEmptyImage(R.drawable.ic_no_orders);
+        mLoadingLayout.setEmptyText("");
     }
 
     @Override
