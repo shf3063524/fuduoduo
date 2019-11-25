@@ -78,7 +78,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
-                            android:textCursorDrawable="@color/cl_333"
+                            android:textCursorDrawable="@drawable/color_cursor"
                             android:layout_toEndOf="@+id/m_tv_account_recharge"
                             android:background="@color/transparent"
                             android:digits="0123456789"
@@ -144,6 +144,7 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/m_tv_fudoubalance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1000.05"

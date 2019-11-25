@@ -139,7 +139,7 @@ public class MineFragment extends BaseFragment {
                 FudouRechargeActivity.openActivity(mContext);
                 break;
             case R.id.m_layout_transfer_fudou:   // 转赠福豆
-                FudouTransferActivity.openActivity(mContext);
+                FudouTransferActivity.openActivity(mContext,fudouBalance);
                 break;
             case R.id.m_layout_my_order:   // 查看全部订单
                 MyOrderActivity.openActivity(mContext, "0");

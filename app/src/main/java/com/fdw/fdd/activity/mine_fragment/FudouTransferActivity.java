@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fdw.fdd.R;
+import com.fdw.fdd.activity.login.UserActivationActivity;
 import com.fdw.fdd.adapter.FudouTransferAdapter;
 import com.fdw.fdd.base.BaseActivity;
 import com.fdw.fdd.entity.bean.MoneyEntity;
@@ -33,7 +34,7 @@ import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
 /**
- * 转赠福豆页面
+ * 转赠中心-页面
  * Author：Created by shihongfei on 2019/9/30 14:05
  * Email：1511808259@qq.com
  */
@@ -46,21 +47,31 @@ public class FudouTransferActivity extends BaseActivity {
     ClearEditText mEtPhoneNumber;
     @BindView(R.id.m_tv_bean_value)
     TextView mTvBeanvalue;
+    @BindView(R.id.m_tv_fudoubalance)
+    TextView mTvFudoubalance;
     @BindView(R.id.m_recycler_view)
     RecyclerView mRecyclerView;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
     @BindColor(R.color.cl_999)
     int cl_999;
+    private String fudouBalance;
 
-    public static void openActivity(Context context) {
+    public static void openActivity(Context context, String fudouBalance) {
         Intent intent = new Intent(context, FudouTransferActivity.class);
+        intent.putExtra("fudouBalance", fudouBalance);
         context.startActivity(intent);
     }
 
     @Override
     protected int attachLayoutRes() {
         return R.layout.activity_fudou_transfer;
+    }
+
+    @Override
+    protected void initPageData() {
+        fudouBalance = getIntent().getStringExtra("fudouBalance");
+        mTvFudoubalance.setText(DoubleUtil.double2Str(fudouBalance));
     }
 
     @Override
@@ -104,8 +115,12 @@ public class FudouTransferActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_layout_money:   // 支付
-                if (textIsEmpty(mEtPhoneNumber)){
-                    Toasty.info(this,"请输入对方手机号").show();
+                if (textIsEmpty(mEtPhoneNumber)) {
+                    Toasty.info(FudouTransferActivity.this, "请输入对方手机号").show();
+                    return;
+                }
+                if (mEtPhoneNumber.length() != 11) {
+                    Toasty.info(FudouTransferActivity.this, "您输入的手机号不正确").show();
                     return;
                 }
                 new CircleDialog.Builder()
@@ -140,11 +155,15 @@ public class FudouTransferActivity extends BaseActivity {
         OkGo.<AppResponse>get(Api.USER_DOEXCHANGE)//
                 .params("id", userId)
                 .params("phoneNumber", phoneNumber)
-                .params("balance", mul)
+                .params("balance", DoubleUtil.doubleTransf(mul))
                 .execute(new JsonCallBack<AppResponse>() {
                     @Override
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
-                        Toasty.normal(FudouTransferActivity.this, "转赠成功").show();
+                        if (simpleResponseAppResponse.isSucess()) {
+                            double sub = DoubleUtil.sub(Double.parseDouble(fudouBalance), Double.parseDouble(beanvalue));
+                            mTvFudoubalance.setText(DoubleUtil.double2Str(String.valueOf(sub)));
+                            Toasty.normal(FudouTransferActivity.this, "转赠成功").show();
+                        }
                     }
                 });
     }
