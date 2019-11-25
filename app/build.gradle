@@ -4,6 +4,7 @@ android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     buildToolsVersion rootProject.ext.android["buildToolsVersion"]
     defaultConfig {
+        applicationId "com.hjkj.fuduoduo"
         minSdkVersion rootProject.ext.android["minSdkVersion"]
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode rootProject.ext.android["versionCode"]
@@ -16,6 +17,9 @@ android {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
             //还可以添加 'armeabi', 'x86'
         }
+    }
+    sourceSets.main {
+        jniLibs.srcDirs = ['libs'] // <-- Set your folder here!
     }
     lintOptions {
         checkReleaseBuilds false
@@ -107,4 +111,8 @@ dependencies {
     implementation 'com.hyphenate:kefu-easeui-android:latest.release'
     //EaseUI中 头像获取用到了glide，请添加glide库
     implementation 'com.github.bumptech.glide:glide:4.7.1' //其他版本也可以
+
+    implementation files('libs/jcore-android-1.2.6.jar')
+    implementation files('libs/jpush-android-3.1.8.jar')
+
 }

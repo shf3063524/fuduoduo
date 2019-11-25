@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.OkHttpClient;
 
 public class MyApp extends Application {
@@ -60,6 +61,14 @@ public class MyApp extends Application {
         ViewDoubleHelper.init(this, 1000); //自定义点击间隔时间(单位：毫秒)
         initOkgo();
         initSmartRefreshLayout();
+
+
+        /* ======================= 极光推送   Start ======================= */
+        // 设置调试模式
+        JPushInterface.setDebugMode(true);
+        // 初始化SDK
+        JPushInterface.init(this);
+        /* ======================= 极光推送   Stop ======================= */
 
     }
 

@@ -1,9 +1,12 @@
 package com.hjkj.fuduoduo;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -19,6 +22,7 @@ import com.hjkj.fuduoduo.fragment.SortFragment;
 import com.hjkj.fuduoduo.tool.GlobalParms;
 import com.hjkj.fuduoduo.tool.SharedPrefUtil;
 import com.hjkj.fuduoduo.tool.StatusBarUtil;
+import com.hjkj.fuduoduo.tool.aurora.ExampleUtil;
 import com.hjkj.fuduoduo.utils.TabEntity;
 import com.hjkj.fuduoduo.utils.ViewFindUtils;
 
@@ -55,6 +59,42 @@ public class MainActivity extends BaseActivity {
     private String message;
     private ArrayList<String> mPageData;
     private String jumpKey;
+    /**
+     * 极光推送stop
+     */
+    private MessageReceiver mMessageReceiver;
+    public static boolean isForeground = false;
+    public static final String MESSAGE_RECEIVED_ACTION = "com.zbrx.centurion.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
+
+    public void registerMessageReceiver() {
+        mMessageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        filter.addAction(MESSAGE_RECEIVED_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter);
+    }
+
+    public class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+                    String messge = intent.getStringExtra(KEY_MESSAGE);
+                    String extras = intent.getStringExtra(KEY_EXTRAS);
+                    StringBuilder showMsg = new StringBuilder();
+                    showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
+                    if (!ExampleUtil.isEmpty(extras)) {
+                        showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
+                    }
+                    // setCostomMsg(showMsg.toString());
+                }
+            } catch (Exception e) {
+            }
+        }
+    }
 
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -100,13 +140,19 @@ public class MainActivity extends BaseActivity {
             replaceFragment(R.id.fl_change, ShoppingFragment.newInstance());
             mTabLayout.setCurrentTab(2);
         }
+        registerMessageReceiver();
     }
 
     @Override
     protected void onResume() {
+        isForeground = true;
         super.onResume();
     }
-
+    @Override
+    protected void onPause() {
+        isForeground = false;
+        super.onPause();
+    }
     private void initTabLayout() {
         mFragments = new ArrayList<>();
         mFragments.add(HomeFragment.newInstance(message));
