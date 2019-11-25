@@ -1,0 +1,60 @@
+package com.fdw.fdd.adapter;
+
+import android.support.annotation.Nullable;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.fdw.fdd.R;
+import com.fdw.fdd.entity.bean.OrderDetailsBean;
+import com.fdw.fdd.tool.DoubleUtil;
+import com.fdw.fdd.tool.GlideUtils;
+
+import java.util.List;
+
+/**
+ * Author：Created by shihongfei on 2019/10/10 09:55
+ * Email：1511808259@qq.com
+ */
+public class OrderDetails04Adapter extends BaseQuickAdapter<OrderDetailsBean, BaseViewHolder> {
+    public OrderDetails04Adapter(int layoutResId, @Nullable List<OrderDetailsBean> data) {
+        super(layoutResId, data);
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, OrderDetailsBean item) {
+        helper.addOnClickListener(R.id.m_tv_refund);
+        // 选择商品图片
+        GlideUtils.loadImage(mContext, item.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, helper.getView(R.id.m_iv_shopping));
+        //商品名称
+        helper.setText(R.id.m_tv_content, item.getCommodity().getName());
+        // 商品规格
+        helper.setText(R.id.m_tv_specification, item.getSpecification().getCommoditySpecification());
+        // 选择商品数量+价格
+        helper.setText(R.id.m_tv_price_num, DoubleUtil.double2Str(item.getOrderDetail().getPrice()) + "积分 x" + item.getOrderDetail().getNumber());
+        // 商品状态
+        switch (item.getRefunding()) {
+            case "卖家申请换货":
+                helper.setText(R.id.m_tv_refund, "售后处理中");
+                break;
+            case "等待商家处理换货申请":
+                helper.setText(R.id.m_tv_refund, "售后处理中");
+                break;
+            case "换货中":
+                helper.setText(R.id.m_tv_refund, "换货中");
+                break;
+            case "商家拒绝换货请求":
+                helper.setText(R.id.m_tv_refund, "售后关闭");
+                break;
+            case "换货完成":
+                helper.setText(R.id.m_tv_refund, "换货完成");
+                break;
+            case "买家取消":
+                helper.setText(R.id.m_tv_refund, "退款关闭");
+                break;
+            case "":
+                helper.setText(R.id.m_tv_refund, "申请售后");
+                break;
+        }
+    }
+}
+

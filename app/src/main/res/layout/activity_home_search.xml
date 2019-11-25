@@ -28,7 +28,7 @@
                 android:layout_marginEnd="8dp"
                 android:src="@mipmap/ic_search_pic_tit" />
 
-            <com.hjkj.fuduoduo.view.ClearEditText
+            <com.fdw.fdd.view.ClearEditText
                 android:id="@+id/m_cet_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -105,7 +105,7 @@
                     android:textSize="12sp" />
             </RelativeLayout>
 
-            <com.hjkj.fuduoduo.view.selfSearchGridView
+            <com.fdw.fdd.view.selfSearchGridView
                 android:id="@+id/grid_view_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -108,7 +108,7 @@
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp">
 
-                <com.hjkj.fuduoduo.view.LogisticsInformationView
+                <com.fdw.fdd.view.LogisticsInformationView
                     android:id="@+id/logistics_InformationView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

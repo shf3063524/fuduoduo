@@ -257,7 +257,7 @@
                 android:textColor="@color/cl_333"
                 android:textSize="14sp" />
 
-            <com.hjkj.fuduoduo.view.ClearEditText
+            <com.fdw.fdd.view.ClearEditText
                 android:id="@+id/m_et_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

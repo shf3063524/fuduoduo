@@ -65,7 +65,7 @@
                 android:layout_marginEnd="8dp"
                 android:src="@mipmap/ic_search_pic_tit" />
 
-            <com.hjkj.fuduoduo.view.ClearEditText
+            <com.fdw.fdd.view.ClearEditText
                 android:id="@+id/m_et_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

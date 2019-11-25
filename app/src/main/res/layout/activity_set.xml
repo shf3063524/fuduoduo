@@ -67,7 +67,7 @@
             android:textSize="12sp" />
     </RelativeLayout>
 
-    <com.hjkj.fuduoduo.view.GlobalClickItem
+    <com.fdw.fdd.view.GlobalClickItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="11dp"
@@ -76,7 +76,7 @@
         app:show_arrow="1"
         app:show_left_icon="1" />
 
-    <com.hjkj.fuduoduo.view.GlobalClickItem
+    <com.fdw.fdd.view.GlobalClickItem
         android:id="@+id/m_login_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
         app:left_text="登录密码"
         app:show_left_icon="1" />
 
-    <com.hjkj.fuduoduo.view.GlobalClickItem
+    <com.fdw.fdd.view.GlobalClickItem
         android:id="@+id/m_payment_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         app:left_text="支付密码"
         app:show_left_icon="1" />
 
-    <com.hjkj.fuduoduo.view.GlobalClickItem
+    <com.fdw.fdd.view.GlobalClickItem
         android:id="@+id/m_my_shipping_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
         app:left_text="我的收货地址"
         app:show_left_icon="1" />
 
-    <com.hjkj.fuduoduo.view.GlobalClickItem
+    <com.fdw.fdd.view.GlobalClickItem
         android:id="@+id/m_about_us"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

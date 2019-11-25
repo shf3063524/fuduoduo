@@ -70,7 +70,7 @@
                 android:padding="10dp"
                 android:src="@mipmap/ic_sort_search" />
 
-            <com.hjkj.fuduoduo.view.ClearEditText
+            <com.fdw.fdd.view.ClearEditText
                 android:id="@+id/m_et_shop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

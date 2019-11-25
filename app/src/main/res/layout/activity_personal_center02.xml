@@ -89,7 +89,7 @@
             android:textColor="@color/cl_333"
             android:textSize="15sp" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
             android:textColor="@color/cl_333"
             android:textSize="15sp" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_et_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
             android:textColor="@color/cl_333"
             android:textSize="15sp" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_et_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

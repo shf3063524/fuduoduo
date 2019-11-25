@@ -126,7 +126,7 @@
         android:layout_above="@id/m_rl_bottom" />
 
 
-    <com.hjkj.fuduoduo.view.SuperExpandableListView
+    <com.fdw.fdd.view.SuperExpandableListView
         android:id="@+id/exListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

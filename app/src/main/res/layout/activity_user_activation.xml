@@ -34,7 +34,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_et_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:layout_marginEnd="47dp"
             android:visibility="visible">
 
-            <com.hjkj.fuduoduo.view.ClearEditText
+            <com.fdw.fdd.view.ClearEditText
                 android:id="@+id/m_et_vcode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             android:layout_marginEnd="40dp"
             android:background="@color/cl_d8" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_et_login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
             android:layout_marginEnd="40dp"
             android:background="@color/cl_d8" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_et_pay_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

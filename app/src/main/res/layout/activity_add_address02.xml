@@ -60,7 +60,7 @@
             android:textColor="@color/cl_666"
             android:textSize="14sp" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_cet_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             android:textColor="@color/cl_666"
             android:textSize="14sp" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_cet_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
             android:textColor="@color/cl_666"
             android:textSize="14sp" />
 
-        <com.hjkj.fuduoduo.view.ClearEditText
+        <com.fdw.fdd.view.ClearEditText
             android:id="@+id/m_cet_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
