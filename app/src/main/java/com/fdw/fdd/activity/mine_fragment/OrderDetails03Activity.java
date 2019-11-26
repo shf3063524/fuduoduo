@@ -27,13 +27,17 @@ import com.fdw.fdd.entity.bean.OrderDetailsBean;
 import com.fdw.fdd.entity.bean.ShopBean;
 import com.fdw.fdd.entity.bean.VcodeLoginData;
 import com.fdw.fdd.entity.net.AppResponse;
+import com.fdw.fdd.kefu.LoginKeFu02Activity;
 import com.fdw.fdd.okgo.Api;
 import com.fdw.fdd.okgo.DialogCallBack;
 import com.fdw.fdd.okgo.JsonCallBack;
 import com.fdw.fdd.tool.DoubleUtil;
 import com.fdw.fdd.tool.StatusBarUtil;
+import com.fdw.fdd.tool.UserManager;
+import com.fdw.fdd.tool.kefutool.Constant;
 import com.fdw.fdd.view.SpaceItemDecoration;
 import com.lzy.okgo.OkGo;
+import com.mylhyl.circledialog.CircleDialog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -113,6 +117,7 @@ public class OrderDetails03Activity extends BaseActivity {
     private int startPage = 1;
     // 一次请求多少数据
     private static final int REQUEST_COUNT = 20;
+    private int index = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
 
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetails03Activity.class);
@@ -262,13 +267,35 @@ public class OrderDetails03Activity extends BaseActivity {
                 }
                 break;
             case R.id.m_tv_one: // 联系卖家
-                Toasty.info(this, "联系卖家").show();
+                String phoneNumber = UserManager.getPhoneNumber(OrderDetails03Activity.this);
+                Intent intent = new Intent();
+                intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
+                intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
+                intent.putExtra("phone", phoneNumber);
+                intent.setClass(OrderDetails03Activity.this, LoginKeFu02Activity.class);
+                startActivity(intent);
                 break;
             case R.id.m_tv_two:// 查看物流
                 ViewLogisticsActivity.openActivity(OrderDetails03Activity.this, detailsData.get(0).getOrder().getOrderNumber());
                 break;
             case R.id.m_tv_three: // 确认收货
-                onConfirm(detailsData.get(0).getOrder().getId());
+                new CircleDialog.Builder()
+                        .setCanceledOnTouchOutside(false)
+                        .setCancelable(false)
+                        .setTitle("确认收货")
+                        .setText("您确定要收货吗？")
+                        .configText(params -> {
+                            // params.gravity = Gravity.LEFT | Gravity.TOP;
+                            params.padding = new int[]{100, 0, 100, 50};
+                        })
+                        .setNegative("取消", null)
+                        .setPositive("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onConfirm(detailsData.get(0).getOrder().getId());
+                            }
+                        })
+                        .show(getSupportFragmentManager());
                 break;
             case R.id.m_layout_logistics: // 物流信息
                 LogisticsInfoActivity.openActivity(OrderDetails03Activity.this, express);

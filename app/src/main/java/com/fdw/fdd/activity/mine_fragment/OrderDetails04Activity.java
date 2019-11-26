@@ -26,12 +26,14 @@ import com.fdw.fdd.entity.bean.OrderBean;
 import com.fdw.fdd.entity.bean.OrderDetailsBean;
 import com.fdw.fdd.entity.bean.ShopBean;
 import com.fdw.fdd.entity.net.AppResponse;
+import com.fdw.fdd.kefu.LoginKeFu02Activity;
 import com.fdw.fdd.okgo.Api;
 import com.fdw.fdd.okgo.DialogCallBack;
 import com.fdw.fdd.okgo.JsonCallBack;
 import com.fdw.fdd.tool.DoubleUtil;
 import com.fdw.fdd.tool.StatusBarUtil;
 import com.fdw.fdd.tool.UserManager;
+import com.fdw.fdd.tool.kefutool.Constant;
 import com.fdw.fdd.view.SpaceItemDecoration;
 import com.lzy.okgo.OkGo;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -111,6 +113,7 @@ public class OrderDetails04Activity extends BaseActivity {
     private int startPage = 1;
     // 一次请求多少数据
     private static final int REQUEST_COUNT = 20;
+    private int index = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
 
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetails04Activity.class);
@@ -237,7 +240,13 @@ public class OrderDetails04Activity extends BaseActivity {
                 }
                 break;
             case R.id.m_tv_one: // 联系卖家
-                Toasty.info(this, "联系卖家").show();
+                String phoneNumber = UserManager.getPhoneNumber(OrderDetails04Activity.this);
+                Intent intent = new Intent();
+                intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
+                intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
+                intent.putExtra("phone", phoneNumber);
+                intent.setClass(OrderDetails04Activity.this, LoginKeFu02Activity.class);
+                startActivity(intent);
                 break;
             case R.id.m_tv_two: // 查看物流
                 ViewLogisticsActivity.openActivity(OrderDetails04Activity.this, responseData.get(0).getOrder().getOrderNumber());
