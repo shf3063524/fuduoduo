@@ -11,6 +11,7 @@
         android:background="@color/cl_fff">
 
         <LinearLayout
+            android:id="@+id/m_layout_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"

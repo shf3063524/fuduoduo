@@ -3,9 +3,11 @@ package com.fdw.fdd.fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fdw.fdd.R;
+import com.fdw.fdd.activity.home_fragment.HomeSearchActivity;
 import com.fdw.fdd.adapter.ProductListAdapter;
 import com.fdw.fdd.adapter.ProductTypeAdapter;
 import com.fdw.fdd.base.BaseFragment;
@@ -20,6 +22,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ezy.ui.layout.LoadingLayout;
 
 /**
@@ -36,6 +39,8 @@ public class SortFragment extends BaseFragment {
     LoadingLayout mLoadingLayout;
     @BindView(R.id.m_refresh_layout)
     SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.m_layout_search)
+    LinearLayout mLayoutSearch;
     //  产品种类适配器和数据源
     private ProductTypeAdapter mProductTypeAdapter;
     private ArrayList<DoFindCategoryData> mProductTypeData;
@@ -124,6 +129,15 @@ public class SortFragment extends BaseFragment {
 
     }
 
+    @OnClick({R.id.m_layout_search})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.m_layout_search:   // 搜索
+                HomeSearchActivity.openActivity(mContext);
+                break;
+        }
+    }
+
     /**
      * 左侧数据加载
      */
@@ -136,6 +150,11 @@ public class SortFragment extends BaseFragment {
                             ArrayList<DoFindCategoryData> tempList = simpleResponseAppResponse.getData();
                             mProductTypeData.clear();
                             mProductTypeData.addAll(tempList);
+
+                            mProductTypeData.get(0).setClickable(true);
+                            mProductTypeAdapter.notifyDataSetChanged();
+                            templateId = mProductTypeData.get(0).getCategoryId();
+                            rightData(templateId);
                         }
                     }
 

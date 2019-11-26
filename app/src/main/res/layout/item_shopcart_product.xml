@@ -41,9 +41,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
-                android:maxEms="10"
+                android:maxEms="18"
                 android:maxLines="2"
-                android:text="SKG 颈椎按摩器4598智能颈部按摩仪脉冲家用护颈仪规格···"
+                android:text=""
                 android:textColor="@color/cl_666"
                 android:textSize="12sp" />
 
@@ -57,7 +57,10 @@
                 android:paddingTop="2dp"
                 android:paddingEnd="6dp"
                 android:paddingBottom="2dp"
-                android:text="珍珠白"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxEms="15"
+                android:text=""
                 android:textColor="@color/cl_999"
                 android:textSize="11sp" />
 
