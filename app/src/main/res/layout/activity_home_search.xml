@@ -113,8 +113,7 @@
                 android:gravity="center"
                 android:horizontalSpacing="10dp"
                 android:numColumns="4"
-                android:verticalSpacing="10dp"
-                android:visibility="visible" />
+                android:verticalSpacing="10dp" />
 
             <TextView
                 android:id="@+id/m_tv_title"
@@ -127,9 +126,9 @@
                 android:visibility="visible" />
 
             <RelativeLayout
-                android:descendantFocusability="blocksDescendants"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/m_recycler_view_hot"

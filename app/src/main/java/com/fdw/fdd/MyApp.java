@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
+import android.widget.Toast;
 
 import com.hyphenate.chat.ChatClient;
 import com.hyphenate.helpdesk.easeui.UIProvider;
@@ -15,6 +16,7 @@ import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.DBCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
+import com.orhanobut.logger.Logger;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshInitializer;
@@ -32,9 +34,8 @@ import cn.jpush.android.api.JPushInterface;
 import okhttp3.OkHttpClient;
 
 public class MyApp extends Application {
-
     private static Context mContext;
-
+    public static String registrationID;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -68,6 +69,7 @@ public class MyApp extends Application {
         JPushInterface.setDebugMode(true);
         // 初始化SDK
         JPushInterface.init(this);
+        registrationID = JPushInterface.getRegistrationID(this);
         /* ======================= 极光推送   Stop ======================= */
 
     }

@@ -312,6 +312,21 @@
                 <category android:name="com.fdw.fdd"></category>
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".tool.aurora.MyReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <category android:name="com.fdw.fdd" />
+            </intent-filter>
+        </receiver>
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data
             android:name="JPUSH_CHANNEL"
@@ -319,6 +334,9 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="0d28dbc3d312f40a1e397e58" /> <!--  </>值来自开发者平台取得的AppKey-->
+
+
+
         <!-- =============== 极光推送相关配置   Stop =============== -->
 
         <!--微信支付回调Activity-->

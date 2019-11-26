@@ -44,18 +44,23 @@ android {
 
 dependencies {
     implementation rootProject.ext.dependencies["appcompat-v7"]
+
     // 每次创建Activity会自动生成此依赖，所以未使用抽取的格式
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+
     //    implementation rootProject.ext.dependencies["constraint-layout"]
     implementation rootProject.ext.dependencies["junit"]
     implementation rootProject.ext.dependencies["runner"]
     implementation rootProject.ext.dependencies["espresso-core"]
     implementation rootProject.ext.dependencies["design"]
     implementation rootProject.ext.dependencies["cardview-v7"]
+
     // https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+
     // https://github.com/square/leakcanary
     debugImplementation rootProject.ext.dependencies["leakcanary-android"]
     releaseImplementation rootProject.ext.dependencies["leakcanary-android-no-op"]
+
     // Optional, if you use support library fragments:
     debugImplementation rootProject.ext.dependencies["leakcanary-support-fragment"]
 
@@ -65,8 +70,10 @@ dependencies {
 
     // https://github.com/H07000223/FlycoTabLayout
     implementation rootProject.ext.dependencies["FlycoTabLayout"]
+
     // https://github.com/Kaopiz/KProgressHUD
     implementation rootProject.ext.dependencies["kprogresshud"]
+
     // https://github.com/scwang90/SmartRefreshLayout
     implementation rootProject.ext.dependencies["SmartRefreshLayout"]
 
@@ -84,6 +91,7 @@ dependencies {
 
     // https://github.com/Bigkoo/Android-PickerView
     implementation rootProject.ext.dependencies["PickerView"]
+
     // https://github.com/google/gson
     implementation rootProject.ext.dependencies["gson"]
 
@@ -98,27 +106,33 @@ dependencies {
 
     // https://github.com/jeasonlzy/okhttp-OkGo
     implementation rootProject.ext.dependencies["okgo"]
+
     // 通过module的方式引入，修改源码
     implementation project(':loadinglayout')
+
     // https://github.com/DeMonLiu623/DeMon-JS-PDF
     implementation rootProject.ext.dependencies["DeMon-JS-PDF"]
+
     //jsoup解析器
     implementation rootProject.ext.dependencies["jsoup"]
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     //环信客服SDK
     implementation 'com.hyphenate:kefu-easeui-android:latest.release'
-    //EaseUI中 头像获取用到了glide，请添加glide库
-    implementation 'com.github.bumptech.glide:glide:4.7.1' //其他版本也可以
 
+    //EaseUI中 头像获取用到了glide，请添加glide库
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+
+    //其他版本也可以
     implementation files('libs/jcore-android-1.2.6.jar')
     implementation files('libs/jpush-android-3.1.8.jar')
 
     // https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419319167&token=&lang=zh_CN
+
     // https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=8_5
     implementation rootProject.ext.dependencies["wechatSDK"]
 
     // https://github.com/orhanobut/logger
     implementation rootProject.ext.dependencies["logger"]
+    implementation 'com.carson_ho:SearchLayout:1.0.1'
 }

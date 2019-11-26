@@ -16,7 +16,9 @@ import com.fdw.fdd.tool.StatusBarUtil;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.lzy.okgo.model.Response;
 import com.mylhyl.circledialog.CircleDialog;
+import com.orhanobut.logger.Logger;
 
+import cn.jpush.android.api.JPushInterface;
 import es.dmoral.toasty.Toasty;
 
 /**
