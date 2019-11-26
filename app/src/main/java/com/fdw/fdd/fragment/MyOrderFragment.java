@@ -1,5 +1,6 @@
 package com.fdw.fdd.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,16 +12,24 @@ import com.fdw.fdd.activity.mine_fragment.OrderDetails02Activity;
 import com.fdw.fdd.activity.mine_fragment.OrderDetails03Activity;
 import com.fdw.fdd.activity.mine_fragment.OrderDetails04Activity;
 import com.fdw.fdd.activity.mine_fragment.OrderDetailsActivity;
+import com.fdw.fdd.activity.mine_fragment.PostEvaluationActivity;
 import com.fdw.fdd.activity.mine_fragment.ViewLogisticsActivity;
+import com.fdw.fdd.activity.product.PayFailureActivity;
+import com.fdw.fdd.activity.product.PaySuccessActivity;
 import com.fdw.fdd.activity.product.StoreDetailsActivity;
 import com.fdw.fdd.adapter.MyOrderAdapter;
 import com.fdw.fdd.base.BaseFragment;
 import com.fdw.fdd.dialog.CancelOrderDialog;
+import com.fdw.fdd.dialog.ConfirmPaymentDialog;
+import com.fdw.fdd.dialog.PayPasswordDialog;
 import com.fdw.fdd.entity.bean.DoQueryOrdersDetailsData;
 import com.fdw.fdd.entity.net.AppResponse;
+import com.fdw.fdd.kefu.LoginKeFu02Activity;
 import com.fdw.fdd.okgo.Api;
 import com.fdw.fdd.okgo.JsonCallBack;
+import com.fdw.fdd.tool.DoubleUtil;
 import com.fdw.fdd.tool.UserManager;
+import com.fdw.fdd.tool.kefutool.Constant;
 import com.lzy.okgo.OkGo;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -45,6 +54,7 @@ public class MyOrderFragment extends BaseFragment {
     private ArrayList<DoQueryOrdersDetailsData> mData;
     private MyOrderAdapter mAdapter;
     private String saleState;
+    private int index = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
 
     public static MyOrderFragment newInstance(String saleState) {
         MyOrderFragment fragment = new MyOrderFragment();
@@ -126,7 +136,13 @@ public class MyOrderFragment extends BaseFragment {
                         StoreDetailsActivity.openActivity(mContext, mData.get(position).getOrder().getSupplierId());
                         break;
                     case R.id.m_tv_one: // 联系买家
-                        Toasty.info(mContext, "联系买家").show();
+                        String phoneNumber = UserManager.getPhoneNumber(mContext);
+                        Intent intent = new Intent();
+                        intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
+                        intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
+                        intent.putExtra("phone", phoneNumber);
+                        intent.setClass(mContext, LoginKeFu02Activity.class);
+                        startActivity(intent);
                         break;
                     case R.id.m_tv_two: // 取消订单
                         new CancelOrderDialog(mContext)
@@ -138,22 +154,34 @@ public class MyOrderFragment extends BaseFragment {
                                 }).show();
                         break;
                     case R.id.m_tv_three: // 立即付款
-                        Toasty.info(mContext, "立即付款").show();
+                        new ConfirmPaymentDialog(mContext, DoubleUtil.double2Str(mData.get(position).getOrder().getActualPrice()))
+                                .setListener(new ConfirmPaymentDialog.OnClickListener() {
+                                    @Override
+                                    public void onClick() {
+                                        new PayPasswordDialog(mContext)
+                                                .setListener(new PayPasswordDialog.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(String payPassword) {
+                                                        ordersDoPay(payPassword, mData.get(position).getOrder().getPayNumber(), DoubleUtil.double2Str(mData.get(position).getOrder().getActualPrice()));
+                                                    }
+                                                }).show();
+                                    }
+                                }).show();
                         break;
                     case R.id.m_tv_four: // 提醒发货
                         remindDhipment(mData.get(position).getOrder().getId());
                         break;
                     case R.id.m_tv_five: // 查看物流
-                        ViewLogisticsActivity.openActivity(mContext);
+                        orderDetails(mData.get(position).getOrder().getId(), "查看物流");
                         break;
                     case R.id.m_tv_six: // 确认收货
-                        Toasty.info(mContext, "确认收货").show();
+                        onConfirm(mData.get(position).getOrder().getId());
                         break;
                     case R.id.m_tv_seven: // 查看物流
-                        ViewLogisticsActivity.openActivity(mContext);
+                        orderDetails(mData.get(position).getOrder().getId(), "查看物流");
                         break;
                     case R.id.m_tv_eight: // 评价
-//                        PostEvaluationActivity.openActivity(mContext);
+                        orderDetails(mData.get(position).getOrder().getId(), "评价");
                         break;
                 }
             }
@@ -235,6 +263,73 @@ public class MyOrderFragment extends BaseFragment {
                     public void onSuccess(AppResponse simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             Toasty.info(mContext, "提醒发货成功啦！").show();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 多订单立即支付
+     */
+    private void ordersDoPay(String payPassword, String payNumbers, String totalPrice) {
+        String id = UserManager.getUserId(mContext);
+        Double mul = DoubleUtil.mul(Double.parseDouble(totalPrice), 100.00);
+        OkGo.<AppResponse>get(Api.ORDERS_DOPAY)//
+                .params("id", id) //
+                .params("payPassword", payPassword) //
+                .params("actualPrice", DoubleUtil.doubleTransf(mul)) //
+                .params("payNumbers", payNumbers) //
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.getState() == 0) {
+                            Toasty.info(mContext, simpleResponseAppResponse.getMessage()).show();
+                            PayFailureActivity.openActivity(mContext);
+                        } else {
+                            PaySuccessActivity.openActivity(mContext);
+                        }
+                    }
+                });
+
+    }
+    /**
+     * @param orderId
+     */
+    private void orderDetails(String orderId, String state) {
+        String userId = UserManager.getUserId(mContext);
+        OkGo.<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>get(Api.ORDERS_DOQUERYORDERSDETAILS)//
+                .params("id", userId)
+                .params("orderId", orderId)
+                .execute(new JsonCallBack<AppResponse<ArrayList<DoQueryOrdersDetailsData>>>() {
+                    @Override
+                    public void onSuccess(AppResponse<ArrayList<DoQueryOrdersDetailsData>> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            ArrayList<DoQueryOrdersDetailsData> responseData = simpleResponseAppResponse.getData();
+                            if ("查看物流".equals(state)) {
+                                ViewLogisticsActivity.openActivity(mContext, responseData.get(0).getOrder().getOrderNumber());
+                            } else {
+                                PostEvaluationActivity.openActivity(mContext, responseData);
+                            }
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * 订单确认收货
+     */
+    private void onConfirm(String id) {
+        OkGo.<AppResponse>get(Api.ORDERS_DORECEIVE)//
+                .params("id", id) // 订单id
+                .params("saleState", "4") //交易状态
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            Toasty.info(mContext, "确认收货成功").show();
+                            mData.clear();
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
                 });

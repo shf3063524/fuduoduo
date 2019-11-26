@@ -14,8 +14,8 @@ public class DoQueryOrdersDetailsData implements Serializable {
     private OrderBean order;
     private ArrayList<ExpressBean> express;
     private DefaultAddressBean freightAddress;
-    private boolean clickable; // 显示与不显示
-    private boolean check; // 选定与不选定
+    private boolean clickable = false; // 显示与不显示
+    private boolean check = false; // 选定与不选定
 
     public ArrayList<ExpressBean> getExpress() {
         return express;

@@ -10,6 +10,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fdw.fdd.R;
+import com.fdw.fdd.entity.bean.DoQueryCollectionsShopData;
 import com.fdw.fdd.entity.bean.DoQueryOrdersDetailsData;
 import com.fdw.fdd.entity.bean.OrderDetailsBean;
 import com.fdw.fdd.entity.bean.ShopBean;
@@ -77,7 +78,15 @@ public class PendingPaymentAdapter extends BaseQuickAdapter<DoQueryOrdersDetails
         helper.addOnClickListener(R.id.m_tv_two);
         helper.addOnClickListener(R.id.m_tv_three);
     }
-
+    public ArrayList<DoQueryOrdersDetailsData> getCheckIdLists() {
+        ArrayList<DoQueryOrdersDetailsData> checkIdLists = new ArrayList<>();
+        for (DoQueryOrdersDetailsData authBizUserUserListData : mData) {
+            if (authBizUserUserListData.isClickable()) {
+                checkIdLists.add(authBizUserUserListData);
+            }
+        }
+        return checkIdLists;
+    }
     /**
      * 设置单选
      */

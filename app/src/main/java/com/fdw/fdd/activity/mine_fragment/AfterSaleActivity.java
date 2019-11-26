@@ -73,6 +73,7 @@ public class AfterSaleActivity extends BaseActivity {
     private void initRefreshLayout() {
         mRefreshLayout.setEnableRefresh(true);
         mRefreshLayout.setEnableLoadMore(false);
+        mLoadingLayout.setEmptyText("");
     }
 
     @Override

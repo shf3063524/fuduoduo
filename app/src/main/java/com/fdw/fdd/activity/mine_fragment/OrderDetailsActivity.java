@@ -13,11 +13,15 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fdw.fdd.R;
+import com.fdw.fdd.activity.product.PayFailureActivity;
+import com.fdw.fdd.activity.product.PaySuccessActivity;
 import com.fdw.fdd.activity.product.ProductDetailsActivity;
 import com.fdw.fdd.adapter.OrderDetailsAdapter;
 import com.fdw.fdd.adapter.ShoppingFragmentAdapter;
 import com.fdw.fdd.base.BaseActivity;
 import com.fdw.fdd.dialog.CancelOrderDialog;
+import com.fdw.fdd.dialog.ConfirmPaymentDialog;
+import com.fdw.fdd.dialog.PayPasswordDialog;
 import com.fdw.fdd.entity.bean.DefaultAddressBean;
 import com.fdw.fdd.entity.bean.DoFindMaybeYouLikeData;
 import com.fdw.fdd.entity.bean.DoQueryOrdersDetailsData;
@@ -25,12 +29,14 @@ import com.fdw.fdd.entity.bean.OrderBean;
 import com.fdw.fdd.entity.bean.OrderDetailsBean;
 import com.fdw.fdd.entity.bean.ShopBean;
 import com.fdw.fdd.entity.net.AppResponse;
+import com.fdw.fdd.kefu.LoginKeFu02Activity;
 import com.fdw.fdd.okgo.Api;
 import com.fdw.fdd.okgo.JsonCallBack;
 import com.fdw.fdd.tool.DoubleUtil;
 import com.fdw.fdd.tool.StatusBarUtil;
 import com.fdw.fdd.tool.TimeLeftUtil;
 import com.fdw.fdd.tool.UserManager;
+import com.fdw.fdd.tool.kefutool.Constant;
 import com.fdw.fdd.view.SpaceItemDecoration;
 import com.lzy.okgo.OkGo;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -107,7 +113,7 @@ public class OrderDetailsActivity extends BaseActivity {
     private int startPage = 1;
     // 一次请求多少数据
     private static final int REQUEST_COUNT = 20;
-
+    private int index = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetailsActivity.class);
         intent.putExtra("orderId", orderId);
@@ -203,7 +209,13 @@ public class OrderDetailsActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_tv_one: // 联系卖家
-                Toasty.info(this, "联系卖家").show();
+                String phoneNumber = UserManager.getPhoneNumber(OrderDetailsActivity.this);
+                Intent intent = new Intent();
+                intent.putExtra(Constant.INTENT_CODE_IMG_SELECTED_KEY, index);
+                intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
+                intent.putExtra("phone", phoneNumber);
+                intent.setClass(OrderDetailsActivity.this, LoginKeFu02Activity.class);
+                startActivity(intent);
                 break;
             case R.id.m_tv_two:   // 取消订单
                 new CancelOrderDialog(OrderDetailsActivity.this)
@@ -215,7 +227,19 @@ public class OrderDetailsActivity extends BaseActivity {
                         }).show();
                 break;
             case R.id.m_tv_three: // 立即支付
-                Toasty.info(this, "立即支付").show();
+                new ConfirmPaymentDialog(OrderDetailsActivity.this, DoubleUtil.double2Str(responseData.get(0).getOrder().getActualPrice()))
+                        .setListener(new ConfirmPaymentDialog.OnClickListener() {
+                            @Override
+                            public void onClick() {
+                                new PayPasswordDialog(OrderDetailsActivity.this)
+                                        .setListener(new PayPasswordDialog.OnClickListener() {
+                                            @Override
+                                            public void onClick(String payPassword) {
+                                                ordersDoPay(payPassword, responseData.get(0).getOrder().getPayNumber(),DoubleUtil.double2Str(responseData.get(0).getOrder().getActualPrice()));
+                                            }
+                                        }).show();
+                            }
+                        }).show();
                 break;
         }
     }
@@ -354,5 +378,30 @@ public class OrderDetailsActivity extends BaseActivity {
                         mRefreshLayout.finishLoadMore();
                     }
                 });
+    }
+
+    /**
+     * 多订单立即支付
+     */
+    private void ordersDoPay(String payPassword, String payNumbers,String totalPrice) {
+        String id = UserManager.getUserId(OrderDetailsActivity.this);
+        Double mul = DoubleUtil.mul(Double.parseDouble(totalPrice), 100.00);
+        OkGo.<AppResponse>get(Api.ORDERS_DOPAY)//
+                .params("id", id) //
+                .params("payPassword", payPassword) //
+                .params("actualPrice", DoubleUtil.doubleTransf(mul)) //
+                .params("payNumbers", payNumbers) //
+                .execute(new JsonCallBack<AppResponse>() {
+                    @Override
+                    public void onSuccess(AppResponse simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.getState() == 0) {
+                            Toasty.info(OrderDetailsActivity.this, simpleResponseAppResponse.getMessage()).show();
+                            PayFailureActivity.openActivity(OrderDetailsActivity.this);
+                        } else {
+                            PaySuccessActivity.openActivity(OrderDetailsActivity.this);
+                        }
+                    }
+                });
+
     }
 }
