@@ -61,6 +61,10 @@ public class ModifyApplicationActivity extends BaseActivity {
     TextView mTvPrompt;
     @BindView(R.id.m_tv_submit)
     TextView mTvSubmit;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_et_content)
     ClearEditText mEtContent;
     @BindView(R.id.m_tv_reason_for_return)
@@ -92,10 +96,10 @@ public class ModifyApplicationActivity extends BaseActivity {
 
     /**
      * @param context
-     * @param detailsData      整个订单数据
-     * @param orderDetailsBean 单个商品数据
-     * @param freightPrice     计算的运费
-     * @param doqueryreturnorderdetailsData  查询退货订单详情
+     * @param detailsData                   整个订单数据
+     * @param orderDetailsBean              单个商品数据
+     * @param freightPrice                  计算的运费
+     * @param doqueryreturnorderdetailsData 查询退货订单详情
      */
     public static void openActivity(Context context, ArrayList<DoQueryOrdersDetailsData> detailsData, OrderDetailsBean orderDetailsBean, String freightPrice, DoqueryreturnorderdetailsData doqueryreturnorderdetailsData) {
         Intent intent = new Intent(context, ModifyApplicationActivity.class);
@@ -110,6 +114,7 @@ public class ModifyApplicationActivity extends BaseActivity {
     protected int attachLayoutRes() {
         return R.layout.activity_modify_application;
     }
+
     @Override
     protected void initPageData() {
         doqueryreturnorderdetailsData = (DoqueryreturnorderdetailsData) getIntent().getSerializableExtra("DoqueryreturnorderdetailsData");
@@ -138,6 +143,7 @@ public class ModifyApplicationActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
 
     private void initRecyclerView() {
@@ -266,6 +272,13 @@ public class ModifyApplicationActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
         /**
          * 客户上传图片回调监听
          */
@@ -428,6 +441,7 @@ public class ModifyApplicationActivity extends BaseActivity {
                     }
                 });
     }
+
     private void onImages() {
         StringBuilder sbClient = new StringBuilder();
         if (imagesList.size() != 0) {

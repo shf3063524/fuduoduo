@@ -72,6 +72,10 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
     int cl_ff0481df;
     @BindColor(R.color.cl_e8f2ff)
     int cl_e8f2ff;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     /**
      * 上传照片最多一次3张
      */
@@ -143,6 +147,7 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
         mTvPhone.setText(UserManager.getPhoneNumber(ApplyForAReplacement02Activity.this));
     }
 
@@ -272,6 +277,14 @@ public class ApplyForAReplacement02Activity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         /**
          * 客户上传图片回调监听
          */

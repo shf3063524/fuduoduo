@@ -76,6 +76,10 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
     int cl_ff0481df;
     @BindColor(R.color.cl_e8f2ff)
     int cl_e8f2ff;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     /**
      * 上传照片最多一次3张
      */
@@ -96,7 +100,7 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
     private String freightPrice;
     private String jumpKey;
 
-    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData, String freightPrice,String jumpKey) {
+    public static void openActivity(Context context, OrderDetailsBean orderDetailsBean, ArrayList<DoQueryOrdersDetailsData> detailsData, String freightPrice, String jumpKey) {
         Intent intent = new Intent(context, ApplyForAfterSaleActivity.class);
         intent.putExtra("OrderDetailsBean", orderDetailsBean);
         intent.putExtra("detailsData", detailsData);
@@ -116,7 +120,7 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
         freightPrice = getIntent().getStringExtra("freightPrice");
         detailsData = (ArrayList<DoQueryOrdersDetailsData>) getIntent().getSerializableExtra("detailsData");
         orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
-        onProcessingData(jumpKey,freightPrice, orderDetailsBean);
+        onProcessingData(jumpKey, freightPrice, orderDetailsBean);
     }
 
     /**
@@ -127,9 +131,9 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
      * @param orderDetailsBean
      */
     private void onProcessingData(String jumpKey, String freightPrice, OrderDetailsBean orderDetailsBean) {
-        if (jumpKey.equals("OrderDetails02Activity")){
+        if (jumpKey.equals("OrderDetails02Activity")) {
             mTvTitle.setText("申请售后");
-        }else if (jumpKey.equals("SelectServiceTypeActivity")){
+        } else if (jumpKey.equals("SelectServiceTypeActivity")) {
             mTvTitle.setText("申请退款");
         }
         // 规格图片
@@ -149,6 +153,7 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
 
 
@@ -278,6 +283,14 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         /**
          * 客户上传图片回调监听
          */
@@ -308,7 +321,7 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
 
             @Override
             public void onRemoveItemClick(int index) {
-                 selectClientPhotoPathList.remove(index);
+                selectClientPhotoPathList.remove(index);
             }
         });
     }
@@ -368,7 +381,7 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
                                     mTvReasonForReturn.setText(type);
                                 }
                             }).show();
-                }else if (jumpKey.equals("SelectServiceTypeActivity")){
+                } else if (jumpKey.equals("SelectServiceTypeActivity")) {
                     new ReasonForReurn02Dialog(ApplyForAfterSaleActivity.this)
                             .setListener(new ReasonForReurn02Dialog.OnClickListener() {
                                 @Override
@@ -445,8 +458,8 @@ public class ApplyForAfterSaleActivity extends BaseActivity {
                     @Override
                     public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
-                           // 退款详情
-                            OrderDetails02RefundDetailsActivity.openActivity(ApplyForAfterSaleActivity.this,orderDetailsBean,detailsData,freightPrice,"ApplyForAfterSaleActivity");
+                            // 退款详情
+                            OrderDetails02RefundDetailsActivity.openActivity(ApplyForAfterSaleActivity.this, orderDetailsBean, detailsData, freightPrice, "ApplyForAfterSaleActivity");
                             finish();
                         }
                     }

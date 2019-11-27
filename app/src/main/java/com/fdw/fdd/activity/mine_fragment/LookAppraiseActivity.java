@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.fdw.fdd.R;
 import com.fdw.fdd.adapter.MineAllReviewAdapter;
@@ -30,6 +31,10 @@ public class LookAppraiseActivity extends BaseActivity {
     RecyclerView mRecyclerViewNoAppraise;
     @BindView(R.id.m_recycler_view_all_appraise)
     RecyclerView mRecyclerViewAllAppraise;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     private ArrayList<TestBean> mNoReviewData;
     private NoReviewAdapter mNoReviewAdapter;
 
@@ -49,6 +54,7 @@ public class LookAppraiseActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
 
     private void initRecyclerView() {
@@ -79,6 +85,14 @@ public class LookAppraiseActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         mNoReviewData.clear();
         for (int i = 0; i < 5; i++) {
             mNoReviewData.add(new TestBean("item" + i));

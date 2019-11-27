@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.Utils;
 import com.hyphenate.chat.ChatClient;
 import com.hyphenate.helpdesk.easeui.UIProvider;
 import com.liys.doubleclicklibrary.helper.ViewDoubleHelper;
@@ -72,6 +73,9 @@ public class MyApp extends Application {
         registrationID = JPushInterface.getRegistrationID(this);
         /* ======================= 极光推送   Stop ======================= */
 
+        /* ======================= 计算按钮宽度工具    ======================= */
+        Utils.init(this);
+        /* ======================= 计算按钮宽度工具    ======================= */
     }
 
     public static Context getmContext() {

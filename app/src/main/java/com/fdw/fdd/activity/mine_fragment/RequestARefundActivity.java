@@ -75,6 +75,10 @@ public class RequestARefundActivity extends BaseActivity {
     RelativeLayout mLayoutGoodsStatus;
     @BindView(R.id.m_layout_reason_for_return)
     RelativeLayout mLayoutResonForReturn;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindColor(R.color.cl_ff0481df)
     int cl_ff0481df;
     @BindColor(R.color.cl_e8f2ff)
@@ -113,7 +117,7 @@ public class RequestARefundActivity extends BaseActivity {
 
     @Override
     protected void initPageData() {
-         orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
+        orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
         freightPrice = getIntent().getStringExtra("freightPrice");
         detailsData = (ArrayList<DoQueryOrdersDetailsData>) getIntent().getSerializableExtra("detailsData");
         onProcessingData(freightPrice, orderDetailsBean);
@@ -143,6 +147,7 @@ public class RequestARefundActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
 
     private void initRecyclerView() {
@@ -271,6 +276,14 @@ public class RequestARefundActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         /**
          * 客户上传图片回调监听
          */
@@ -301,7 +314,7 @@ public class RequestARefundActivity extends BaseActivity {
 
             @Override
             public void onRemoveItemClick(int index) {
-                 selectClientPhotoPathList.remove(index);
+                selectClientPhotoPathList.remove(index);
             }
         });
     }
@@ -385,7 +398,7 @@ public class RequestARefundActivity extends BaseActivity {
                                     mTvReasonForReturn.setText(type);
                                 }
                             }).show();
-                }else {
+                } else {
                     new ReasonForReurn02Dialog(RequestARefundActivity.this)
                             .setListener(new ReasonForReurn02Dialog.OnClickListener() {
                                 @Override
@@ -467,7 +480,7 @@ public class RequestARefundActivity extends BaseActivity {
                     public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             // 退款详情
-                            OrderDetails02RefundDetailsActivity.openActivity(RequestARefundActivity.this,orderDetailsBean,detailsData,freightPrice,"RequestARefundActivity");
+                            OrderDetails02RefundDetailsActivity.openActivity(RequestARefundActivity.this, orderDetailsBean, detailsData, freightPrice, "RequestARefundActivity");
                             finish();
                         }
                     }

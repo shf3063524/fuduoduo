@@ -2,11 +2,21 @@ package com.fdw.fdd.activity.mine_fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.blankj.utilcode.util.SizeUtils;
+import com.fdw.fdd.MainActivity;
+import com.fdw.fdd.activity.home_fragment.MessageCenterActivity;
+import com.fdw.fdd.kefu.LoginKeFu02Activity;
+import com.fdw.fdd.tool.UserManager;
+import com.fdw.fdd.tool.kefutool.Constant;
+import com.fdw.fdd.view.TriangleDrawable;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.fdw.fdd.R;
 import com.fdw.fdd.adapter.MyFragmentPagerAdapter;
@@ -16,9 +26,13 @@ import com.fdw.fdd.fragment.MyOrderFragment;
 import com.fdw.fdd.fragment.PendingPaymentFragment;
 import com.fdw.fdd.fragment.DeliveredFragment;
 import com.fdw.fdd.fragment.PendingReceiptFragment;
+import com.zyyoona7.popup.EasyPopup;
+import com.zyyoona7.popup.XGravity;
+import com.zyyoona7.popup.YGravity;
 
 import java.util.ArrayList;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -34,15 +48,17 @@ public class MyOrderActivity extends BaseActivity {
     ImageView mIvInquire;
     @BindView(R.id.m_iv_pop_ups)
     ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_slidingtablayout)
     SlidingTabLayout mSlidingTabLayout;
     @BindView(R.id.m_viewPager)
     ViewPager mViewPager;
-
     private ArrayList<String> mTabList;
     private ArrayList<Fragment> mFragments;
     // 跳转Fragment设定的状态
     private String positionStatus = "0";
+    private int index = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
 
     public static void openActivity(Context context, String positionStatus) {
         Intent intent = new Intent(context, MyOrderActivity.class);
@@ -64,6 +80,7 @@ public class MyOrderActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initSlidingTabLayout();
+        initQQPop();
         initFragment(positionStatus);
     }
 
@@ -73,7 +90,7 @@ public class MyOrderActivity extends BaseActivity {
      * @param positionStatus
      */
     private void initFragment(String positionStatus) {
-        switch (positionStatus){
+        switch (positionStatus) {
             case "0": // 全部订单
                 mViewPager.setCurrentItem(0);
                 break;
@@ -113,7 +130,18 @@ public class MyOrderActivity extends BaseActivity {
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 
-    @OnClick({R.id.m_iv_return, R.id.m_iv_inquire, R.id.m_iv_pop_ups})
+    @Override
+    protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+    }
+
+    @OnClick({R.id.m_iv_return, R.id.m_iv_inquire})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_return:   // 返回
@@ -122,9 +150,6 @@ public class MyOrderActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_iv_inquire:   // 查询
-
-                break;
-            case R.id.m_iv_pop_ups:   // 小弹窗
 
                 break;
         }

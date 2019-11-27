@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fdw.fdd.R;
@@ -40,6 +41,10 @@ public class AfterSaleActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_loading_layout)
     LoadingLayout mLoadingLayout;
     @BindView(R.id.m_refresh_layout)
@@ -63,6 +68,7 @@ public class AfterSaleActivity extends BaseActivity {
         initRefreshLayout();
         initRecyclerView();
         initLoadingLayout();
+        initQQPop();
     }
 
     private void initLoadingLayout() {
@@ -142,6 +148,14 @@ public class AfterSaleActivity extends BaseActivity {
 
                         break;
                 }
+            }
+        });
+
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
             }
         });
     }

@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -44,6 +45,10 @@ public class PayFailureActivity extends BaseActivity {
     TextView mTvBackHome;
     @BindView(R.id.m_scrollview)
     ScrollView myScrollView;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_love_recycler_view)
     RecyclerView mLoveRecyclerView;
     @BindView(R.id.m_refresh_layout)
@@ -57,6 +62,7 @@ public class PayFailureActivity extends BaseActivity {
     private int startPage = 1;
     // 一次请求多少数据
     private static final int REQUEST_COUNT = 20;
+
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, PayFailureActivity.class);
         context.startActivity(intent);
@@ -73,7 +79,9 @@ public class PayFailureActivity extends BaseActivity {
         initRefreshLayout();
         initRecyclerView();
         initLoadingLayout();
+        initQQPop();
     }
+
     private void initRefreshLayout() {
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setEnableLoadMore(true);
@@ -84,6 +92,7 @@ public class PayFailureActivity extends BaseActivity {
 //        mLoadingLayout.setEmptyImage(R.drawable.ic_no_address);
         mLoadingLayout.setEmptyText("暂无数据");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -102,7 +111,13 @@ public class PayFailureActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
-
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -126,7 +141,7 @@ public class PayFailureActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.m_iv_arrow, R.id.m_tv_look_appraise,R.id.m_tv_back_home})
+    @OnClick({R.id.m_iv_arrow, R.id.m_tv_look_appraise, R.id.m_tv_back_home})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.m_iv_arrow:   // 返回
@@ -140,7 +155,7 @@ public class PayFailureActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_tv_back_home: // 返回首页
-                MainActivity.openActivity(PayFailureActivity.this,"PayFailureActivity");
+                MainActivity.openActivity(PayFailureActivity.this, "PayFailureActivity");
                 finish();
                 break;
         }

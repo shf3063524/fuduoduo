@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.fdw.fdd.R;
 import com.fdw.fdd.adapter.NegotiationHistoryAdapter;
@@ -30,6 +31,10 @@ public class NegotiationHistoryActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     private ArrayList<DoqueryconsultData> mData;
     private NegotiationHistoryAdapter mAdapter;
 
@@ -55,6 +60,7 @@ public class NegotiationHistoryActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
 
     private void initRecyclerView() {
@@ -67,7 +73,13 @@ public class NegotiationHistoryActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
-
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
     }
 
     @OnClick({R.id.m_iv_arrow})

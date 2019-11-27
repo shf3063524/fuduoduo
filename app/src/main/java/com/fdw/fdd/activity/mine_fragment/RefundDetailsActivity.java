@@ -76,6 +76,10 @@ public class RefundDetailsActivity extends BaseActivity {
     SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_loading_layout)
     LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_layout_negotiation_history)
     RelativeLayout mLayoutNegotiationHistory;
 
@@ -108,6 +112,7 @@ public class RefundDetailsActivity extends BaseActivity {
         StatusBarUtil.setColor(RefundDetailsActivity.this, cl_e51C23, 1);
         initRefreshLayout();
         initRecyclerView();
+        initQQPop();
         initLoadingLayout();
     }
 
@@ -140,6 +145,14 @@ public class RefundDetailsActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

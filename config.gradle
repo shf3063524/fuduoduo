@@ -1,4 +1,4 @@
-ext{
+ext {
     android = [
             compileSdkVersion: 28,
             buildToolsVersion: "28.0.3",
@@ -27,14 +27,18 @@ ext{
 
             //region tools
             "butterknife"                  : "com.jakewharton:butterknife:${version["butterknifeSdkVersion"]}",
-            "butterknife-compiler"        : "com.jakewharton:butterknife-compiler:${version["butterknifeSdkVersion"]}",
-            "gson"                          : "com.google.code.gson:gson:2.8.5",
+            "butterknife-compiler"         : "com.jakewharton:butterknife-compiler:${version["butterknifeSdkVersion"]}",
+            "gson"                         : "com.google.code.gson:gson:2.8.5",
             "okgo"                         : "com.lzy.net:okgo:3.0.4",
             "DoubleClick"                  : "com.github.liys666666:DoubleClick:V2.0.6",
             "DeMon-JS-PDF"                 : "com.github.DeMonLiu623:DeMon-JS-PDF:v1.0",
-            "jsoup"                         : "org.jsoup:jsoup:1.12.1",
+            "jsoup"                        : "org.jsoup:jsoup:1.12.1",
             "wechatSDK"                    : "com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.1.6",
             "logger"                       : "com.orhanobut:logger:2.2.0",
+            "glide"                        : "com.github.bumptech.glide:glide:4.7.1",
+            "SearchLayout"                 : "com.carson_ho:SearchLayout:1.0.1",
+            "EasyPopup"                    : "com.github.zyyoona7:EasyPopup:1.1.2",
+            "utilcode"                    : "com.blankj:utilcode:1.13.10",
 
             //endregion
 
@@ -52,7 +56,7 @@ ext{
             "rxjava"                       : "io.reactivex.rxjava2:rxjava:2.0.5",
             "rxandroid"                    : "io.reactivex.rxjava2:rxandroid:2.0.1",
             //endregion
-            
+
             //region test
             "junit"                        : "junit:junit:4.12",
             "androidJUnitRunner"           : "android.support.test.runner.AndroidJUnitRunner",

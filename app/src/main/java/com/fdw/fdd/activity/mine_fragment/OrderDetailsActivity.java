@@ -101,6 +101,10 @@ public class OrderDetailsActivity extends BaseActivity {
     SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_loading_layout)
     LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
     private ArrayList<OrderDetailsBean> mOrderDetailsData;
@@ -114,6 +118,7 @@ public class OrderDetailsActivity extends BaseActivity {
     // 一次请求多少数据
     private static final int REQUEST_COUNT = 20;
     private int index = Constant.INTENT_CODE_IMG_SELECTED_DEFAULT;
+
     public static void openActivity(Context context, String orderId) {
         Intent intent = new Intent(context, OrderDetailsActivity.class);
         intent.putExtra("orderId", orderId);
@@ -137,6 +142,7 @@ public class OrderDetailsActivity extends BaseActivity {
         initRefreshLayout();
         initRecyclerView();
         initLoadingLayout();
+        initQQPop();
     }
 
     @Override
@@ -177,6 +183,14 @@ public class OrderDetailsActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -235,7 +249,7 @@ public class OrderDetailsActivity extends BaseActivity {
                                         .setListener(new PayPasswordDialog.OnClickListener() {
                                             @Override
                                             public void onClick(String payPassword) {
-                                                ordersDoPay(payPassword, responseData.get(0).getOrder().getPayNumber(),DoubleUtil.double2Str(responseData.get(0).getOrder().getActualPrice()));
+                                                ordersDoPay(payPassword, responseData.get(0).getOrder().getPayNumber(), DoubleUtil.double2Str(responseData.get(0).getOrder().getActualPrice()));
                                             }
                                         }).show();
                             }
@@ -383,7 +397,7 @@ public class OrderDetailsActivity extends BaseActivity {
     /**
      * 多订单立即支付
      */
-    private void ordersDoPay(String payPassword, String payNumbers,String totalPrice) {
+    private void ordersDoPay(String payPassword, String payNumbers, String totalPrice) {
         String id = UserManager.getUserId(OrderDetailsActivity.this);
         Double mul = DoubleUtil.mul(Double.parseDouble(totalPrice), 100.00);
         OkGo.<AppResponse>get(Api.ORDERS_DOPAY)//

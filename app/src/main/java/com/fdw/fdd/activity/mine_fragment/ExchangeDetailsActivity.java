@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -82,6 +83,10 @@ public class ExchangeDetailsActivity extends BaseActivity {
     SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_loading_layout)
     LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
 
@@ -92,6 +97,7 @@ public class ExchangeDetailsActivity extends BaseActivity {
     private int startPage = 1;
     // 一次请求多少数据
     private static final int REQUEST_COUNT = 20;
+
     public static void openActivity(Context context, String orderDetailsId) {
         Intent intent = new Intent(context, ExchangeDetailsActivity.class);
         intent.putExtra("orderDetailsId", orderDetailsId);
@@ -115,7 +121,9 @@ public class ExchangeDetailsActivity extends BaseActivity {
         initRefreshLayout();
         initRecyclerView();
         initLoadingLayout();
+        initQQPop();
     }
+
     private void initRefreshLayout() {
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setEnableLoadMore(true);
@@ -126,6 +134,7 @@ public class ExchangeDetailsActivity extends BaseActivity {
 //        mLoadingLayout.setEmptyImage(R.drawable.ic_no_address);
         mLoadingLayout.setEmptyText("暂无数据");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -145,6 +154,14 @@ public class ExchangeDetailsActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

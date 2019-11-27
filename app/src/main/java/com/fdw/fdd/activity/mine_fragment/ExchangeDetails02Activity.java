@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -99,6 +100,10 @@ public class ExchangeDetails02Activity extends BaseActivity {
     SmartRefreshLayout mRefreshLayout;
     @BindView(R.id.m_loading_layout)
     LoadingLayout mLoadingLayout;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
 
@@ -136,6 +141,7 @@ public class ExchangeDetails02Activity extends BaseActivity {
         initRefreshLayout();
         initRecyclerView();
         initLoadingLayout();
+        initQQPop();
     }
 
     private void initRefreshLayout() {
@@ -167,6 +173,14 @@ public class ExchangeDetails02Activity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

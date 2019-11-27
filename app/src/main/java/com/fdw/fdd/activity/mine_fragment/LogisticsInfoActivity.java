@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.fdw.fdd.R;
 import com.fdw.fdd.base.BaseActivity;
@@ -25,6 +26,10 @@ import butterknife.OnClick;
 public class LogisticsInfoActivity extends BaseActivity {
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.logistics_InformationView)
     LogisticsInformationView logistics_InformationView;
 
@@ -43,6 +48,7 @@ public class LogisticsInfoActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        initQQPop();
         ArrayList<ExpressBean> expressBeans = (ArrayList<ExpressBean>) getIntent().getSerializableExtra("expressBeans");
         initData(expressBeans);
     }
@@ -66,6 +72,17 @@ public class LogisticsInfoActivity extends BaseActivity {
 
 
         // initPermissionChecker();
+    }
+
+    @Override
+    protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
     }
 
     @OnClick({R.id.m_iv_arrow})

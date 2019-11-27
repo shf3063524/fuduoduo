@@ -41,9 +41,9 @@
             android:id="@+id/m_iv_pop_ups"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="12dp"
             android:background="@mipmap/ic_more_button" />
 
     </RelativeLayout>

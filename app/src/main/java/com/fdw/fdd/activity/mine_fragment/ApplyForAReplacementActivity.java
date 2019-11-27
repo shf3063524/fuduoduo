@@ -74,6 +74,10 @@ public class ApplyForAReplacementActivity extends BaseActivity {
     RelativeLayout mLayoutExChangeGoods;
     @BindView(R.id.m_layout_address)
     RelativeLayout mLayoutAddress;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindColor(R.color.cl_ff0481df)
     int cl_ff0481df;
     @BindColor(R.color.cl_e8f2ff)
@@ -146,6 +150,7 @@ public class ApplyForAReplacementActivity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
 
     private void initRecyclerView() {
@@ -274,6 +279,14 @@ public class ApplyForAReplacementActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         /**
          * 客户上传图片回调监听
          */
@@ -461,7 +474,7 @@ public class ApplyForAReplacementActivity extends BaseActivity {
                     public void onSuccess(AppResponse<VcodeLoginData> simpleResponseAppResponse) {
                         if (simpleResponseAppResponse.isSucess()) {
                             // 换货详情
-                            ExchangeDetailsActivity.openActivity(ApplyForAReplacementActivity.this,orderDetailsBean.getOrderDetail().getId());
+                            ExchangeDetailsActivity.openActivity(ApplyForAReplacementActivity.this, orderDetailsBean.getOrderDetail().getId());
                             finish();
                         }
                     }

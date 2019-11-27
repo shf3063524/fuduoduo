@@ -6,7 +6,7 @@
     android:background="@color/cl_f6">
 
     <RelativeLayout
-        android:id="@+id/m_layout_head"
+        android:id="@+id/m_layout_set_return"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/cl_e51C23">
@@ -27,7 +27,7 @@
             android:textSize="17sp" />
 
         <ImageView
-            android:id="@+id/m_iv_more"
+            android:id="@+id/m_iv_pop_ups"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -72,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/m_view_line"
-        android:layout_below="@+id/m_layout_head">
+        android:layout_below="@+id/m_layout_set_return">
 
         <ScrollView
             android:id="@+id/m_scrollview"

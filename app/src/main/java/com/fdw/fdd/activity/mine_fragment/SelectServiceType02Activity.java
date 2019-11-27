@@ -28,6 +28,10 @@ public class SelectServiceType02Activity extends BaseActivity {
     ImageView mIvShopping;
     @BindView(R.id.m_tv_content)
     TextView mTvContent;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_tv_specification)
     TextView mTvSpecification;
     @BindView(R.id.m_layout_rechange_china_pic)
@@ -61,7 +65,7 @@ public class SelectServiceType02Activity extends BaseActivity {
      */
     private void onProcessData(OrderDetailsBean orderDetailsBean) {
         // 规格图片
-        GlideUtils.loadImage(SelectServiceType02Activity.this,orderDetailsBean.getSpecification().getSpecificationImage(),R.drawable.ic_all_background,mIvShopping);
+        GlideUtils.loadImage(SelectServiceType02Activity.this, orderDetailsBean.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
         // 商品内容
         mTvContent.setText(orderDetailsBean.getCommodity().getName());
         // 规格
@@ -70,7 +74,18 @@ public class SelectServiceType02Activity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        initQQPop();
+    }
 
+    @Override
+    protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
     }
 
     @OnClick({R.id.m_iv_arrow, R.id.m_layout_rechange_china_pic})
@@ -82,7 +97,7 @@ public class SelectServiceType02Activity extends BaseActivity {
                 }
                 break;
             case R.id.m_layout_rechange_china_pic:   // 我要换货 申请换货
-                ApplyForAReplacementActivity.openActivity(SelectServiceType02Activity.this,orderDetailsBean,detailsData);
+                ApplyForAReplacementActivity.openActivity(SelectServiceType02Activity.this, orderDetailsBean, detailsData);
                 break;
         }
     }

@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.fdw.fdd.MainActivity;
 import com.fdw.fdd.R;
 import com.fdw.fdd.entity.bean.DoQueryShopDetailsData;
 import com.fdw.fdd.kefu.LoginKeFuActivity;
@@ -343,7 +344,7 @@ public class ProductDetailsActivity extends BaseActivity implements ObservableSc
                 }
                 break;
             case R.id.iv_shopping_cart: // 跳转购物车Frgment
-//                MainActivity.openActivity(ProductDetailsActivity.this, "", "ProductDetailsActivity");
+                MainActivity.openActivity(ProductDetailsActivity.this, "ProductDetailsActivity");
                 break;
             case R.id.m_rl_service: // 跳转客服
                 String phoneNumber = UserManager.getPhoneNumber(ProductDetailsActivity.this);

@@ -134,8 +134,11 @@ public class MainActivity extends BaseActivity {
         if ("LoginActivity".equals(jumpKey)) {
             message = getIntent().getStringExtra("message");
         } else if ("ProductDetailsActivity".equals(jumpKey)) {
-            replaceFragment(R.id.fl_change, ShoppingFragment.newInstance());
+//            replaceFragment(R.id.fl_change, ShoppingFragment.newInstance());
             mTabLayout.setCurrentTab(2);
+        }else if ("BaseActivity".equals(jumpKey)){
+            mTabLayout.setCurrentTab(3);
+            StatusBarUtil.setColor(MainActivity.this, cl_e51C23, 1);
         }
         registerMessageReceiver();
     }

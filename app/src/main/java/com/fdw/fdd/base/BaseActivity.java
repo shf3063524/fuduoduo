@@ -1,6 +1,8 @@
 package com.fdw.fdd.base;
 
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -10,7 +12,21 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import com.blankj.utilcode.util.SizeUtils;
+import com.fdw.fdd.MainActivity;
+import com.fdw.fdd.R;
+import com.fdw.fdd.activity.home_fragment.MessageCenterActivity;
+import com.fdw.fdd.activity.mine_fragment.MyOrderActivity;
+import com.fdw.fdd.kefu.LoginKeFu02Activity;
+import com.fdw.fdd.tool.UserManager;
+import com.fdw.fdd.tool.kefutool.Constant;
+import com.fdw.fdd.view.TriangleDrawable;
+import com.zyyoona7.popup.EasyPopup;
+import com.zyyoona7.popup.XGravity;
+import com.zyyoona7.popup.YGravity;
 
 import butterknife.ButterKnife;
 
@@ -20,6 +36,9 @@ import butterknife.ButterKnife;
  * Email：1511808259@qq.com
  */
 public abstract class BaseActivity extends BaseStatusActivity {
+
+    public EasyPopup mQQPop;
+
     /**
      * 绑定布局文件
      *
@@ -158,5 +177,76 @@ public abstract class BaseActivity extends BaseStatusActivity {
 
     public String getTextString(TextView view) {
         return view.getText().toString().trim();
+    }
+
+    public void initQQPop() {
+        // 消息
+// 首页
+// 个人中心
+// 客服小秘
+//                .setBackgroundDimEnable(true)
+//                .setDimValue(0.5f)
+//                .setDimColor(Color.RED)
+//                .setDimView(mTitleBar)
+        mQQPop = EasyPopup.create()
+                .setContext(this)
+                .setContentView(R.layout.layout_right_pop)
+                .setAnimationStyle(R.style.RightTop2PopAnim)
+                .setOnViewListener(new EasyPopup.OnViewListener() {
+                    @Override
+                    public void initViews(View view, EasyPopup basePopup) {
+                        View arrowView = view.findViewById(R.id.v_arrow);
+                        TextView mTvMessage = (TextView) view.findViewById(R.id.m_tv_message);
+                        TextView mTvHome = (TextView) view.findViewById(R.id.m_tv_home);
+                        TextView mTvCenter = (TextView) view.findViewById(R.id.m_tv_center);
+                        TextView mTvKefu = (TextView) view.findViewById(R.id.m_tv_kefu);
+                        arrowView.setBackground(new TriangleDrawable(TriangleDrawable.TOP, Color.parseColor("#696969")));
+                        // 消息
+                        mTvMessage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                MessageCenterActivity.openActivity(BaseActivity.this);
+                            }
+                        });
+                        // 首页
+                        mTvHome.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                MainActivity.openActivity(BaseActivity.this);
+                            }
+                        });
+                        // 个人中心
+                        mTvCenter.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                MainActivity.openActivity(BaseActivity.this,"BaseActivity");
+                            }
+                        });
+                        // 客服小秘
+                        mTvKefu.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String phoneNumber = UserManager.getPhoneNumber(BaseActivity.this);
+                                Intent intent = new Intent();
+                                intent.putExtra(Constant.MESSAGE_TO_INTENT_EXTRA, Constant.MESSAGE_TO_AFTER_SALES);
+                                intent.putExtra("phone", phoneNumber);
+                                intent.setClass(BaseActivity.this, LoginKeFu02Activity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                })
+                .setFocusAndOutsideEnable(true)
+//                .setBackgroundDimEnable(true)
+//                .setDimValue(0.5f)
+//                .setDimColor(Color.RED)
+//                .setDimView(mTitleBar)
+                .apply();
+    }
+
+    public void showQQPop(View view, int height) {
+        int offsetX = SizeUtils.dp2px(20) - view.getWidth() / 2;
+        int offsetY = (height - view.getHeight()) / 2;
+        mQQPop.showAtAnchorView(view, YGravity.BELOW, XGravity.ALIGN_RIGHT, offsetX, offsetY);
     }
 }

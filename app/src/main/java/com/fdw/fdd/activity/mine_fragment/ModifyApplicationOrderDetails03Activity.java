@@ -66,7 +66,10 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
     ClearEditText mEtContent;
     @BindView(R.id.m_tv_submit)
     TextView mTvSubmit;
-
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_tv_good_status)
     TextView mTvGoodStatus;
     @BindView(R.id.m_tv_reason_for_return)
@@ -98,12 +101,13 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
     private ArrayList<DoQueryOrdersDetailsData> detailsData;
     private OrderDetailsBean orderDetailsBean;
     private DoqueryreturnorderdetailsData doqueryreturnorderdetailsData;
+
     /**
      * @param context
-     * @param detailsData      整个订单数据
-     * @param orderDetailsBean 单个商品数据
-     * @param freightPrice     计算的运费
-     * @param doqueryreturnorderdetailsData  查询退货订单详情
+     * @param detailsData                   整个订单数据
+     * @param orderDetailsBean              单个商品数据
+     * @param freightPrice                  计算的运费
+     * @param doqueryreturnorderdetailsData 查询退货订单详情
      */
     public static void openActivity(Context context, ArrayList<DoQueryOrdersDetailsData> detailsData, OrderDetailsBean orderDetailsBean, String freightPrice, DoqueryreturnorderdetailsData doqueryreturnorderdetailsData) {
         Intent intent = new Intent(context, ModifyApplicationOrderDetails03Activity.class);
@@ -118,6 +122,7 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
     protected int attachLayoutRes() {
         return R.layout.activity_modify_application_order_detalis03;
     }
+
     @Override
     protected void initPageData() {
         doqueryreturnorderdetailsData = (DoqueryreturnorderdetailsData) getIntent().getSerializableExtra("DoqueryreturnorderdetailsData");
@@ -126,10 +131,13 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
         orderDetailsBean = (OrderDetailsBean) getIntent().getSerializableExtra("OrderDetailsBean");
         onProcessingData(freightPrice, orderDetailsBean);
     }
+
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
+
     private void onProcessingData(String freightPrice, OrderDetailsBean orderDetailsBean) {
         // 规格图片
         GlideUtils.loadImage(ModifyApplicationOrderDetails03Activity.this, orderDetailsBean.getSpecification().getSpecificationImage(), R.drawable.ic_all_background, mIvShopping);
@@ -145,6 +153,7 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
         mTvPrompt.setText("最多" + DoubleUtil.double2Str(String.valueOf(addTotalPrice)) + "积分，含发货邮费" + DoubleUtil.double2Str(freightPrice) + "积分");
 
     }
+
     private void initRecyclerView() {
 
         mAdapter = new ChooseImageAdapter(ModifyApplicationOrderDetails03Activity.this, onAddPicClickListener);
@@ -271,6 +280,14 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         /**
          * 客户上传图片回调监听
          */
@@ -416,7 +433,6 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
     }
 
 
-
     private void UploadAvatar(File file) {
         OkGo.<AppResponse<VcodeLoginData>>post(Api.IMAGE_DOUPLOADPORTRAIT)//
                 .params("image", file)
@@ -431,6 +447,7 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
                     }
                 });
     }
+
     /**
      * 申请售后提交信息
      */
@@ -454,6 +471,7 @@ public class ModifyApplicationOrderDetails03Activity extends BaseActivity {
                     }
                 });
     }
+
     private void onImages() {
         StringBuilder sbClient = new StringBuilder();
         if (imagesList.size() != 0) {

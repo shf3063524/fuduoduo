@@ -33,6 +33,10 @@ public class SelectServiceTypeActivity extends BaseActivity {
     ImageView mIvArrow;
     @BindView(R.id.m_iv_shopping)
     ImageView mIvShopping;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_tv_content)
     TextView mTvContent;
     @BindView(R.id.m_tv_specification)
@@ -86,7 +90,18 @@ public class SelectServiceTypeActivity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        initQQPop();
+    }
 
+    @Override
+    protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
     }
 
     @OnClick({R.id.m_iv_arrow, R.id.m_layout_refund, R.id.m_layout_refund_china_pic, R.id.m_layout_rechange_china_pic})

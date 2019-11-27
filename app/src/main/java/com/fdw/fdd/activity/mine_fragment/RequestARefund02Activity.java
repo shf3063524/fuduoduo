@@ -35,6 +35,10 @@ public class RequestARefund02Activity extends BaseActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.m_iv_arrow)
     ImageView mIvArrow;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_tv_reason_for_return)
     TextView mTvReasonForReturn;
     @BindView(R.id.m_layout_reason_for_return)
@@ -65,6 +69,7 @@ public class RequestARefund02Activity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
 
     private void initRecyclerView() {
@@ -193,6 +198,14 @@ public class RequestARefund02Activity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         /**
          * 客户上传图片回调监听
          */

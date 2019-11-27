@@ -72,6 +72,10 @@ public class ModifyApplication03Activity extends BaseActivity {
     RelativeLayout mLayoutExChangeGoods;
     @BindView(R.id.m_layout_address)
     RelativeLayout mLayoutAddress;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindColor(R.color.cl_ff0481df)
     int cl_ff0481df;
     @BindColor(R.color.cl_e8f2ff)
@@ -134,6 +138,7 @@ public class ModifyApplication03Activity extends BaseActivity {
     @Override
     protected void initViews() {
         initRecyclerView();
+        initQQPop();
     }
 
     private void initRecyclerView() {
@@ -262,6 +267,14 @@ public class ModifyApplication03Activity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         /**
          * 客户上传图片回调监听
          */

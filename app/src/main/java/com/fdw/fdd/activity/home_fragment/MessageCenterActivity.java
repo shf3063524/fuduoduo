@@ -33,6 +33,10 @@ public class MessageCenterActivity extends BaseActivity {
     RelativeLayout mLayoutWindowNotice;
     @BindView(R.id.m_layout_trade)
     RelativeLayout mLayoutTrade;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_layout_special_offers)
     RelativeLayout mLayoutSpecialOffers;
     @BindColor(R.color.cl_e51C23)
@@ -54,6 +58,7 @@ public class MessageCenterActivity extends BaseActivity {
     protected void initViews() {
         StatusBarUtil.setColor(MessageCenterActivity.this, cl_e51C23, 1);
         initRecyclerView();
+        initQQPop();
     }
 
     private void initRecyclerView() {
@@ -73,6 +78,14 @@ public class MessageCenterActivity extends BaseActivity {
 
     @Override
     protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
+
         mData.clear();
         for (int i = 0; i < 10; i++) {
             mData.add(new TestBean("item" + i));

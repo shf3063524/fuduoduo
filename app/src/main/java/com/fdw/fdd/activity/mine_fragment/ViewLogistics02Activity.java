@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fdw.fdd.R;
@@ -32,6 +33,10 @@ public class ViewLogistics02Activity extends BaseActivity {
     TextView mTvExpressDelivery;
     @BindView(R.id.m_tv_status)
     TextView mTvStatus;
+    @BindView(R.id.m_iv_pop_ups)
+    ImageView mIvPopUps;
+    @BindView(R.id.m_layout_set_return)
+    RelativeLayout mLayoutSetReturn;
     @BindView(R.id.m_tv_waybill_number)
     TextView mTvWaybillNumber;
     @BindView(R.id.logistics_InformationView)
@@ -53,6 +58,7 @@ public class ViewLogistics02Activity extends BaseActivity {
 
     @Override
     protected void initViews() {
+        initQQPop();
         String image = getIntent().getStringExtra("image");
         FreightMapBean expressBeans = (FreightMapBean) getIntent().getSerializableExtra("FreightMapBean");
         // 商品图片
@@ -88,6 +94,17 @@ public class ViewLogistics02Activity extends BaseActivity {
 
 
         // initPermissionChecker();
+    }
+
+    @Override
+    protected void actionView() {
+        mIvPopUps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int height = mLayoutSetReturn.getHeight();
+                showQQPop(view, height);
+            }
+        });
     }
 
     @OnClick({R.id.m_iv_arrow})
