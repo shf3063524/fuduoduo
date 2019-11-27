@@ -4,17 +4,22 @@ import android.annotation.SuppressLint;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fdw.fdd.R;
 import com.fdw.fdd.entity.bean.DoQueryOrdersDetailsData;
+import com.fdw.fdd.entity.bean.DoqueryexpresscompanyData;
 import com.fdw.fdd.entity.bean.OrderDetailsBean;
 import com.fdw.fdd.entity.bean.ShopBean;
 import com.fdw.fdd.tool.DoubleUtil;
 
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +27,9 @@ import java.util.List;
  * Author：Created by shihongfei on 2019/10/3 17:26
  * Email：1511808259@qq.com
  */
-public class MyOrderAdapter extends BaseQuickAdapter<DoQueryOrdersDetailsData, BaseViewHolder> {
+public class MyOrderAdapter extends BaseQuickAdapter<DoQueryOrdersDetailsData, BaseViewHolder> implements Filterable {
+    private AdapterFilter adapterFilter;
+
     public MyOrderAdapter(int layoutResId, @Nullable List<DoQueryOrdersDetailsData> data) {
         super(layoutResId, data);
     }
@@ -136,6 +143,94 @@ public class MyOrderAdapter extends BaseQuickAdapter<DoQueryOrdersDetailsData, B
         });
 
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (adapterFilter == null) {
+            adapterFilter = new AdapterFilter((List<DoQueryOrdersDetailsData>) mData);
+        }
+        return adapterFilter;
+    }
+
+
+    private class AdapterFilter extends Filter {
+
+        private List<DoQueryOrdersDetailsData> originalData;
+
+        public AdapterFilter(List<DoQueryOrdersDetailsData> list) {
+            this.originalData = list;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            if (constraint == null || constraint.length() == 0) {
+                results.values = originalData;
+                results.count = originalData.size();
+            } else {
+                List<DoQueryOrdersDetailsData> filterData = new ArrayList<DoQueryOrdersDetailsData>();
+                for (DoQueryOrdersDetailsData data : originalData) {
+                    String searchContent = constraint.toString().toUpperCase();
+                    // 商户名称是否包含搜索内容
+                    String name = data.getShop().getName();
+                    boolean isNameIsContains = false;
+                    isNameIsContains = name.toUpperCase().contains(searchContent);
+                    // 订单编号是否包含搜索内容
+                    String orderNumber = data.getOrder().getOrderNumber();
+                    boolean isOrderNumberIsContains = false;
+                    isOrderNumberIsContains = orderNumber.toUpperCase().contains(searchContent);
+//                    // 商品信息是否包含搜索内容
+                    boolean isShoppName = false;
+                    StringBuilder sb = new StringBuilder();
+                    for (OrderDetailsBean orderDetailsBean : data.getOrderDetails()) {
+                        String shoppName = orderDetailsBean.getCommodity().getName();
+                        sb.append(shoppName);
+                    }
+                    isShoppName = sb.toString().trim().toUpperCase().contains(searchContent);
+//
+//                    // 订单状态是否包含搜索内容
+                    String saleStateName = "";
+                    boolean isSaleStateName = false;
+
+                    switch (data.getOrder().getSaleState()) {
+                        case "1":
+                            saleStateName = "交易关闭";
+                            break;
+                        case "2":
+                            saleStateName = "等待买家付款";
+                            break;
+                        case "3":
+                            saleStateName = "卖家已发货";
+                            break;
+                        case "4":
+                            saleStateName = "交易完成";
+                            break;
+                    }
+                    isSaleStateName = saleStateName.toUpperCase().contains(searchContent);
+
+                    if (isNameIsContains || isOrderNumberIsContains || isShoppName || isSaleStateName) {
+                        filterData.add(data);
+                    }
+                }
+                results.values = filterData;
+                results.count = filterData.size();
+            }
+            return results;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mData = (List<DoQueryOrdersDetailsData>) results.values;
+//            List tempList = Arrays.asList(mData.toArray());
+//            if (filterCondition != 0) {
+//                Collections.sort(tempList, getComparator());
+//                mData.clear();
+//                mData.addAll(tempList);
+//            }
+            notifyDataSetChanged();
+        }
     }
 }
 

@@ -218,6 +218,10 @@
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
         <activity android:name="com.fdw.fdd.activity.mine_fragment.AboutUsActivity" />
         <activity android:name="com.fdw.fdd.kefu.LoginKeFu02Activity" />
+
+        <activity
+            android:name=".activity.mine_fragment.InquireOrderActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden|adjustPan|stateHidden" />
         <!-- =============== 极光推送相关配置   Start =============== -->
         <!-- Rich push 核心功能 since 2.0.6-->
         <activity
@@ -315,8 +319,8 @@
 
         <receiver
             android:name=".tool.aurora.MyReceiver"
-            android:exported="false"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTRATION" />
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
@@ -324,6 +328,7 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
+
                 <category android:name="com.fdw.fdd" />
             </intent-filter>
         </receiver>
@@ -334,7 +339,6 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="0d28dbc3d312f40a1e397e58" /> <!--  </>值来自开发者平台取得的AppKey-->
-
 
 
         <!-- =============== 极光推送相关配置   Stop =============== -->

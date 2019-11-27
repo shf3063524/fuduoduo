@@ -150,7 +150,7 @@ public class MyOrderActivity extends BaseActivity {
                 }
                 break;
             case R.id.m_iv_inquire:   // 查询
-
+                InquireOrderActivity.openActivity(MyOrderActivity.this);
                 break;
         }
     }

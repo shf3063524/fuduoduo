@@ -355,7 +355,7 @@ public class OrderDetailsActivity extends BaseActivity {
         String newTime = TimeLeftUtil.doCalculate(order.getCreateTime());
         mTvTime.setText("还剩0小时" + newTime + "分");
         // 订单号
-        mTvPayNumber.setText(order.getPayNumber());
+        mTvPayNumber.setText(order.getOrderNumber());
 
         ArrayList<OrderDetailsBean> orderDetails = detailsData.get(0).getOrderDetails();
         mOrderDetailsData.clear();
