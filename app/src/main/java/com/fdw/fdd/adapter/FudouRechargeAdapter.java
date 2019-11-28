@@ -55,6 +55,7 @@ public class FudouRechargeAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final TextView mTvYuan = ((MyTextViewHolder) holder).mTvYuan;
+        final TextView mTvUnit = ((MyTextViewHolder) holder).mTvUnit;
         final TextView mTvintegral = ((MyTextViewHolder) holder).mTvintegral;
         final RelativeLayout mLayoutOne = ((MyTextViewHolder) holder).mLayoutOne;
         mTvYuan.setText(data.get(position).getMoney());
@@ -63,11 +64,15 @@ public class FudouRechargeAdapter extends RecyclerView.Adapter {
         if (data.get(position).isSelected()) {
             mLayoutOne.setSelected(true);
             mTvYuan.setTextColor(ContextCompat.getColor(mTvYuan.getContext(), R.color.cl_e51C23));
+            mTvUnit.setTextColor(ContextCompat.getColor(mTvUnit.getContext(), R.color.cl_e51C23));
             mTvintegral.setTextColor(ContextCompat.getColor(mTvYuan.getContext(), R.color.cl_e51C23));
+            mTvintegral.setTextColor(ContextCompat.getColor(mTvUnit.getContext(), R.color.cl_e51C23));
         } else {
             mLayoutOne.setSelected(false);
             mTvYuan.setTextColor(ContextCompat.getColor(mTvYuan.getContext(), R.color.cl_333));
+            mTvUnit.setTextColor(ContextCompat.getColor(mTvUnit.getContext(), R.color.cl_333));
             mTvintegral.setTextColor(ContextCompat.getColor(mTvYuan.getContext(), R.color.cl_333));
+            mTvintegral.setTextColor(ContextCompat.getColor(mTvUnit.getContext(), R.color.cl_333));
         }
         mLayoutOne.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,12 +112,14 @@ public class FudouRechargeAdapter extends RecyclerView.Adapter {
 
     class MyTextViewHolder extends RecyclerView.ViewHolder {
         TextView mTvYuan;
+        TextView  mTvUnit;
         TextView mTvintegral;
         RelativeLayout mLayoutOne;
 
         public MyTextViewHolder(View itemView) {
             super(itemView);
             mTvYuan = (TextView) itemView.findViewById(R.id.m_tv_yuan);
+            mTvUnit = (TextView) itemView.findViewById(R.id.m_tv_unit);
             mTvintegral = (TextView) itemView.findViewById(R.id.m_tv_integral);
             mLayoutOne = (RelativeLayout) itemView.findViewById(R.id.m_layout_one);
         }

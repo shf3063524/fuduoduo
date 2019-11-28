@@ -8,17 +8,29 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fdw.fdd.R;
+import com.fdw.fdd.entity.bean.DoQueryOrdersDetailsData;
+import com.fdw.fdd.entity.bean.DounifyplaceorderData;
+import com.fdw.fdd.entity.net.AppResponse;
+import com.fdw.fdd.okgo.Api;
+import com.fdw.fdd.okgo.JsonCallBack;
+import com.fdw.fdd.tool.DoubleUtil;
+import com.fdw.fdd.tool.SharedPrefUtil;
 import com.fdw.fdd.tool.UserManager;
 import com.fdw.fdd.view.SpaceItemDecoration;
 import com.fdw.fdd.adapter.FudouRechargeAdapter;
 import com.fdw.fdd.base.BaseActivity;
 import com.fdw.fdd.entity.bean.MoneyEntity;
 import com.fdw.fdd.tool.StatusBarUtil;
+import com.lzy.okgo.OkGo;
 import com.mylhyl.circledialog.CircleDialog;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +54,7 @@ public class FudouRechargeActivity extends BaseActivity {
     @BindView(R.id.m_tv_phone)
     TextView mTvPhone;
     @BindView(R.id.m_layout_money)
-    RelativeLayout mLayoutMoney;
+    LinearLayout mLayoutMoney;
     @BindColor(R.color.cl_e51C23)
     int cl_e51C23;
     @BindColor(R.color.cl_333)
@@ -75,18 +87,18 @@ public class FudouRechargeActivity extends BaseActivity {
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         GridLayoutManager manager = new GridLayoutManager(this, 3);
         List<MoneyEntity> data = new ArrayList<MoneyEntity>();
-        data.add(new MoneyEntity("30元", "充值送3积分", true));
-        data.add(new MoneyEntity("50元", "充值送5积分", false));
-        data.add(new MoneyEntity("100元", "充值送10积分", false));
-        data.add(new MoneyEntity("200元", "充值送20积分", false));
-        data.add(new MoneyEntity("500元", "充值送50积分", false));
-        data.add(new MoneyEntity("1000元", "充值送100积分", false));
+        data.add(new MoneyEntity("30", "充值送3积分", true));
+        data.add(new MoneyEntity("50", "充值送5积分", false));
+        data.add(new MoneyEntity("100", "充值送10积分", false));
+        data.add(new MoneyEntity("200", "充值送20积分", false));
+        data.add(new MoneyEntity("500", "充值送50积分", false));
+        data.add(new MoneyEntity("1000", "充值送100积分", false));
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(3, 10, true));
         FudouRechargeAdapter adapter = new FudouRechargeAdapter(data, this);
         adapter.setMoneyInputListener(new FudouRechargeAdapter.MoneyInputListener() {
             @Override
             public void onGetMoneyInput(String money) {
-                mTvMoney.setText("¥" + money + "立即充值");
+                mTvMoney.setText(money);
             }
         });
         mRecyclerView.setLayoutManager(manager);
@@ -122,7 +134,7 @@ public class FudouRechargeActivity extends BaseActivity {
 
                                         break;
                                     case "微信支付":
-
+                                        onWxPay(getTextString(mTvMoney));
                                         break;
                                 }
                             }
@@ -131,5 +143,39 @@ public class FudouRechargeActivity extends BaseActivity {
                         .show(getSupportFragmentManager());
                 break;
         }
+    }
+
+    private void onWxPay(String price){
+        String userId = UserManager.getUserId(FudouRechargeActivity.this);
+        Double mul = DoubleUtil.mul(Double.parseDouble(price), 100.00);
+        OkGo.<AppResponse<DounifyplaceorderData>>get(Api.ORDERS_DOUNIFYPLACEORDER)//
+                .params("userId", userId)
+                .params("type", 2)
+                .params("price", DoubleUtil.doubleTransf(mul))
+                .execute(new JsonCallBack<AppResponse<DounifyplaceorderData>>() {
+                    @Override
+                    public void onSuccess(AppResponse<DounifyplaceorderData> simpleResponseAppResponse) {
+                        if (simpleResponseAppResponse.isSucess()) {
+                            weChatPay(simpleResponseAppResponse.getData());
+                        }
+                    }
+                });
+    }
+
+    private void weChatPay(DounifyplaceorderData weChatInfo) {
+        final IWXAPI weChatApi = WXAPIFactory.createWXAPI(this, null);
+        // 将该app注册到微信
+        weChatApi.registerApp(weChatInfo.getAppid());
+        SharedPrefUtil.putString(this, getString(R.string.weChartId), weChatInfo.getAppid());
+        // 调起支付
+        PayReq request = new PayReq();
+        request.appId = weChatInfo.getAppid();
+        request.partnerId = weChatInfo.getMch_id();
+        request.prepayId = weChatInfo.getPrepay_id();
+        request.packageValue = weChatInfo.getWechatPackage();
+        request.nonceStr = weChatInfo.getNonce_str();
+        request.timeStamp = weChatInfo.getTimestamp();
+        request.sign = weChatInfo.getSign();
+        weChatApi.sendReq(request);
     }
 }

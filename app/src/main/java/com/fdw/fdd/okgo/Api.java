@@ -191,6 +191,13 @@ public class Api {
      */
     public static final String ORDERS_DORECEIVERETURNORDERS = BASE_URL + "/orders-service/orders/doReceiveReturnOrders";
 
+//********************************************************微信支付端口*******************************************************************************************
+    private static final String BASE_PAY_URL = "http://user.fuduowang.com";
+    /**
+     *   微信支付统一下单接口
+     */
+    public static final String ORDERS_DOUNIFYPLACEORDER = BASE_PAY_URL + "/orders-service/orders/doUnifyPlaceOrder";
+
     //************************************************    商品有关    **************************************************************
 
     // 图片地址---和商品有关
